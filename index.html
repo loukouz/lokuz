@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auditor Zero7 - Hub Trader</title>
-    <!-- Tailwind CSS para o Design Moderno -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse para ler CSV no navegador -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -14,25 +14,33 @@
 <body class="bg-[#0b0f19] text-slate-100 font-sans min-h-screen flex flex-col">
 
     <!-- Topo / Header -->
-    <header class="bg-[#070a12] border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+    <header class="bg-[#070a12] border-b border-slate-800 px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
             <h1 class="text-lg font-bold text-white flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-blue-500"></span> Auditor Regulamentar Zero7
             </h1>
-            <p class="text-xs text-slate-400">Plataforma de análise de conformidade e gestão de risco para mesas proprietárias</p>
+            <p class="text-xs text-slate-400">Análise de conformidade, custos TET e gestão de risco para mesas proprietárias</p>
         </div>
         <div class="flex items-center gap-3">
-            <select id="selectFase" class="bg-[#1e293b] border border-slate-700 text-xs rounded px-3 py-1.5 text-slate-200 outline-none">
-                <option value="Avaliação">Fase: Avaliação</option>
-                <option value="Incubadora">Fase: Incubadora</option>
-                <option value="Conta Real">Fase: Conta Real</option>
-            </select>
-            <select id="selectPlano" class="bg-[#1e293b] border border-slate-700 text-xs rounded px-3 py-1.5 text-slate-200 outline-none">
-                <option value="Pleno">Plano: Pleno (R$ 4.997)</option>
-                <option value="Junior">Plano: Júnior (R$ 1.997)</option>
-                <option value="Senior">Plano: Sênior (R$ 9.997)</option>
-                <option value="Trainee">Plano: Trainee (R$ 997)</option>
-            </select>
+            <div class="flex flex-col">
+                <label class="text-[10px] text-slate-400 font-semibold mb-1">FASE</label>
+                <select id="selectFase" onchange="reprocessarSeHouverDados()" class="bg-[#1e293b] border border-slate-700 text-xs rounded px-3 py-1.5 text-slate-200 outline-none">
+                    <option value="Avaliação">Avaliação</option>
+                    <option value="Incubadora">Incubadora</option>
+                    <option value="Conta Real">Conta Real</option>
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label class="text-[10px] text-slate-400 font-semibold mb-1">PLANO</label>
+                <select id="selectPlano" onchange="reprocessarSeHouverDados()" class="bg-[#1e293b] border border-slate-700 text-xs rounded px-3 py-1.5 text-slate-200 outline-none">
+                    <option value="Pleno">Pleno (R$ 4.997)</option>
+                    <option value="Junior">Júnior (R$ 1.997)</option>
+                    <option value="Senior">Sênior (R$ 9.997)</option>
+                    <option value="Trainee">Trainee (R$ 997)</option>
+                    <option value="Expert">Expert (R$ 14.997)</option>
+                    <option value="Master">Master (R$ 19.997)</option>
+                </select>
+            </div>
         </div>
     </header>
 
@@ -40,31 +48,31 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-6 flex flex-col gap-6">
 
         <!-- Caixa de Upload (Dropzone) -->
-        <div id="dropzone" class="border-2 border-dashed border-slate-700 hover:border-blue-500 bg-[#131b2e]/50 rounded-xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3">
+        <div id="dropzone" class="border-2 border-dashed border-slate-700 hover:border-blue-500 bg-[#131b2e]/50 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2">
             <div class="p-3 bg-blue-500/10 text-blue-400 rounded-full">
-                <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                <i data-lucide="upload-cloud" class="w-6 h-6"></i>
             </div>
             <div>
-                <p class="text-sm font-semibold text-slate-200">Arraste o seu relatório CSV do Profit aqui</p>
-                <p class="text-xs text-slate-400 mt-1">ou clique para selecionar o arquivo da aba Operações</p>
+                <p class="text-sm font-semibold text-slate-200">Arraste o seu ficheiro CSV do Profit aqui</p>
+                <p class="text-xs text-slate-400">ou clique para selecionar o relatório da aba Operações</p>
             </div>
             <input type="file" id="fileInput" accept=".csv" class="hidden">
         </div>
 
         <!-- Banner Dinâmico de Status -->
-        <div id="bannerStatus" class="bg-[#7f1d1d] border border-red-900/50 rounded-xl p-5 shadow-lg hidden">
-            <h2 id="bannerTitulo" class="text-base font-bold text-white uppercase tracking-wide">Aguardando Ficheiro</h2>
+        <div id="bannerStatus" class="bg-[#1f2937] border border-slate-700 rounded-xl p-5 shadow-lg hidden transition-all">
+            <h2 id="bannerTitulo" class="text-sm font-extrabold uppercase tracking-wider text-white">Aguardando Ficheiro</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/10">
                 <div>
-                    <p class="text-xs text-slate-300 font-medium">VALOR ACEITE PELA MESA ZERO7</p>
+                    <p class="text-[11px] text-slate-200 font-semibold tracking-wide">VALOR ACEITE PELA MESA ZERO7</p>
                     <p id="bannerValido" class="text-2xl font-black text-white mt-0.5">R$ 0,00</p>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-300 font-medium">PROGRESSO DA META</p>
+                    <p class="text-[11px] text-slate-200 font-semibold tracking-wide">PROGRESSO DA META</p>
                     <p id="bannerPct" class="text-2xl font-black text-white mt-0.5">0.0%</p>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-300 font-medium">FALTA P/ PEDIR SOLICITAÇÃO</p>
+                    <p class="text-[11px] text-slate-200 font-semibold tracking-wide">FALTA P/ PEDIR SOLICITAÇÃO</p>
                     <p id="bannerFalta" class="text-2xl font-black text-white mt-0.5">R$ 0,00</p>
                 </div>
             </div>
@@ -95,7 +103,7 @@
         </div>
 
         <!-- Tabela de Operações -->
-        <div class="bg-[#131b2e] border border-slate-800 rounded-xl overflow-hidden flex flex-col flex-1">
+        <div class="bg-[#131b2e] border border-slate-800 rounded-xl overflow-hidden flex flex-col flex-1 shadow-md">
             <div class="px-5 py-4 border-b border-slate-800 flex justify-between items-center">
                 <h3 class="text-sm font-bold text-white">Registo Detalhado de Operações Auditadas</h3>
                 <span id="txtTotalOps" class="text-xs text-slate-400">0 operações carregadas</span>
@@ -119,7 +127,7 @@
                     </thead>
                     <tbody id="tabelaCorpo" class="divide-y divide-slate-800/60 text-slate-300">
                         <tr>
-                            <td colspan="11" class="p-8 text-center text-slate-500 italic">Carregue um arquivo CSV para visualizar os dados.</td>
+                            <td colspan="11" class="p-8 text-center text-slate-500 italic">Carregue um ficheiro CSV para visualizar os dados.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -128,7 +136,7 @@
 
     </main>
 
-    <!-- Script de Processamento em JavaScript -->
+    <!-- Script de Processamento Robusto -->
     <script>
         lucide.createIcons();
 
@@ -136,8 +144,12 @@
             "Pleno": { meta: 4997.00, perda_diaria: 1247.00, perda_maxima: 4997.00, max_win: 25, max_wdo: 15 },
             "Junior": { meta: 1997.00, perda_diaria: 497.00, perda_maxima: 1997.00, max_win: 10, max_wdo: 6 },
             "Senior": { meta: 9997.00, perda_diaria: 2497.00, perda_maxima: 9997.00, max_win: 50, max_wdo: 30 },
-            "Trainee": { meta: 997.00, perda_diaria: 247.00, perda_maxima: 997.00, max_win: 5, max_wdo: 3 }
+            "Trainee": { meta: 997.00, perda_diaria: 247.00, perda_maxima: 997.00, max_win: 5, max_wdo: 3 },
+            "Expert": { meta: 14997.00, perda_diaria: 3747.00, perda_maxima: 14997.00, max_win: 75, max_wdo: 45 },
+            "Master": { meta: 19997.00, perda_diaria: 4997.00, perda_maxima: 19997.00, max_win: 100, max_wdo: 60 }
         };
+
+        let ultimoArquivoBruto = null;
 
         const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('fileInput');
@@ -148,10 +160,10 @@
         dropzone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropzone.classList.remove('border-blue-500');
-            if (e.dataTransfer.files.length) processarCSV(e.dataTransfer.files[0]);
+            if (e.dataTransfer.files.length) lerArquivoCSV(e.dataTransfer.files[0]);
         });
         fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) processarCSV(e.target.files[0]);
+            if (e.target.files.length) lerArquivoCSV(e.target.files[0]);
         });
 
         function formatarMoeda(val) {
@@ -159,23 +171,75 @@
         }
 
         function limparNumero(val) {
-            if (!val) return 0.0;
+            if (val === undefined || val === null || val === '') return 0.0;
             let s = String(val).replace('R$', '').replace('pts', '').trim();
-            s = s.replace(/\./g, '').replace(',', '.');
+            if (s.includes(',') && s.includes('.')) {
+                s = s.replace(/\./g, '').replace(',', '.');
+            } else if (s.includes(',')) {
+                s = s.replace(',', '.');
+            }
             let num = parseFloat(s);
             return isNaN(num) ? 0.0 : num;
         }
 
-        function processarCSV(file) {
-            Papa.parse(file, {
-                header: true,
-                delimiter: ";",
-                encoding: "ISO-8859-1",
-                skipEmptyLines: true,
-                complete: function(results) {
-                    analisarDados(results.data);
+        // Procura colunas de forma flexível (ignora acentos, espaços e maiúsculas/minúsculas)
+        function getVal(row, possibleNames) {
+            const keys = Object.keys(row);
+            for (let name of possibleNames) {
+                let target = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\.\s_]/g, '');
+                for (let k of keys) {
+                    let cleanK = k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\.\s_]/g, '');
+                    if (cleanK === target || cleanK.includes(target)) {
+                        return row[k];
+                    }
                 }
-            });
+            }
+            return null;
+        }
+
+        function lerArquivoCSV(file) {
+            ultimoArquivoBruto = file;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                let conteudo = e.target.result;
+                let linhas = conteudo.split(/\r\n|\n/);
+                let linhaInicio = 0;
+                
+                for (let i = 0; i < Math.min(linhas.length, 30); i++) {
+                    let l = linhas[i].toUpperCase();
+                    if (l.includes("ATIVO") && (l.includes("ABERTURA") || l.includes("COMPRA"))) {
+                        linhaInicio = i;
+                        break;
+                    }
+                }
+
+                let conteudoLimpo = linhas.slice(linhaInicio).join("\n");
+
+                Papa.parse(conteudoLimpo, {
+                    header: true,
+                    delimiter: ";",
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        if (results.data && results.data.length > 0) {
+                            analisarDados(results.data);
+                        } else {
+                            alert("O ficheiro CSV parece vazio ou o formato não foi reconhecido.");
+                        }
+                    },
+                    error: function(err) {
+                        alert("Erro ao ler o CSV: " + err.message);
+                    }
+                });
+            };
+
+            reader.readAsText(file, "ISO-8859-1");
+        }
+
+        function reprocessarSeHouverDados() {
+            if (ultimoArquivoBruto) {
+                lerArquivoCSV(ultimoArquivoBruto);
+            }
         }
 
         function analisarDados(data) {
@@ -193,23 +257,23 @@
             let diasAcumulado = {};
 
             data.forEach(row => {
-                let ativo = (row['Ativo'] || '').toUpperCase().trim();
-                let abertura = row['Abertura'] || '';
-                let fechamento = row['Fechamento'] || '';
-                let qtdC = limparNumero(row['Qtd Compra'] || 0);
-                let qtdV = limparNumero(row['Qtd Venda'] || 0);
+                let ativo = String(getVal(row, ['ativo']) || '').toUpperCase().trim();
+                let abertura = String(getVal(row, ['abertura']) || '');
+                let fechamento = String(getVal(row, ['fechamento']) || '');
+                
+                let qtdC = limparNumero(getVal(row, ['qtdcompra', 'quantidadecompra']));
+                let qtdV = limparNumero(getVal(row, ['qtdvenda', 'quantidadevenda']));
                 let qtdPos = Math.max(qtdC, qtdV);
-                let qtdTotal = qtdC + qtdV > 0 ? (qtdC + qtdV) : (qtdPos * 2);
+                let qtdTotal = (qtdC + qtdV) > 0 ? (qtdC + qtdV) : (qtdPos * 2);
 
-                let pCompra = limparNumero(row['Preço Compra'] || 0);
-                let pVenda = limparNumero(row['Preço Venda'] || 0);
+                let pCompra = limparNumero(getVal(row, ['precocompra']));
+                let pVenda = limparNumero(getVal(row, ['precovenda']));
                 let pontos = Math.abs(pVenda - pCompra);
 
-                let bruto = limparNumero(row['Res. Intervalo Bruto'] || row['Total'] || row['Res. Operação'] || 0);
-                let tetCsv = Math.abs(limparNumero(row['TET'] || row['Comissões'] || 0));
+                let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
+                let tetCsv = Math.abs(limparNumero(getVal(row, ['tet', 'comissoes', 'comissao', 'taxas'])));
 
-                // Custos TET ou contingência ida/volta
-                let custoOp = tetCsv > 0 ? tetCsv : (ativo.includes('WIN') ? qtdTotal * 0.37 : (ativo.includes('WDO') ? qtdTotal * 1.47 : 0));
+                let custoOp = tetCsv > 0 ? tetCsv : (ativo.includes('WIN') ? qtdTotal * 0.37 : (ativo.includes('WDO') ? qtdTotal * 1.47 : (ativo.includes('BIT') ? qtdTotal * 0.45 : 0)));
                 custosTotais += custoOp;
 
                 if (bruto > 0) lucroBrutoTotal += bruto;
@@ -219,12 +283,24 @@
                 let motivo = "Conforme";
 
                 if (fase !== "Conta Real") {
-                    if (ativo.includes('WIN') && cfg.max_win > 0 && qtdPosIndex > cfg.max_win) {
+                    if (ativo.includes('WIN') && cfg.max_win > 0 && qtdPos > cfg.max_win) {
                         conforme = false; motivo = `Lote > Máx WIN (${cfg.max_win})`;
+                    } else if (ativo.includes('WDO') && cfg.max_wdo > 0 && qtdPos > cfg.max_wdo) {
+                        conforme = false; motivo = `Lote > Máx WDO (${cfg.max_wdo})`;
                     }
+
                     if (conforme && bruto > 0) {
                         if (ativo.includes('WIN') && pontos <= 10.0) { conforme = false; motivo = "Ignorado: WIN <= 10 pts"; }
                         if (ativo.includes('WDO') && pontos <= 0.5) { conforme = false; motivo = "Ignorado: WDO <= 0.5 pt"; }
+                        if (ativo.includes('BIT') && pontos <= 1000.0) { conforme = false; motivo = "Ignorado: BIT <= 1.000 pts"; }
+                    }
+
+                    let partesHora = fechamento.split(' ')[1] || '';
+                    if (conforme && partesHora) {
+                        let [h, m, s] = partesHora.split(':').map(Number);
+                        if (h > 17 || (h === 17 && m > 30)) {
+                            if (bruto > 0) { conforme = false; motivo = "Ignorado: Fechamento pós-17:30"; }
+                        }
                     }
                 }
 
@@ -245,17 +321,16 @@
 
                 saldoZero7Total += saldoTrade;
 
-                // Agrupamento por dia
                 let dataDia = abertura.split(' ')[0] || 'Geral';
                 if (!diasAcumulado[dataDia]) diasAcumulado[dataDia] = 0;
                 diasAcumulado[dataDia] += saldoTrade;
 
                 operacoesProcessadas.push({
                     data: dataDia,
-                    ativo: ativo,
+                    ativo: ativo || 'WIN',
                     abertura: abertura.split(' ')[1] || '',
                     fechamento: fechamento.split(' ')[1] || '',
-                    qtd: qtdPos,
+                    qtd: qtdPos || 1,
                     pontos: pontos.toFixed(1),
                     bruto: bruto,
                     custo: custoOp,
@@ -265,7 +340,6 @@
                 });
             });
 
-            // Regra dos 50% de consistência diária (Avaliação)
             let excessoTeto = 0;
             let teto50 = cfg.meta * 0.50;
             if (fase === "Avaliação") {
@@ -279,7 +353,16 @@
             let progressoPct = (saldoFinalZero7 / cfg.meta) * 100;
             let faltaMeta = Math.max(0, cfg.meta - saldoFinalZero7);
 
-            // Atualizar Interface
+            let acumulado = 0;
+            let piorDrawdown = 0;
+            operacoesProcessadas.forEach(op => {
+                acumulado += op.saldo;
+                if (acumulado < piorDrawdown) piorDrawdown = acumulado;
+            });
+            let violouMaxima = piorDrawdown <= -cfg.perda_maxima;
+            let qtdDias = Object.keys(diasAcumulado).length;
+            let minDias = fase === "Avaliação" ? 5 : 1;
+
             document.getElementById('cardLucroBruto').innerText = formatarMoeda(lucroBrutoTotal);
             document.getElementById('cardPrejuizoBruto').innerText = formatarMoeda(prejuizoBrutoTotal);
             document.getElementById('cardCustos').innerText = '- ' + formatarMoeda(custosTotais);
@@ -287,29 +370,35 @@
             document.getElementById('cardAnulado').innerText = formatarMoeda(lucroAnuladoTotal + excessoTeto);
             document.getElementById('txtTotalOps').innerText = `${operacoesProcessadas.length} operações carregadas`;
 
-            // Atualizar Banner Principal
             const banner = document.getElementById('bannerStatus');
             banner.classList.remove('hidden');
 
             let corBg = "#7f1d1d";
             let statusTxt = "📍 INÍCIO DA JORNADA";
 
-            if (saldoFinalZero7 >= cfg.meta) {
-                corBg = "#065f46"; statusTxt = "🎉 META CONCLUÍDA! APTO A SOLICITAR APROVAÇÃO";
+            if (violouMaxima) {
+                corBg = "#030712";
+                statusTxt = `❌ CONTA QUEBRADA — Drawdown Máximo Excedido (${formatarMoeda(pior_drawdown)})`;
+                faltaMeta = 0;
+            } else if (saldoFinalZero7 >= cfg.meta && qtdDias >= minDias) {
+                corBg = "#065f46";
+                statusTxt = "🎉 META CONCLUÍDA! APTO A SOLICITAR APROVAÇÃO NA ÁREA DO TRADER";
             } else if (progressoPct >= 75) {
-                corBg = "#854d0e"; statusTxt = "⚡ RETA FINAL DA AVALIAÇÃO";
+                corBg = "#854d0e";
+                statusTxt = `⚡ RETA FINAL (${progressoPct.toFixed(1)}%) — Pouco falta para a meta!`;
             } else if (progressoPct >= 50) {
-                corBg = "#1e40af"; statusTxt = "🚀 MEIO DO CAMINHO ALCANÇADO";
+                corBg = "#1e40af";
+                statusTxt = `🚀 MEIO DO CAMINHO (${progressoPct.toFixed(1)}%) — Consistência sólida!`;
+            } else {
+                statusTxt = saldoFinalZero7 < 0 ? `⚠️ SALDO NEGATIVO (${progressoPct.toFixed(1)}%)` : `📍 INÍCIO DA JORNADA (${progressoPct.toFixed(1)}%)`;
             }
 
-            banner.className = `rounded-xl p-5 shadow-lg border border-white/10 text-white`;
             banner.style.backgroundColor = corBg;
             document.getElementById('bannerTitulo').innerText = statusTxt;
             document.getElementById('bannerValido').innerText = formatarMoeda(saldoFinalZero7);
             document.getElementById('bannerPct').innerText = progressoPct.toFixed(1) + '%';
-            document.getElementById('bannerFalta').innerText = saldoFinalZero7 >= cfg.meta ? "R$ 0,00 (CONCLUÍDO)" : formatarMoeda(faltaMeta);
+            document.getElementById('bannerFalta').innerText = (violouMaxima || saldoFinalZero7 >= cfg.meta) ? "R$ 0,00" : formatarMoeda(faltaMeta);
 
-            // Preencher Tabela
             const tbody = document.getElementById('tabelaCorpo');
             tbody.innerHTML = '';
 
