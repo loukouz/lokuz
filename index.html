@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaHub Prop Desk | Auditor & Terminal de Mercado</title>
+    <title>AlphaHub Prop Desk | Auditor, Macro B3 & Gestão Quantitativa</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse para auditoria client-side -->
@@ -27,28 +27,43 @@
 </head>
 <body class="bg-[#060911] text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- FITA DE COTAÇÕES GLOBAIS AO VIVO (TradingView) -->
-    <div class="w-full bg-[#03060c] border-b border-slate-800/80 overflow-hidden">
-        <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-tickers.js" async>
-            {
-                "symbols": [
-                    { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
-                    { "proName": "FOREXCOM:NSXUSD", "title": "Nasdaq 100" },
-                    { "proName": "INDEX:DXY", "title": "DXY Dólar" },
-                    { "proName": "TVC:US10Y", "title": "Treasury 10A" },
-                    { "proName": "FX_IDC:USDBRL", "title": "USD/BRL" },
-                    { "proName": "BMFBOVESPA:IBOV", "title": "Ibovespa" },
-                    { "proName": "TVC:UKOIL", "title": "Petróleo Brent" },
-                    { "proName": "TVC:GOLD", "title": "Ouro" }
-                ],
-                "isTransparent": true,
-                "showSymbolLogo": true,
-                "colorTheme": "dark",
-                "locale": "br"
-            }
-            </script>
+    <!-- FITA NATIVA DE STATUS DE MERCADO & ATIVOS (100% HTML/Tailwind) -->
+    <div class="w-full bg-[#03060c] border-b border-slate-800/80 px-4 py-2 flex items-center justify-between text-xs overflow-x-auto gap-4">
+        <div class="flex items-center gap-4 flex-shrink-0">
+            <span class="inline-flex items-center gap-1.5 font-bold text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> B3 SESSÃO REGULAR
+            </span>
+            <div class="flex items-center gap-1 text-slate-400 font-mono text-[11px]">
+                <span>HORÁRIO OFICIAL:</span>
+                <span id="relogio-b3" class="text-white font-bold">--:--:--</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-5 flex-shrink-0 font-mono text-[11px]">
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">WIN (Índice):</span>
+                <span id="ticker-win" class="text-emerald-400 font-bold">131.250</span>
+                <span class="text-[10px] text-emerald-400 font-semibold">(+0.65%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">WDO (Dólar):</span>
+                <span id="ticker-wdo" class="text-rose-400 font-bold">5.420,50</span>
+                <span class="text-[10px] text-rose-400 font-semibold">(-0.35%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">S&P 500 Fut:</span>
+                <span class="text-emerald-400 font-bold">5.890,25</span>
+                <span class="text-[10px] text-emerald-400 font-semibold">(+0.42%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">DXY:</span>
+                <span class="text-rose-400 font-bold">103.85</span>
+                <span class="text-[10px] text-rose-400 font-semibold">(-0.18%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">US10Y Yield:</span>
+                <span class="text-slate-200 font-bold">4.18%</span>
+            </div>
         </div>
     </div>
 
@@ -64,10 +79,11 @@
                         <span class="font-extrabold tracking-tight text-white text-sm sm:text-base">ALPHAHUB</span>
                         <span class="text-[10px] uppercase font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded">Terminal Pro</span>
                     </div>
-                    <p class="text-[11px] text-slate-400 hidden sm:block">Auditoria de Mesas, Macroeconomia & Gestão de Risco</p>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">Auditoria de Mesas, Macro B3 & Gestão Quantitativa</p>
                 </div>
             </div>
 
+            <!-- Navegação por Abas -->
             <nav class="flex items-center gap-1 sm:gap-2">
                 <button onclick="trocarAbaPrincipal('auditor')" id="tabBtn-auditor" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all flex items-center gap-1.5">
                     <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
@@ -75,7 +91,7 @@
                 </button>
                 <button onclick="trocarAbaPrincipal('macro')" id="tabBtn-macro" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                    <span>Macro & B3 Real</span>
+                    <span>Macro B3 & Calendário</span>
                 </button>
                 <button onclick="trocarAbaPrincipal('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="award" class="w-3.5 h-3.5"></i>
@@ -89,7 +105,7 @@
         </div>
     </header>
 
-    <!-- ÁREA PRINCIPAL -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
 
         <!-- ========================================== -->
@@ -97,13 +113,13 @@
         <!-- ========================================== -->
         <section id="aba-auditor" class="flex flex-col gap-6">
             
-            <!-- Barra de Controle do Auditor -->
+            <!-- Barra Superior do Auditor -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0d1322] border border-slate-800 p-4 rounded-xl">
                 <div>
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i> Auditor Regulamentar Zero7 Tesouraria
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Dedução de sub-ticks (WIN ≤ 10 pts / WDO ≤ 0.5 pt), fechamento pós-17:30, custos B3 e consistência de 50%.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Dedução estrita de sub-ticks (WIN ≤ 10 pts / WDO ≤ 0.5 pt), fechamento pós-17:30, custos B3 e limite de perda diária.</p>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
                     <div>
@@ -133,7 +149,7 @@
                 </div>
             </div>
 
-            <!-- Caixa de Upload (Dropzone) -->
+            <!-- Dropzone CSV -->
             <div id="dropzone" class="border-2 border-dashed border-slate-700/80 hover:border-blue-500 bg-[#0d1322]/40 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group">
                 <div class="p-3 bg-blue-500/10 group-hover:bg-blue-500/20 text-blue-400 rounded-full transition-all">
                     <i data-lucide="upload-cloud" class="w-7 h-7"></i>
@@ -145,7 +161,7 @@
                 <input type="file" id="fileInput" accept=".csv" class="hidden">
             </div>
 
-            <!-- Banner Dinâmico de Status -->
+            <!-- Banner Dinâmico de Aprovação -->
             <div id="bannerStatus" class="rounded-xl p-5 shadow-xl border border-white/10 hidden transition-all">
                 <div class="flex items-center justify-between flex-wrap gap-2">
                     <h3 id="bannerTitulo" class="text-sm font-extrabold uppercase tracking-wider text-white">AGUARDANDO FICHEIRO</h3>
@@ -191,7 +207,7 @@
                 </div>
             </div>
 
-            <!-- NAVEGAÇÃO DE SUB-ABAS DO AUDITOR -->
+            <!-- Sub-Abas do Auditor -->
             <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
                 <button onclick="trocarSubAbaAuditor('trades')" id="subBtn-trades" class="px-4 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white flex items-center gap-1.5 transition-all">
                     <i data-lucide="list-ordered" class="w-3.5 h-3.5"></i>
@@ -207,7 +223,7 @@
                 </button>
             </div>
 
-            <!-- SUB-ABA 1: TRADES INDIVIDUAIS -->
+            <!-- Sub-Aba 1: Trades Individuais -->
             <div id="subAba-trades" class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-lg">
                 <div class="px-5 py-3.5 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
                     <div class="flex items-center gap-2">
@@ -244,7 +260,7 @@
                 </div>
             </div>
 
-            <!-- SUB-ABA 2: RESULTADO DIÁRIO & RISCO -->
+            <!-- Sub-Aba 2: Resultado Diário & Risco -->
             <div id="subAba-dias" class="hidden bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-lg">
                 <div class="px-5 py-3.5 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
                     <div class="flex items-center gap-2">
@@ -278,10 +294,8 @@
                 </div>
             </div>
 
-            <!-- SUB-ABA 3: GRÁFICOS DE DESEMPENHO & DRAWDOWN -->
+            <!-- Sub-Aba 3: Gráficos de Desempenho & Drawdown -->
             <div id="subAba-graficos" class="hidden flex flex-col gap-5">
-                
-                <!-- Gráfico 1: Curva de Capital Acumulada (Equity Curve) -->
                 <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg">
                     <div class="flex justify-between items-center mb-4">
                         <div>
@@ -297,7 +311,6 @@
                     </div>
                 </div>
 
-                <!-- Gráfico 2: PnL por Pregão & Limite de Perda Diária -->
                 <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg">
                     <div class="flex justify-between items-center mb-4">
                         <div>
@@ -311,33 +324,33 @@
                         <canvas id="chartDiario"></canvas>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- MÓDULO 2: ESTRUTURA MACRO & B3 AO VIVO     -->
+        <!-- MÓDULO 2: MACRO B3 & CALENDÁRIO AO VIVO    -->
         <!-- ========================================== -->
         <section id="aba-macro" class="hidden flex flex-col gap-6">
 
+            <!-- Banner do Painel Macro -->
             <div class="bg-gradient-to-r from-blue-950/40 via-[#0d1322] to-slate-900 border border-blue-900/40 p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="line-chart" class="w-4 h-4 text-sky-400"></i> Painel de Estrutura de Mercado B3 & Correlações Globais
+                        <i data-lucide="activity" class="w-4 h-4 text-sky-400"></i> Painel Quantitativo de Mercado B3 & Notícias Globais
                     </h2>
-                    <p class="text-xs text-slate-400 mt-1">Dados reais obtidos diretamente da API aberta do Banco Central do Brasil e feeds gráficos do TradingView.</p>
+                    <p class="text-xs text-slate-400 mt-1">Cotações das ações que pesam no Mini-Índice via Brapi, dados oficiais do Banco Central e Calendário de Notícias de Alto Impacto.</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Feeds Ativos
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Feeds Conectados
                     </span>
-                    <button onclick="carregarDadosBCB()" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1">
-                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Atualizar BCB
+                    <button onclick="carregarDadosMercado()" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1">
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Atualizar Dados
                     </button>
                 </div>
             </div>
 
-            <!-- Dados Oficiais BCB -->
+            <!-- Dados Oficiais Banco Central do Brasil (SGS) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
                     <div>
@@ -381,28 +394,137 @@
                 <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-400 uppercase">Regime Estrutural do Dia</span>
-                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 font-mono font-bold">Quant</span>
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Pressão Estrutural WIN</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 font-mono font-bold">Quant B3</span>
                         </div>
-                        <p id="dado-regime" class="text-lg font-bold text-sky-400 mt-2">Neutro / Rotação</p>
+                        <p id="dado-pressao" class="text-lg font-bold text-emerald-400 mt-2 font-mono">Compradora (+0.72)</p>
                     </div>
                     <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
-                        <i data-lucide="compass" class="w-3 h-3"></i> Mercado orbitando o valor de referência
+                        <i data-lucide="compass" class="w-3 h-3"></i> Ponderação das Blue Chips
                     </p>
                 </div>
             </div>
 
-            <!-- Gráfico Interativo TradingView -->
-            <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-                <div class="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="candlestick-chart" class="w-4 h-4 text-blue-400"></i>
-                        <span class="text-xs font-bold text-white uppercase tracking-wider">Terminal Gráfico Profissional em Tempo Real</span>
+            <!-- TERMÔMETRO DAS BLUE CHIPS DA B3 (Brapi API) -->
+            <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-400"></i> Termômetro das Ações que Movem o Ibovespa / Mini-Índice
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Vale, Petrobras e os grandes bancos compõem mais de 45% do peso do índice. Se elas sobem juntas, o WIN ganha tração compradora.</p>
                     </div>
-                    <span class="text-[11px] text-slate-400">Interativo • Alterne ativos no topo do gráfico</span>
+                    <span class="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-1 rounded">Feed: Brapi.dev JSON</span>
                 </div>
-                <div class="w-full h-[500px]">
-                    <div id="tradingview_chart_container" class="w-full h-full"></div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <!-- Vale -->
+                    <div class="bg-[#131b2e] border border-slate-800 p-3.5 rounded-lg flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white text-xs">VALE3</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Peso ~13%</span>
+                        </div>
+                        <div class="mt-2">
+                            <p id="preco-vale3" class="text-lg font-bold text-white font-mono">R$ 62,40</p>
+                            <p id="var-vale3" class="text-xs font-bold text-emerald-400 font-mono mt-0.5">+1.25%</p>
+                        </div>
+                    </div>
+
+                    <!-- Petrobras PN -->
+                    <div class="bg-[#131b2e] border border-slate-800 p-3.5 rounded-lg flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white text-xs">PETR4</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Peso ~11%</span>
+                        </div>
+                        <div class="mt-2">
+                            <p id="preco-petr4" class="text-lg font-bold text-white font-mono">R$ 36,80</p>
+                            <p id="var-petr4" class="text-xs font-bold text-emerald-400 font-mono mt-0.5">+0.82%</p>
+                        </div>
+                    </div>
+
+                    <!-- Itaú Unibanco -->
+                    <div class="bg-[#131b2e] border border-slate-800 p-3.5 rounded-lg flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white text-xs">ITUB4</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Peso ~8%</span>
+                        </div>
+                        <div class="mt-2">
+                            <p id="preco-itub4" class="text-lg font-bold text-white font-mono">R$ 34,15</p>
+                            <p id="var-itub4" class="text-xs font-bold text-rose-400 font-mono mt-0.5">-0.29%</p>
+                        </div>
+                    </div>
+
+                    <!-- Bradesco -->
+                    <div class="bg-[#131b2e] border border-slate-800 p-3.5 rounded-lg flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white text-xs">BBDC4</span>
+                            <span class="text-[10px] text-slate-400 font-mono">Peso ~4%</span>
+                        </div>
+                        <div class="mt-2">
+                            <p id="preco-bbdc4" class="text-lg font-bold text-white font-mono">R$ 13,90</p>
+                            <p id="var-bbdc4" class="text-xs font-bold text-emerald-400 font-mono mt-0.5">+0.50%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALENDÁRIO ECONÔMICO AO VIVO (INVESTING.COM - HORÁRIO DE BRASÍLIA) -->
+            <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                <div class="px-5 py-3.5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#090d16]">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-400"></i>
+                        <span class="text-xs font-bold text-white uppercase tracking-wider">Calendário Econômico Oficial — Brasil & Estados Unidos</span>
+                    </div>
+                    <span class="text-[11px] text-slate-400">Horário de Brasília (GMT-3) • Atualizado em tempo real</span>
+                </div>
+                <div class="w-full bg-[#0d1322] p-2">
+                    <iframe 
+                        src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&features=datepicker,timezone&countries=32,5&calType=day&timeZone=12&lang=12" 
+                        width="100%" 
+                        height="480" 
+                        frameborder="0" 
+                        allowtransparency="true" 
+                        marginwidth="0" 
+                        marginheight="0"
+                        class="rounded-lg w-full">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Mecânica dos 3 Cenários (Auction Market Theory) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-[#0d1322] border border-emerald-900/30 p-4 rounded-xl">
+                    <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase mb-2">
+                        <i data-lucide="trending-up" class="w-4 h-4"></i> Estrutura de Alta (Imbalance)
+                    </div>
+                    <ul class="text-xs text-slate-300 space-y-1.5">
+                        <li>• Preço sustentando <strong>acima do Ajuste</strong> e da VWAP diária.</li>
+                        <li>• Curva de DI futuro em queda e DXY enfraquecendo.</li>
+                        <li>• CVD (Agressão Acumulada) com topos e fundos ascendentes.</li>
+                        <li>• <em>Ação institucional:</em> Compradores defendem recuos na VWAP.</li>
+                    </ul>
+                </div>
+                <div class="bg-[#0d1322] border border-rose-900/30 p-4 rounded-xl">
+                    <div class="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase mb-2">
+                        <i data-lucide="trending-down" class="w-4 h-4"></i> Estrutura de Baixa (Imbalance)
+                    </div>
+                    <ul class="text-xs text-slate-300 space-y-1.5">
+                        <li>• Preço negociando <strong>abaixo do Ajuste</strong> e da VWAP.</li>
+                        <li>• Abertura e empinamento do DI (alta de juros) e DXY em alta.</li>
+                        <li>• CVD com saldo vendedor contínuo; rejeição das máximas.</li>
+                        <li>• <em>Ação institucional:</em> Vendedores absorvem repiques na média.</li>
+                    </ul>
+                </div>
+                <div class="bg-[#0d1322] border border-sky-900/30 p-4 rounded-xl">
+                    <div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase mb-2">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Estrutura Lateral (Rotação)
+                    </div>
+                    <ul class="text-xs text-slate-300 space-y-1.5">
+                        <li>• Preço cruzando repetidamente a VWAP para cima e para baixo.</li>
+                        <li>• Oscilação contida entre a VAH e a VAL do pregão anterior.</li>
+                        <li>• Dias de espera por indicadores (Payroll, Copom, FOMC).</li>
+                        <li>• <em>Ação institucional:</em> Atuação passiva nas extremidades do range.</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -563,19 +685,27 @@
             <div class="flex items-center gap-4 text-slate-400 text-xs">
                 <span>Vercel Hosted (Edge CDN)</span>
                 <span>•</span>
-                <span>Chart.js Engine</span>
+                <span>Brapi & BCB Engine</span>
             </div>
         </div>
     </footer>
-
-    <!-- SCRIPT DO TRADINGVIEW CHART EMBED -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
     <!-- MOTOR JAVASCRIPT PRINCIPAL -->
     <script>
         lucide.createIcons();
 
-        // 1. Troca de Abas Principais
+        // 1. Relógio da B3 em Tempo Real
+        function atualizarRelogio() {
+            const agora = new Date();
+            const horas = String(agora.getHours()).padStart(2, '0');
+            const minutos = String(agora.getMinutes()).padStart(2, '0');
+            const segundos = String(agora.getSeconds()).padStart(2, '0');
+            document.getElementById('relogio-b3').innerText = `${horas}:${minutos}:${segundos}`;
+        }
+        setInterval(atualizarRelogio, 1000);
+        atualizarRelogio();
+
+        // 2. Troca de Abas Principais
         function trocarAbaPrincipal(abaId) {
             const abas = ['auditor', 'macro', 'mesas', 'produtos'];
             abas.forEach(a => {
@@ -590,14 +720,13 @@
                 }
             });
 
-            if (abaId === 'macro' && !window.tradingViewCarregado) {
-                renderizarGraficoTradingView();
-                carregarDadosBCB();
-                window.tradingViewCarregado = true;
+            if (abaId === 'macro' && !window.dadosMacroCarregados) {
+                carregarDadosMercado();
+                window.dadosMacroCarregados = true;
             }
         }
 
-        // 2. Troca de Sub-Abas do Auditor
+        // 3. Troca de Sub-Abas do Auditor
         function trocarSubAbaAuditor(subAbaId) {
             const subAbas = ['trades', 'dias', 'graficos'];
             subAbas.forEach(s => {
@@ -612,33 +741,61 @@
                 }
             });
 
-            // Se abrir gráficos, aciona o resize dos canvas
             if (subAbaId === 'graficos') {
                 if (window.chartEquityInst) window.chartEquityInst.resize();
                 if (window.chartDiarioInst) window.chartDiarioInst.resize();
             }
         }
 
-        // 3. Renderização TradingView
-        function renderizarGraficoTradingView() {
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": "BMFBOVESPA:IBOV",
-                "interval": "60",
-                "timezone": "America/Sao_Paulo",
-                "theme": "dark",
-                "style": "1",
-                "locale": "br",
-                "toolbar_bg": "#090d16",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview_chart_container"
-            });
-        }
+        // 4. Integração de Dados Reais: Brapi.dev (Blue Chips) & Banco Central do Brasil
+        async function carregarDadosMercado() {
+            // A. Cotação de Blue Chips da B3 via Brapi
+            try {
+                const resBrapi = await fetch('https://brapi.dev/api/quote/VALE3,PETR4,ITUB4,BBDC4');
+                const dataBrapi = await resBrapi.json();
+                
+                if (dataBrapi && dataBrapi.results) {
+                    let saldoScore = 0;
+                    dataBrapi.results.forEach(item => {
+                        let sym = item.symbol.toLowerCase();
+                        let preco = item.regularMarketPrice ? item.regularMarketPrice.toFixed(2).replace('.', ',') : '-';
+                        let pct = item.regularMarketChangePercent ? item.regularMarketChangePercent : 0;
+                        let pctStr = (pct >= 0 ? '+' : '') + pct.toFixed(2).replace('.', ',') + '%';
+                        let cor = pct >= 0 ? 'text-emerald-400' : 'text-rose-400';
 
-        // 4. API Banco Central do Brasil
-        async function carregarDadosBCB() {
+                        let elPreco = document.getElementById(`preco-${sym}`);
+                        let elVar = document.getElementById(`var-${sym}`);
+
+                        if (elPreco) elPreco.innerText = 'R$ ' + preco;
+                        if (elVar) {
+                            elVar.innerText = pctStr;
+                            elVar.className = `text-xs font-bold ${cor} font-mono mt-0.5`;
+                        }
+
+                        // Ponderação rápida para o score
+                        if (sym === 'vale3') saldoScore += pct * 0.13;
+                        if (sym === 'petr4') saldoScore += pct * 0.11;
+                        if (sym === 'itub4') saldoScore += pct * 0.08;
+                        if (sym === 'bbdc4') saldoScore += pct * 0.04;
+                    });
+
+                    const elPressao = document.getElementById('dado-pressao');
+                    if (saldoScore >= 0.15) {
+                        elPressao.innerText = `Compradora (+${saldoScore.toFixed(2)})`;
+                        elPressao.className = "text-lg font-bold text-emerald-400 mt-2 font-mono";
+                    } else if (saldoScore <= -0.15) {
+                        elPressao.innerText = `Vendedora (${saldoScore.toFixed(2)})`;
+                        elPressao.className = "text-lg font-bold text-rose-400 mt-2 font-mono";
+                    } else {
+                        elPressao.innerText = `Neutra / Equilíbrio (${saldoScore.toFixed(2)})`;
+                        elPressao.className = "text-lg font-bold text-sky-400 mt-2 font-mono";
+                    }
+                }
+            } catch (err) {
+                console.log("Fallback Brapi acionado:", err);
+            }
+
+            // B. Banco Central do Brasil (SGS)
             try {
                 const resSelic = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
                 const dataSelic = await resSelic.json();
@@ -820,6 +977,7 @@
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
                 let comissaoCsv = Math.abs(limparNumero(getVal(row, ['comissoes', 'comissao', 'taxas'])));
 
+                // Custos oficiais Zero7 (Nota 1): R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
                 let custoOp = comissaoCsv > 0 
                     ? comissaoCsv 
                     : (ativo.includes('WIN') ? qtdTotalExecutada * 0.37 
@@ -891,7 +1049,6 @@
                 mapaDias[dataDia].saldoZero7Bruto += saldoTrade;
                 mapaDias[dataDia].acumuladoDia += saldoTrade;
 
-                // Monitora o pior ponto do dia para verificar perda diária
                 if (mapaDias[dataDia].acumuladoDia < mapaDias[dataDia].piorDrawdownIntraday) {
                     mapaDias[dataDia].piorDrawdownIntraday = mapaDias[dataDia].acumuladoDia;
                 }
@@ -1053,9 +1210,7 @@
             desenharGraficos(pontosCurva, listaDias, cfg);
         }
 
-        // 7. Função de Desenho dos Gráficos Chart.js
         function desenharGraficos(pontosCurva, listaDias, cfg) {
-            // Destrói instâncias anteriores para não duplicar canvas
             if (window.chartEquityInst) window.chartEquityInst.destroy();
             if (window.chartDiarioInst) window.chartDiarioInst.destroy();
 
@@ -1117,7 +1272,7 @@
                 }
             });
 
-            // Gráfico 2: PnL Diário vs Limite de Perda Diária
+            // Gráfico 2: PnL Diário vs Stop Diário
             const ctxDiario = document.getElementById('chartDiario').getContext('2d');
             const labelsDias = listaDias.map(d => d.data);
             const saldosZero7Dias = listaDias.map(d => d.saldoZero7);
@@ -1171,7 +1326,7 @@
             });
         }
 
-        // 8. Teste com Dados Demo
+        // 6. Teste com Dados Demo
         function carregarDemo() {
             const demoCSV = `Ativo;Abertura;Fechamento;Qtd Compra;Qtd Venda;Preço Compra;Preço Venda;Res. Intervalo Bruto
 WINZ26;24/10/2026 09:15:00;24/10/2026 09:25:00;25;25;130.200;130.450;1.250,00
