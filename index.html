@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse para auditoria client-side -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Chart.js para Curva de Capital e Drawdown -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Google Fonts -->
@@ -25,7 +27,7 @@
 </head>
 <body class="bg-[#060911] text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- FITA DE COTAÇÕES GLOBAIS AO VIVO (TradingView Ticker Tape Widget) -->
+    <!-- FITA DE COTAÇÕES GLOBAIS AO VIVO (TradingView) -->
     <div class="w-full bg-[#03060c] border-b border-slate-800/80 overflow-hidden">
         <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -50,7 +52,7 @@
         </div>
     </div>
 
-    <!-- TOPO / HEADER -->
+    <!-- HEADER PRINCIPAL -->
     <header class="bg-[#090d16] border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -62,25 +64,24 @@
                         <span class="font-extrabold tracking-tight text-white text-sm sm:text-base">ALPHAHUB</span>
                         <span class="text-[10px] uppercase font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded">Terminal Pro</span>
                     </div>
-                    <p class="text-[11px] text-slate-400 hidden sm:block">Auditoria de Mesas, Macroeconomia & Estrutura Quantitativa</p>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">Auditoria de Mesas, Macroeconomia & Gestão de Risco</p>
                 </div>
             </div>
 
-            <!-- Navegação por Abas -->
             <nav class="flex items-center gap-1 sm:gap-2">
-                <button onclick="trocarAba('auditor')" id="tabBtn-auditor" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all flex items-center gap-1.5">
+                <button onclick="trocarAbaPrincipal('auditor')" id="tabBtn-auditor" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all flex items-center gap-1.5">
                     <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
                     <span>Auditor Zero7</span>
                 </button>
-                <button onclick="trocarAba('macro')" id="tabBtn-macro" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
+                <button onclick="trocarAbaPrincipal('macro')" id="tabBtn-macro" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i>
                     <span>Macro & B3 Real</span>
                 </button>
-                <button onclick="trocarAba('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
+                <button onclick="trocarAbaPrincipal('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="award" class="w-3.5 h-3.5"></i>
                     <span>Mesas & Cupons</span>
                 </button>
-                <button onclick="trocarAba('produtos')" id="tabBtn-produtos" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
+                <button onclick="trocarAbaPrincipal('produtos')" id="tabBtn-produtos" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="boxes" class="w-3.5 h-3.5"></i>
                     <span>Softwares</span>
                 </button>
@@ -88,21 +89,21 @@
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- ÁREA PRINCIPAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
 
         <!-- ========================================== -->
-        <!-- ABA 1: AUDITOR ZERO7                       -->
+        <!-- MÓDULO 1: AUDITOR ZERO7                    -->
         <!-- ========================================== -->
         <section id="aba-auditor" class="flex flex-col gap-6">
             
-            <!-- Barra Superior do Auditor -->
+            <!-- Barra de Controle do Auditor -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0d1322] border border-slate-800 p-4 rounded-xl">
                 <div>
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i> Auditor Regulamentar Zero7 Tesouraria
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Dedução estrita de sub-ticks (WIN ≤ 10 pts / WDO ≤ 0.5 pt), fechamento pós-17:30, custos B3 e limite de perda diária.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Dedução de sub-ticks (WIN ≤ 10 pts / WDO ≤ 0.5 pt), fechamento pós-17:30, custos B3 e consistência de 50%.</p>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
                     <div>
@@ -132,7 +133,7 @@
                 </div>
             </div>
 
-            <!-- Dropzone CSV -->
+            <!-- Caixa de Upload (Dropzone) -->
             <div id="dropzone" class="border-2 border-dashed border-slate-700/80 hover:border-blue-500 bg-[#0d1322]/40 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group">
                 <div class="p-3 bg-blue-500/10 group-hover:bg-blue-500/20 text-blue-400 rounded-full transition-all">
                     <i data-lucide="upload-cloud" class="w-7 h-7"></i>
@@ -144,7 +145,7 @@
                 <input type="file" id="fileInput" accept=".csv" class="hidden">
             </div>
 
-            <!-- Banner Dinâmico de Aprovação -->
+            <!-- Banner Dinâmico de Status -->
             <div id="bannerStatus" class="rounded-xl p-5 shadow-xl border border-white/10 hidden transition-all">
                 <div class="flex items-center justify-between flex-wrap gap-2">
                     <h3 id="bannerTitulo" class="text-sm font-extrabold uppercase tracking-wider text-white">AGUARDANDO FICHEIRO</h3>
@@ -190,16 +191,32 @@
                 </div>
             </div>
 
-            <!-- Tabela de Operações Auditadas -->
-            <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-lg">
+            <!-- NAVEGAÇÃO DE SUB-ABAS DO AUDITOR -->
+            <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+                <button onclick="trocarSubAbaAuditor('trades')" id="subBtn-trades" class="px-4 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white flex items-center gap-1.5 transition-all">
+                    <i data-lucide="list-ordered" class="w-3.5 h-3.5"></i>
+                    <span>Registro Individual de Trades Auditados</span>
+                </button>
+                <button onclick="trocarSubAbaAuditor('dias')" id="subBtn-dias" class="px-4 py-2 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-1.5 transition-all">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                    <span>Resultado Consolidado por Dia & Risco</span>
+                </button>
+                <button onclick="trocarSubAbaAuditor('graficos')" id="subBtn-graficos" class="px-4 py-2 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-1.5 transition-all">
+                    <i data-lucide="line-chart" class="w-3.5 h-3.5"></i>
+                    <span>Curva de Capital & Drawdown</span>
+                </button>
+            </div>
+
+            <!-- SUB-ABA 1: TRADES INDIVIDUAIS -->
+            <div id="subAba-trades" class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-lg">
                 <div class="px-5 py-3.5 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Registo Individual de Trades Auditados</h4>
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Histórico de Operações Auditadas Trade a Trade</h4>
                     </div>
                     <span id="txtTotalOps" class="text-xs text-slate-400 font-mono">0 operações carregadas</span>
                 </div>
-                <div class="overflow-x-auto max-h-[460px]">
+                <div class="overflow-x-auto max-h-[480px]">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="bg-[#070b14] text-slate-400 sticky top-0 uppercase tracking-wider font-semibold border-b border-slate-800">
                             <tr>
@@ -216,7 +233,7 @@
                                 <th class="p-3">Motivo da Auditoria</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelaCorpo" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                        <tbody id="tabelaCorpoTrades" class="divide-y divide-slate-800/60 font-mono text-slate-300">
                             <tr>
                                 <td colspan="11" class="p-10 text-center text-slate-500 italic font-sans">
                                     Nenhum relatório carregado. Arraste um arquivo CSV ou clique em "Testar Dados Demo".
@@ -226,14 +243,83 @@
                     </table>
                 </div>
             </div>
+
+            <!-- SUB-ABA 2: RESULTADO DIÁRIO & RISCO -->
+            <div id="subAba-dias" class="hidden bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-lg">
+                <div class="px-5 py-3.5 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Desempenho por Pregão: Líquido Real vs. Aceito Zero7</h4>
+                    </div>
+                    <span id="txtTotalDias" class="text-xs text-slate-400 font-mono">0 pregões analisados</span>
+                </div>
+                <div class="overflow-x-auto max-h-[480px]">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead class="bg-[#070b14] text-slate-400 sticky top-0 uppercase tracking-wider font-semibold border-b border-slate-800">
+                            <tr>
+                                <th class="p-3">Data do Pregão</th>
+                                <th class="p-3 text-center">Nº Trades</th>
+                                <th class="p-3 text-right">Saldo Líquido Real</th>
+                                <th class="p-3 text-right">Saldo Aceito Zero7</th>
+                                <th class="p-3 text-right">Dedução Teto 50%</th>
+                                <th class="p-3 text-right">Limite Perda Diária</th>
+                                <th class="p-3 text-right">Drawdown do Dia</th>
+                                <th class="p-3 text-center">Conformidade do Dia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaCorpoDias" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                            <tr>
+                                <td colspan="8" class="p-10 text-center text-slate-500 italic font-sans">
+                                    Nenhum pregão processado. Carregue um relatório para visualizar o consolidado diário.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SUB-ABA 3: GRÁFICOS DE DESEMPENHO & DRAWDOWN -->
+            <div id="subAba-graficos" class="hidden flex flex-col gap-5">
+                
+                <!-- Gráfico 1: Curva de Capital Acumulada (Equity Curve) -->
+                <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Curva de Capital (Saldo Válido Zero7 Acumulado)
+                            </h4>
+                            <p class="text-[11px] text-slate-400">Evolução do patrimônio aceito pela mesa vs. Linha de Meta e Trava de Perda Máxima.</p>
+                        </div>
+                        <span id="badgeProgressoGrafico" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">Progresso: 0%</span>
+                    </div>
+                    <div class="w-full h-[280px]">
+                        <canvas id="chartEquity"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 2: PnL por Pregão & Limite de Perda Diária -->
+                <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <i data-lucide="bar-chart-3" class="w-4 h-4 text-sky-400"></i> Resultado Diário (Líquido vs. Aceito) & Trava de Stop Diário
+                            </h4>
+                            <p class="text-[11px] text-slate-400">A linha tracejada vermelha marca o limite de perda diária do plano que bloqueia a plataforma no dia.</p>
+                        </div>
+                    </div>
+                    <div class="w-full h-[260px]">
+                        <canvas id="chartDiario"></canvas>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- ABA 2: ESTRUTURA MACRO & B3 AO VIVO        -->
+        <!-- MÓDULO 2: ESTRUTURA MACRO & B3 AO VIVO     -->
         <!-- ========================================== -->
         <section id="aba-macro" class="hidden flex flex-col gap-6">
 
-            <!-- Banner Informativo -->
             <div class="bg-gradient-to-r from-blue-950/40 via-[#0d1322] to-slate-900 border border-blue-900/40 p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
@@ -251,7 +337,7 @@
                 </div>
             </div>
 
-            <!-- Dados Oficiais BCB (Juros & Câmbio PTAX) -->
+            <!-- Dados Oficiais BCB -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
                     <div>
@@ -306,7 +392,7 @@
                 </div>
             </div>
 
-            <!-- Gráfico Interativo TradingView (Ibovespa / Mini-Índice & Câmbio) -->
+            <!-- Gráfico Interativo TradingView -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
                 <div class="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
                     <div class="flex items-center gap-2">
@@ -315,52 +401,14 @@
                     </div>
                     <span class="text-[11px] text-slate-400">Interativo • Alterne ativos no topo do gráfico</span>
                 </div>
-                <div class="w-full h-[520px]">
-                    <!-- TradingView Advanced Chart -->
+                <div class="w-full h-[500px]">
                     <div id="tradingview_chart_container" class="w-full h-full"></div>
-                </div>
-            </div>
-
-            <!-- Mecânica dos 3 Cenários (Teoria dos Leilões) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-[#0d1322] border border-emerald-900/30 p-4 rounded-xl">
-                    <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase mb-2">
-                        <i data-lucide="trending-up" class="w-4 h-4"></i> Estrutura de Alta (Imbalance)
-                    </div>
-                    <ul class="text-xs text-slate-300 space-y-1.5">
-                        <li>• Preço sustentando <strong>acima do Ajuste</strong> e da VWAP diária.</li>
-                        <li>• Curva de DI futuro em queda e DXY enfraquecendo.</li>
-                        <li>• CVD (Agressão Acumulada) com topos e fundos ascendentes.</li>
-                        <li>• <em>Ação institucional:</em> Compradores defendem recuos na VWAP.</li>
-                    </ul>
-                </div>
-                <div class="bg-[#0d1322] border border-rose-900/30 p-4 rounded-xl">
-                    <div class="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase mb-2">
-                        <i data-lucide="trending-down" class="w-4 h-4"></i> Estrutura de Baixa (Imbalance)
-                    </div>
-                    <ul class="text-xs text-slate-300 space-y-1.5">
-                        <li>• Preço negociando <strong>abaixo do Ajuste</strong> e da VWAP.</li>
-                        <li>• Abertura e empinamento do DI (alta de juros) e DXY em alta.</li>
-                        <li>• CVD com saldo vendedor contínuo; rejeição das máximas.</li>
-                        <li>• <em>Ação institucional:</em> Vendedores absorvem repiques na média.</li>
-                    </ul>
-                </div>
-                <div class="bg-[#0d1322] border border-sky-900/30 p-4 rounded-xl">
-                    <div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase mb-2">
-                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Estrutura Lateral (Rotação)
-                    </div>
-                    <ul class="text-xs text-slate-300 space-y-1.5">
-                        <li>• Preço cruzando repetidamente a VWAP para cima e para baixo.</li>
-                        <li>• Oscilação contida entre a VAH e a VAL do pregão anterior.</li>
-                        <li>• Dias de espera por indicadores (Payroll, Copom, FOMC).</li>
-                        <li>• <em>Ação institucional:</em> Atuação passiva nas extremidades do range.</li>
-                    </ul>
                 </div>
             </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- ABA 3: COMPARADOR DE MESAS & CUPONS        -->
+        <!-- MÓDULO 3: COMPARADOR DE MESAS & CUPONS     -->
         <!-- ========================================== -->
         <section id="aba-mesas" class="hidden flex flex-col gap-6">
 
@@ -371,7 +419,6 @@
                     </h2>
                     <p class="text-xs text-slate-400 mt-0.5">Compare regras de drawdown, metas de aprovação e utilize cupons oficiais com desconto imediato.</p>
                 </div>
-                <!-- Filtros de Mercado -->
                 <div class="flex items-center gap-2 flex-wrap">
                     <button onclick="filtrarMesas('todas')" class="filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white" data-cat="todas">Todas</button>
                     <button onclick="filtrarMesas('b3')" class="filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700" data-cat="b3">B3 Brasil</button>
@@ -380,9 +427,7 @@
                 </div>
             </div>
 
-            <!-- Grid de Cartões de Cupons -->
             <div id="gridMesas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                
                 <!-- Zero7 -->
                 <div class="mesa-card bg-[#0d1322] border border-slate-800 hover:border-slate-700 rounded-xl p-5 flex flex-col justify-between gap-4" data-mercado="b3">
                     <div>
@@ -399,12 +444,10 @@
                             <div class="flex justify-between"><span class="text-slate-400">Dias Mínimos:</span><span class="font-mono font-bold text-slate-200">5 dias úteis</span></div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="copiarCupom('ZERO7VIP', this)" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>ZERO7VIP (15% OFF)</span>
-                        </button>
-                    </div>
+                    <button onclick="copiarCupom('ZERO7VIP', this)" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>ZERO7VIP (15% OFF)</span>
+                    </button>
                 </div>
 
                 <!-- Apex Trader Funding -->
@@ -423,12 +466,10 @@
                             <div class="flex justify-between"><span class="text-slate-400">Dias Mínimos:</span><span class="font-mono font-bold text-slate-200">1 dia apenas</span></div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="copiarCupom('APEX80', this)" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>APEX80 (Até 80% OFF)</span>
-                        </button>
-                    </div>
+                    <button onclick="copiarCupom('APEX80', this)" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>APEX80 (Até 80% OFF)</span>
+                    </button>
                 </div>
 
                 <!-- FTMO -->
@@ -439,124 +480,42 @@
                             <span class="text-xs text-slate-400">Até 90% Repasse</span>
                         </div>
                         <h3 class="text-lg font-bold text-white mt-2">FTMO Global</h3>
-                        <p class="text-xs text-slate-400 mt-1">Líder mundial em avaliação de câmbio, índices e criptoativos. 2 etapas com regras transparentes.</p>
+                        <p class="text-xs text-slate-400 mt-1">Líder mundial em avaliação de câmbio e índices. 2 etapas com regras transparentes.</p>
                         
                         <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
                             <div class="flex justify-between"><span class="text-slate-400">Meta Fase 1:</span><span class="font-mono font-bold text-slate-200">10%</span></div>
                             <div class="flex justify-between"><span class="text-slate-400">Perda Máxima:</span><span class="font-mono font-bold text-rose-400">10% (Estática)</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Prazo de Teste:</span><span class="font-mono font-bold text-slate-200">Ilimitado</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Prazo:</span><span class="font-mono font-bold text-slate-200">Ilimitado</span></div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="copiarCupom('FTMOALPHA', this)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>FTMOALPHA (Ver Bônus)</span>
-                        </button>
-                    </div>
+                    <button onclick="copiarCupom('FTMOALPHA', this)" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>FTMOALPHA (Ver Bônus)</span>
+                    </button>
                 </div>
-
-                <!-- Axia Investing -->
-                <div class="mesa-card bg-[#0d1322] border border-slate-800 hover:border-slate-700 rounded-xl p-5 flex flex-col justify-between gap-4" data-mercado="b3">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">B3 BRASIL</span>
-                            <span class="text-xs text-slate-400">Formação & Mesa</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mt-2">Axia Investing</h3>
-                        <p class="text-xs text-slate-400 mt-1">Uma das pioneiras no Brasil com repasses progressivos e suporte focado em day trading institucional.</p>
-                        
-                        <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
-                            <div class="flex justify-between"><span class="text-slate-400">Ativos:</span><span class="font-mono font-bold text-slate-200">WIN & WDO</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Perda Diária:</span><span class="font-mono font-bold text-rose-400">Sim (Monitorada)</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Plataforma:</span><span class="font-mono font-bold text-slate-200">Profit incluso</span></div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="copiarCupom('AXIAHUB10', this)" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>AXIAHUB10 (10% OFF)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Topstep -->
-                <div class="mesa-card bg-[#0d1322] border border-slate-800 hover:border-slate-700 rounded-xl p-5 flex flex-col justify-between gap-4" data-mercado="cme">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">CME FUTUROS</span>
-                            <span class="text-xs text-slate-400">Pioneira em Chicago</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mt-2">Topstep Trading</h3>
-                        <p class="text-xs text-slate-400 mt-1">Trading Combine de etapa única com End of Day Trailing Drawdown. Extremamente conceituada nos EUA.</p>
-                        
-                        <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
-                            <div class="flex justify-between"><span class="text-slate-400">Meta $50k:</span><span class="font-mono font-bold text-slate-200">$3,000</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Drawdown EOD:</span><span class="font-mono font-bold text-rose-400">$2,000 (Fim do dia)</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Repasse:</span><span class="font-mono font-bold text-slate-200">90%</span></div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="copiarCupom('TOPSTEPHUB', this)" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>TOPSTEPHUB (20% OFF)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- TradeDay -->
-                <div class="mesa-card bg-[#0d1322] border border-slate-800 hover:border-slate-700 rounded-xl p-5 flex flex-col justify-between gap-4" data-mercado="cme">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">CME FUTUROS</span>
-                            <span class="text-xs text-slate-400">Saques no Dia 1</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mt-2">TradeDay</h3>
-                        <p class="text-xs text-slate-400 mt-1">Drawdown travado no balanço inicial após atingir a meta. Sem pegadinhas de trailing intraday.</p>
-                        
-                        <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
-                            <div class="flex justify-between"><span class="text-slate-400">Plataformas:</span><span class="font-mono font-bold text-slate-200">Tradovate / Ninja</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Regra de Consistência:</span><span class="font-mono font-bold text-slate-200">Flexível</span></div>
-                            <div class="flex justify-between"><span class="text-slate-400">Repasse:</span><span class="font-mono font-bold text-slate-200">90%</span></div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 pt-2">
-                        <button onclick="copiarCupom('TRADEDAY20', this)" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                            <span>TRADEDAY20 (20% OFF)</span>
-                        </button>
-                    </div>
-                </div>
-
             </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- ABA 4: SOFTWARES & PRODUTOS PRO            -->
+        <!-- MÓDULO 4: SOFTWARES PRO                    -->
         <!-- ========================================== -->
         <section id="aba-produtos" class="hidden flex flex-col gap-6">
-
             <div class="bg-[#0d1322] border border-slate-800 p-5 rounded-xl">
                 <h2 class="text-sm font-bold text-white flex items-center gap-2">
                     <i data-lucide="boxes" class="w-4 h-4 text-sky-400"></i> Ferramentas e Softwares Proprietários
                 </h2>
-                <p class="text-xs text-slate-400 mt-1">Conectores, painéis executáveis em Python/PyQt6 e indicadores quantitativos para turbinar a sua consistência operacional.</p>
+                <p class="text-xs text-slate-400 mt-1">Conectores, painéis executáveis em Python/PyQt6 e indicadores quantitativos para o seu setup operacional.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                
                 <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
                     <div>
                         <span class="text-[10px] font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">SOFTWARE DESKTOP</span>
                         <h3 class="text-base font-bold text-white mt-2">AlphaFlow Terminal (PyQt6)</h3>
-                        <p class="text-xs text-slate-400 mt-1">Dashboard desktop independente com conexão direta ao MetaTrader 5. Filtros de agressão institucional, pressão de book e Cumulative Volume Delta (CVD) em tempo real.</p>
-                        <div class="mt-4 pt-3 border-t border-slate-800 text-xs space-y-1 text-slate-300">
-                            <p>✓ Suporta 4 instâncias simultâneas de MT5</p>
-                            <p>✓ Alertas sonoros de absorção e exaustão</p>
-                            <p>✓ Código aberto com instalador executável</p>
-                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Dashboard desktop independente integrado com MetaTrader 5. Filtros de agressão institucional, Times & Sales e CVD em tempo real.</p>
                     </div>
-                    <button class="mt-5 w-full bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs py-2.5 rounded-lg border border-slate-700 flex items-center justify-center gap-2 transition-all">
-                        <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Entrar na Fila de Espera
+                    <button class="mt-5 w-full bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs py-2.5 rounded-lg border border-slate-700 flex items-center justify-center gap-2">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Em Fila de Espera
                     </button>
                 </div>
 
@@ -564,14 +523,9 @@
                     <div>
                         <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AUTOMAÇÃO & GESTÃO</span>
                         <h3 class="text-base font-bold text-white mt-2">Zero7 Risk Shield (EA MT5)</h3>
-                        <p class="text-xs text-slate-400 mt-1">Robô sentinela que trava as ordens no MetaTrader 5 caso você atinja a perda máxima diária, lote excedido ou opere após o horário limite regulamentar das mesas.</p>
-                        <div class="mt-4 pt-3 border-t border-slate-800 text-xs space-y-1 text-slate-300">
-                            <p>✓ Trava mecânica antibobagem e autoflagelo</p>
-                            <p>✓ Desativa operações às 17:28h automaticamente</p>
-                            <p>✓ Controle rigoroso de limite de contratos</p>
-                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Robô sentinela que trava as ordens no MetaTrader 5 caso atinja a perda máxima diária, lote excedido ou passe das 17:28h.</p>
                     </div>
-                    <button class="mt-5 w-full bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs py-2.5 rounded-lg border border-slate-700 flex items-center justify-center gap-2 transition-all">
+                    <button class="mt-5 w-full bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs py-2.5 rounded-lg border border-slate-700 flex items-center justify-center gap-2">
                         <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Em Desenvolvimento
                     </button>
                 </div>
@@ -580,18 +534,12 @@
                     <div>
                         <span class="text-[10px] font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">COMUNIDADE VIP</span>
                         <h3 class="text-base font-bold text-white mt-2">AlphaHub Pro Desk Club</h3>
-                        <p class="text-xs text-slate-400 mt-1">Acesso irrestrito a planilhas de gestão quantitativa, salas de estudo de preparação macro antes da abertura e suporte prioritário de auditoria.</p>
-                        <div class="mt-4 pt-3 border-t border-slate-800 text-xs space-y-1 text-slate-300">
-                            <p>✓ Planilhas automatizadas de imposto e DARF</p>
-                            <p>✓ Estudo diário dos Ajustes e VWAP do pregão</p>
-                            <p>✓ Canal restrito de traders financiados</p>
-                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Acesso a planilhas quantitativas de imposto e DARF, salas diárias de preparação macro e suporte prioritário de auditoria.</p>
                     </div>
-                    <button class="mt-5 w-full bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-bold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20">
+                    <button class="mt-5 w-full bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20">
                         <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Notificar Lançamento
                     </button>
                 </div>
-
             </div>
         </section>
 
@@ -609,13 +557,13 @@
             <div>
                 <p class="font-bold text-slate-300">AlphaHub Financial Technology & Analytics © 2026</p>
                 <p class="text-[11px] mt-1 max-w-2xl leading-relaxed">
-                    <strong>Aviso Legal Regulatório:</strong> O AlphaHub é uma plataforma estritamente tecnológica e de processamento de dados analíticos. Não somos instituição financeira, corretora, nem casa de análise credenciada. Nos termos da <strong>Resolução CVM nº 20/2021</strong>, nenhuma funcionalidade, estatística ou dado apresentado constitui análise de valores mobiliários, consultoria, recomendação ou indicação de compra ou venda de quaisquer ativos financeiros. O day trading em contratos futuros envolve elevado risco de perda patrimonial.
+                    <strong>Aviso Legal Regulatório:</strong> O AlphaHub é uma plataforma tecnológica de processamento analítico de dados. Não somos instituição financeira, corretora, nem casa de análise credenciada. Nos termos da <strong>Resolução CVM nº 20/2021</strong>, nenhuma funcionalidade, estatística ou dado apresentado constitui análise de valores mobiliários, consultoria ou indicação de compra/venda de ativos financeiros.
                 </p>
             </div>
             <div class="flex items-center gap-4 text-slate-400 text-xs">
                 <span>Vercel Hosted (Edge CDN)</span>
                 <span>•</span>
-                <span>ISO-8859-1 Engine</span>
+                <span>Chart.js Engine</span>
             </div>
         </div>
     </footer>
@@ -623,12 +571,12 @@
     <!-- SCRIPT DO TRADINGVIEW CHART EMBED -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
-    <!-- JAVASCRIPT PRINCIPAL -->
+    <!-- MOTOR JAVASCRIPT PRINCIPAL -->
     <script>
         lucide.createIcons();
 
-        // 1. Alternador de Abas
-        function trocarAba(abaId) {
+        // 1. Troca de Abas Principais
+        function trocarAbaPrincipal(abaId) {
             const abas = ['auditor', 'macro', 'mesas', 'produtos'];
             abas.forEach(a => {
                 const sec = document.getElementById('aba-' + a);
@@ -642,7 +590,6 @@
                 }
             });
 
-            // Se abrir a aba macro pela primeira vez, inicializa o widget gráfico do TradingView
             if (abaId === 'macro' && !window.tradingViewCarregado) {
                 renderizarGraficoTradingView();
                 carregarDadosBCB();
@@ -650,7 +597,29 @@
             }
         }
 
-        // 2. Renderização do Gráfico TradingView
+        // 2. Troca de Sub-Abas do Auditor
+        function trocarSubAbaAuditor(subAbaId) {
+            const subAbas = ['trades', 'dias', 'graficos'];
+            subAbas.forEach(s => {
+                const container = document.getElementById('subAba-' + s);
+                const btn = document.getElementById('subBtn-' + s);
+                if (s === subAbaId) {
+                    container.classList.remove('hidden');
+                    btn.className = "px-4 py-2 text-xs font-bold rounded-lg bg-blue-600 text-white flex items-center gap-1.5 transition-all";
+                } else {
+                    container.classList.add('hidden');
+                    btn.className = "px-4 py-2 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-1.5 transition-all";
+                }
+            });
+
+            // Se abrir gráficos, aciona o resize dos canvas
+            if (subAbaId === 'graficos') {
+                if (window.chartEquityInst) window.chartEquityInst.resize();
+                if (window.chartDiarioInst) window.chartDiarioInst.resize();
+            }
+        }
+
+        // 3. Renderização TradingView
         function renderizarGraficoTradingView() {
             new TradingView.widget({
                 "autosize": true,
@@ -668,76 +637,56 @@
             });
         }
 
-        // 3. Consulta à API Aberta do Banco Central do Brasil (SGS)
+        // 4. API Banco Central do Brasil
         async function carregarDadosBCB() {
             try {
-                // Selic Meta definida pelo Copom (Série SGS 432)
                 const resSelic = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
                 const dataSelic = await resSelic.json();
                 if (dataSelic && dataSelic.length > 0) {
                     document.getElementById('dado-selic').innerText = parseFloat(dataSelic[0].valor).toFixed(2) + '% a.a.';
                 }
-            } catch (e) {
-                console.log("Fallback Selic:", e);
-            }
+            } catch (e) { console.log(e); }
 
             try {
-                // Taxa DI acumulada diária anualizada (Série SGS 4389)
                 const resDI = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados/ultimos/1?formato=json');
                 const dataDI = await resDI.json();
                 if (dataDI && dataDI.length > 0) {
                     document.getElementById('dado-di').innerText = parseFloat(dataDI[0].valor).toFixed(2) + '% a.a.';
                 }
-            } catch (e) {
-                console.log("Fallback DI:", e);
-            }
+            } catch (e) { console.log(e); }
 
             try {
-                // PTAX Venda Fechamento (Série SGS 10844)
                 const resPtax = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.10844/dados/ultimos/1?formato=json');
                 const dataPtax = await resPtax.json();
                 if (dataPtax && dataPtax.length > 0) {
                     let val = parseFloat(dataPtax[0].valor);
                     document.getElementById('dado-ptax').innerText = 'R$ ' + val.toFixed(4).replace('.', ',');
                 }
-            } catch (e) {
-                console.log("Fallback Ptax:", e);
-            }
+            } catch (e) { console.log(e); }
         }
 
-        // 4. Filtro de Mesas
+        // 5. Filtros e Cupons
         function filtrarMesas(cat) {
             document.querySelectorAll('.filtro-btn').forEach(b => {
-                if (b.dataset.cat === cat) {
-                    b.className = "filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white";
-                } else {
-                    b.className = "filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700";
-                }
+                b.className = b.dataset.cat === cat ? "filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white" : "filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700";
             });
-
             document.querySelectorAll('.mesa-card').forEach(card => {
-                if (cat === 'todas' || card.dataset.mercado === cat) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                if (cat === 'todas' || card.dataset.mercado === cat) card.classList.remove('hidden');
+                else card.classList.add('hidden');
             });
         }
 
-        // 5. Toast e Cópia de Cupons
         function copiarCupom(cupom, btn) {
             navigator.clipboard.writeText(cupom).then(() => {
                 const toast = document.getElementById('toast');
                 document.getElementById('toastMsg').innerText = `Cupom ${cupom} copiado!`;
                 toast.classList.remove('translate-y-20', 'opacity-0');
-                setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 2800);
+                setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 2800);
             });
         }
 
         // ==========================================
-        // MOTOR DE AUDITORIA ZERO7 (CLIENT-SIDE)
+        // MOTOR DE AUDITORIA & GRÁFICOS CLIENT-SIDE
         // ==========================================
         const CONFIG_PLANOS = {
             "Pleno":   { meta: 4997.00, perda_diaria: 1247.00, perda_maxima: 4997.00, max_win: 25, max_wdo: 15 },
@@ -748,8 +697,9 @@
             "Master":  { meta: 19997.00,perda_diaria: 4997.00, perda_maxima: 19997.00,max_win: 100,max_wdo: 60 }
         };
 
-        let ultimoArquivoBruto = null;
         let dadosProcessadosAtuais = null;
+        window.chartEquityInst = null;
+        window.chartDiarioInst = null;
 
         const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('fileInput');
@@ -797,9 +747,7 @@
         }
 
         function lerArquivoCSV(file) {
-            ultimoArquivoBruto = file;
             const reader = new FileReader();
-            
             reader.onload = function(e) {
                 let conteudo = e.target.result;
                 let linhas = conteudo.split(/\r\n|\n/);
@@ -832,7 +780,6 @@
                     }
                 });
             };
-
             reader.readAsText(file, "ISO-8859-1");
         }
 
@@ -854,7 +801,7 @@
             let saldoZero7Total = 0;
 
             let operacoesProcessadas = [];
-            let diasAcumulado = {};
+            let mapaDias = {};
 
             data.forEach(row => {
                 let ativo = String(getVal(row, ['ativo']) || '').toUpperCase().trim();
@@ -871,8 +818,6 @@
                 let pontos = Math.abs(pVenda - pCompra);
 
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
-                
-                // Sem ler a coluna TET (que é Tempo Entre Trades). Apenas comissões explícitas ou contingência Zero7.
                 let comissaoCsv = Math.abs(limparNumero(getVal(row, ['comissoes', 'comissao', 'taxas'])));
 
                 let custoOp = comissaoCsv > 0 
@@ -882,7 +827,6 @@
                     : (ativo.includes('BIT') ? qtdTotalExecutada * 0.45 : 0)));
 
                 custosTotais += custoOp;
-
                 if (bruto > 0) lucroBrutoTotal += bruto;
                 if (bruto < 0) prejuizoBrutoTotal += bruto;
 
@@ -929,8 +873,28 @@
                 saldoZero7Total += saldoTrade;
 
                 let dataDia = abertura.split(' ')[0] || 'Geral';
-                if (!diasAcumulado[dataDia]) diasAcumulado[dataDia] = 0;
-                diasAcumulado[dataDia] += saldoTrade;
+                if (!mapaDias[dataDia]) {
+                    mapaDias[dataDia] = {
+                        data: dataDia,
+                        trades: 0,
+                        brutoTotal: 0,
+                        custosTotal: 0,
+                        saldoZero7Bruto: 0,
+                        piorDrawdownIntraday: 0,
+                        acumuladoDia: 0
+                    };
+                }
+
+                mapaDias[dataDia].trades += 1;
+                mapaDias[dataDia].brutoTotal += bruto;
+                mapaDias[dataDia].custosTotal += custoOp;
+                mapaDias[dataDia].saldoZero7Bruto += saldoTrade;
+                mapaDias[dataDia].acumuladoDia += saldoTrade;
+
+                // Monitora o pior ponto do dia para verificar perda diária
+                if (mapaDias[dataDia].acumuladoDia < mapaDias[dataDia].piorDrawdownIntraday) {
+                    mapaDias[dataDia].piorDrawdownIntraday = mapaDias[dataDia].acumuladoDia;
+                }
 
                 operacoesProcessadas.push({
                     data: dataDia,
@@ -947,61 +911,86 @@
                 });
             });
 
-            // Teto de Consistência de 50% em um único dia (Avaliação)
-            let excessoTeto = 0;
+            // Tratamento de Consolidado Diário e Teto de 50%
             let teto50 = cfg.meta * 0.50;
-            if (fase === "Avaliação") {
-                Object.values(diasAcumulado).forEach(valDia => {
-                    if (valDia > teto50) excessoTeto += (valDia - teto50);
-                });
-            }
+            let excessoTetoTotal = 0;
+            let listaDias = [];
 
-            let saldoFinalZero7 = saldoZero7Total - excessoTeto;
+            Object.keys(mapaDias).forEach(diaKey => {
+                let d = mapaDias[diaKey];
+                let saldoRealDia = d.brutoTotal - d.custosTotal;
+                let excessoDia = 0;
+
+                if (fase === "Avaliação" && d.saldoZero7Bruto > teto50) {
+                    excessoDia = d.saldoZero7Bruto - teto50;
+                    excessoTetoTotal += excessoDia;
+                }
+
+                let saldoAceitoZero7Dia = d.saldoZero7Bruto - excessoDia;
+                let violouPerdaDiaria = d.piorDrawdownIntraday <= -cfg.perda_diaria;
+
+                listaDias.push({
+                    data: d.data,
+                    trades: d.trades,
+                    saldoReal: saldoRealDia,
+                    saldoZero7: saldoAceitoZero7Dia,
+                    excessoTeto: excessoDia,
+                    limiteDiario: -cfg.perda_diaria,
+                    drawdownDia: d.piorDrawdownIntraday,
+                    violouDiaria: violouPerdaDiaria
+                });
+            });
+
+            let saldoFinalZero7 = saldoZero7Total - excessoTetoTotal;
             let saldoLiquidoReal = lucroBrutoTotal + prejuizoBrutoTotal - custosTotais;
             let progressoPct = (saldoFinalZero7 / cfg.meta) * 100;
             let faltaMeta = Math.max(0, cfg.meta - saldoFinalZero7);
 
-            // Verificação de Quebra por Drawdown Máximo Total
+            // Verificação de Drawdown Máximo Total
             let acumulado = 0;
-            let piorDrawdown = 0;
+            let piorDrawdownTotal = 0;
+            let pontosCurva = [];
+
             operacoesProcessadas.forEach(op => {
                 acumulado += op.saldo;
-                if (acumulado < piorDrawdown) piorDrawdown = acumulado;
+                if (acumulado < piorDrawdownTotal) piorDrawdownTotal = acumulado;
+                pontosCurva.push(acumulado);
             });
-            let violouMaxima = piorDrawdown <= -cfg.perda_maxima;
-            let qtdDias = Object.keys(diasAcumulado).length;
+
+            let violouMaxima = piorDrawdownTotal <= -cfg.perda_maxima;
             let minDias = fase === "Avaliação" ? 5 : 1;
 
-            // Atualização dos Cartões Analíticos
+            // Atualização dos Cartões
             document.getElementById('cardLucroBruto').innerText = formatarMoeda(lucroBrutoTotal);
             document.getElementById('cardPrejuizoBruto').innerText = formatarMoeda(prejuizoBrutoTotal);
             document.getElementById('cardCustos').innerText = '- ' + formatarMoeda(custosTotais);
             document.getElementById('cardLiquidoReal').innerText = formatarMoeda(saldoLiquidoReal);
-            document.getElementById('cardAnulado').innerText = formatarMoeda(lucroAnuladoTotal + excessoTeto);
+            document.getElementById('cardAnulado').innerText = formatarMoeda(lucroAnuladoTotal + excessoTetoTotal);
             document.getElementById('txtTotalOps').innerText = `${operacoesProcessadas.length} operações auditadas`;
+            document.getElementById('txtTotalDias').innerText = `${listaDias.length} pregões analisados`;
 
-            // Atualização do Banner Dinâmico com as 5 Cores Oficiais
+            // Atualização do Banner Dinâmico
             const banner = document.getElementById('bannerStatus');
             banner.classList.remove('hidden');
 
-            let corBg = "#7f1d1d"; // Vermelho padrão (<50%)
+            let corBg = "#7f1d1d";
             let statusTxt = "📍 INÍCIO DA JORNADA";
 
             if (violouMaxima) {
-                corBg = "#030712"; // Preto se quebrou
-                statusTxt = `❌ CONTA REPROVADA — Perda Máxima Excedida (${formatarMoeda(piorDrawdown)})`;
+                corBg = "#030712";
+                statusTxt = `❌ CONTA REPROVADA — Perda Máxima Excedida (${formatarMoeda(piorDrawdownTotal)})`;
                 faltaMeta = 0;
-            } else if (saldoFinalZero7 >= cfg.meta && qtdDias >= minDias) {
-                corBg = "#065f46"; // Verde esmeralda se meta batida
+            } else if (saldoFinalZero7 >= cfg.meta && listaDias.length >= minDias) {
+                corBg = "#065f46";
                 statusTxt = "🎉 META CONCLUÍDA! VOCÊ ESTÁ APTO A SOLICITAR APROVAÇÃO NA ÁREA DO TRADER";
             } else if (progressoPct >= 75) {
-                corBg = "#854d0e"; // Âmbar se >= 75%
+                corBg = "#854d0e";
                 statusTxt = `⚡ RETA FINAL (${progressoPct.toFixed(1)}%) — Pouco falta para concluir a avaliação!`;
             } else if (progressoPct >= 50) {
-                corBg = "#1e40af"; // Azul se >= 50%
+                corBg = "#1e40af";
                 statusTxt = `🚀 MEIO DO CAMINHO (${progressoPct.toFixed(1)}%) — Mantenha o gerenciamento e a consistência!`;
             } else {
-                statusTxt = saldoFinalZero7 < 0 ? `⚠️ SALDO NEGATIVO (${progressoPct.toFixed(1)}%) — Atenção ao risco diário.` : `📍 INÍCIO DA JORNADA (${progressoPct.toFixed(1)}%) — Menos de 50% concluído.`;
+                statusTxt = saldoFinalZero7 < 0 ? `⚠️ SALDO NEGATIVO (${progressoPct.toFixed(1)}%) — Cuidado redobrado com o stop diário.` : `📍 INÍCIO DA JORNADA (${progressoPct.toFixed(1)}%) — Menos de 50% concluído.`;
             }
 
             banner.style.backgroundColor = corBg;
@@ -1009,16 +998,14 @@
             document.getElementById('bannerValido').innerText = formatarMoeda(saldoFinalZero7);
             document.getElementById('bannerPct').innerText = progressoPct.toFixed(1) + '%';
             document.getElementById('bannerFalta').innerText = (violouMaxima || saldoFinalZero7 >= cfg.meta) ? "R$ 0,00" : formatarMoeda(faltaMeta);
+            document.getElementById('badgeProgressoGrafico').innerText = `Progresso: ${progressoPct.toFixed(1)}%`;
 
-            // Preenchimento da Tabela
-            const tbody = document.getElementById('tabelaCorpo');
-            tbody.innerHTML = '';
-
+            // 1. Tabela de Trades Individuais
+            const tbodyTrades = document.getElementById('tabelaCorpoTrades');
+            tbodyTrades.innerHTML = '';
             operacoesProcessadas.forEach(op => {
                 let tr = document.createElement('tr');
-                let tagClass = op.status === "Desconsiderado" ? "bg-rose-950/30 text-rose-300" : "hover:bg-slate-800/40";
-                tr.className = tagClass;
-
+                tr.className = op.status === "Desconsiderado" ? "bg-rose-950/30 text-rose-300" : "hover:bg-slate-800/40";
                 tr.innerHTML = `
                     <td class="p-3">${op.data}</td>
                     <td class="p-3 font-bold text-white">${op.ativo}</td>
@@ -1036,19 +1023,166 @@
                     </td>
                     <td class="p-3 text-slate-400 font-sans">${op.motivo}</td>
                 `;
-                tbody.appendChild(tr);
+                tbodyTrades.appendChild(tr);
+            });
+
+            // 2. Tabela de Consolidação Diária
+            const tbodyDias = document.getElementById('tabelaCorpoDias');
+            tbodyDias.innerHTML = '';
+            listaDias.forEach(d => {
+                let tr = document.createElement('tr');
+                tr.className = d.violouDiaria ? "bg-red-950/40 text-red-300 font-bold" : "hover:bg-slate-800/40";
+                tr.innerHTML = `
+                    <td class="p-3 text-white font-bold">${d.data}</td>
+                    <td class="p-3 text-center">${d.trades}</td>
+                    <td class="p-3 text-right ${d.saldoReal >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${formatarMoeda(d.saldoReal)}</td>
+                    <td class="p-3 text-right font-bold ${d.saldoZero7 >= 0 ? 'text-sky-400' : 'text-rose-400'}">${formatarMoeda(d.saldoZero7)}</td>
+                    <td class="p-3 text-right text-amber-400">${d.excessoTeto > 0 ? '-' + formatarMoeda(d.excessoTeto) : 'R$ 0,00'}</td>
+                    <td class="p-3 text-right text-slate-400">${formatarMoeda(d.limiteDiario)}</td>
+                    <td class="p-3 text-right font-bold ${d.violouDiaria ? 'text-rose-400' : 'text-slate-300'}">${formatarMoeda(d.drawdownDia)}</td>
+                    <td class="p-3 text-center">
+                        <span class="px-2.5 py-0.5 rounded text-[10px] font-bold ${d.violouDiaria ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">
+                            ${d.violouDiaria ? 'BLOQUEIO DIÁRIO (Stop Atingido)' : 'Conforme Regular'}
+                        </span>
+                    </td>
+                `;
+                tbodyDias.appendChild(tr);
+            });
+
+            // 3. Renderização dos Gráficos com Chart.js
+            desenharGraficos(pontosCurva, listaDias, cfg);
+        }
+
+        // 7. Função de Desenho dos Gráficos Chart.js
+        function desenharGraficos(pontosCurva, listaDias, cfg) {
+            // Destrói instâncias anteriores para não duplicar canvas
+            if (window.chartEquityInst) window.chartEquityInst.destroy();
+            if (window.chartDiarioInst) window.chartDiarioInst.destroy();
+
+            // Gráfico 1: Curva de Capital
+            const ctxEquity = document.getElementById('chartEquity').getContext('2d');
+            const labelsTrades = pontosCurva.map((_, idx) => `Trade ${idx + 1}`);
+
+            window.chartEquityInst = new Chart(ctxEquity, {
+                type: 'line',
+                data: {
+                    labels: labelsTrades,
+                    datasets: [
+                        {
+                            label: 'Saldo Válido Zero7 (R$)',
+                            data: pontosCurva,
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.08)',
+                            fill: true,
+                            tension: 0.25,
+                            borderWidth: 2,
+                            pointRadius: 2,
+                            pointHoverRadius: 4
+                        },
+                        {
+                            label: `Meta do Plano (${formatarMoeda(cfg.meta)})`,
+                            data: Array(pontosCurva.length).fill(cfg.meta),
+                            borderColor: '#10b981',
+                            borderDash: [5, 5],
+                            borderWidth: 1.5,
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: `Perda Máxima (-${formatarMoeda(cfg.perda_maxima)})`,
+                            data: Array(pontosCurva.length).fill(-cfg.perda_maxima),
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5],
+                            borderWidth: 1.5,
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.dataset.label}: ${formatarMoeda(context.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 }, callback: (v) => 'R$ ' + v } }
+                    }
+                }
+            });
+
+            // Gráfico 2: PnL Diário vs Limite de Perda Diária
+            const ctxDiario = document.getElementById('chartDiario').getContext('2d');
+            const labelsDias = listaDias.map(d => d.data);
+            const saldosZero7Dias = listaDias.map(d => d.saldoZero7);
+            const saldosReaisDias = listaDias.map(d => d.saldoReal);
+
+            window.chartDiarioInst = new Chart(ctxDiario, {
+                type: 'bar',
+                data: {
+                    labels: labelsDias,
+                    datasets: [
+                        {
+                            label: 'Saldo Aceito Zero7 (R$)',
+                            data: saldosZero7Dias,
+                            backgroundColor: saldosZero7Dias.map(v => v >= 0 ? '#38bdf8' : '#f43f5e'),
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Saldo Líquido Real (R$)',
+                            data: saldosReaisDias,
+                            backgroundColor: 'rgba(148, 163, 184, 0.3)',
+                            borderRadius: 4
+                        },
+                        {
+                            type: 'line',
+                            label: `Limite Perda Diária (-${formatarMoeda(cfg.perda_diaria)})`,
+                            data: Array(labelsDias.length).fill(-cfg.perda_diaria),
+                            borderColor: '#ef4444',
+                            borderDash: [6, 6],
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.dataset.label}: ${formatarMoeda(context.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.04)' }, ticks: { color: '#64748b', font: { size: 10 }, callback: (v) => 'R$ ' + v } }
+                    }
+                }
             });
         }
 
-        // 6. Dados Demo para Teste Rápido
+        // 8. Teste com Dados Demo
         function carregarDemo() {
             const demoCSV = `Ativo;Abertura;Fechamento;Qtd Compra;Qtd Venda;Preço Compra;Preço Venda;Res. Intervalo Bruto
-WINZ26;28/10/2026 09:15:00;28/10/2026 09:22:10;25;25;130.200;130.450;1.250,00
-WINZ26;28/10/2026 10:04:12;28/10/2026 10:05:00;25;25;130.500;130.510;50,00
-WINZ26;28/10/2026 11:30:00;28/10/2026 11:45:00;25;25;130.600;130.900;1.500,00
-WINZ26;28/10/2026 14:10:00;28/10/2026 14:20:00;25;25;131.000;130.800;-1.000,00
-WINZ26;28/10/2026 15:40:00;28/10/2026 15:55:00;25;25;130.800;131.200;2.000,00
-WINZ26;28/10/2026 17:31:00;28/10/2026 17:33:00;10;10;131.100;131.250;300,00`;
+WINZ26;24/10/2026 09:15:00;24/10/2026 09:25:00;25;25;130.200;130.450;1.250,00
+WINZ26;24/10/2026 10:04:12;24/10/2026 10:05:00;25;25;130.500;130.510;50,00
+WINZ26;24/10/2026 11:30:00;24/10/2026 11:45:00;25;25;130.600;130.900;1.500,00
+WINZ26;25/10/2026 09:30:00;25/10/2026 09:40:00;25;25;131.000;130.800;-1.000,00
+WINZ26;25/10/2026 11:00:00;25/10/2026 11:35:00;25;25;130.800;131.100;1.500,00
+WINZ26;26/10/2026 10:15:00;26/10/2026 10:30:00;25;25;131.200;131.550;1.750,00
+WINZ26;27/10/2026 14:00:00;27/10/2026 14:15:00;25;25;131.800;131.550;-1.250,00
+WINZ26;28/10/2026 09:20:00;28/10/2026 09:50:00;25;25;131.400;131.850;2.250,00
+WINZ26;28/10/2026 17:31:00;28/10/2026 17:33:00;10;10;131.800;131.950;300,00`;
 
             Papa.parse(demoCSV, {
                 header: true,
