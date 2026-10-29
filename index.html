@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaHub Prop Desk | Auditor, Macro B3 & Gestão Quantitativa</title>
-    <!-- Tailwind CSS (Garante toda a interface visual) -->
+    <title>AlphaHub Prop Desk | Terminal Quantitativo & Auditoria B3</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse para ler CSV localmente -->
+    <!-- PapaParse para auditoria client-side de CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Chart.js para Curva de Capital e Correlações -->
+    <!-- Chart.js para Curva de Capital e Gráficos Yahoo Finance -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,42 +27,42 @@
 </head>
 <body class="bg-[#060911] text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- FITA SUPERIOR DE STATUS DE MERCADO -->
+    <!-- FITA SUPERIOR DE COTAÇÕES REAIS (ALIMENTADA VIA YAHOO FINANCE & BCB) -->
     <div class="w-full bg-[#03060c] border-b border-slate-800/80 px-4 py-2 flex items-center justify-between text-xs overflow-x-auto gap-4">
         <div class="flex items-center gap-4 flex-shrink-0">
             <span class="inline-flex items-center gap-1.5 font-bold text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> B3 SESSÃO REGULAR
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> SESSÃO REGULAR
             </span>
             <div class="flex items-center gap-1 text-slate-400 font-mono text-[11px]">
-                <span>HORÁRIO OFICIAL:</span>
+                <span>BRASÍLIA:</span>
                 <span id="relogio-b3" class="text-white font-bold">--:--:--</span>
             </div>
         </div>
 
-        <div class="flex items-center gap-5 flex-shrink-0 font-mono text-[11px]">
+        <div id="ticker-tape-container" class="flex items-center gap-5 flex-shrink-0 font-mono text-[11px]">
             <div class="flex items-center gap-1.5">
-                <span class="text-slate-400">WIN (Índice):</span>
-                <span class="text-emerald-400 font-bold">131.420</span>
-                <span class="text-[10px] text-emerald-400 font-semibold">(+0.55%)</span>
+                <span class="text-slate-400">EWZ (Brasil NY):</span>
+                <span id="tape-ewz" class="text-slate-300 font-bold">Carregando...</span>
             </div>
             <div class="flex items-center gap-1.5">
-                <span class="text-slate-400">WDO (Dólar):</span>
-                <span class="text-rose-400 font-bold">5.412,00</span>
-                <span class="text-[10px] text-rose-400 font-semibold">(-0.42%)</span>
+                <span class="text-slate-400">USD/BRL:</span>
+                <span id="tape-usdbrl" class="text-slate-300 font-bold">Carregando...</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">S&P 500 Fut:</span>
-                <span class="text-emerald-400 font-bold">5.895,50</span>
-                <span class="text-[10px] text-emerald-400 font-semibold">(+0.38%)</span>
+                <span id="tape-es" class="text-slate-300 font-bold">Carregando...</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">DXY:</span>
-                <span class="text-rose-400 font-bold">103.80</span>
-                <span class="text-[10px] text-rose-400 font-semibold">(-0.15%)</span>
+                <span id="tape-dxy" class="text-slate-300 font-bold">Carregando...</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">US10Y Yield:</span>
-                <span class="text-slate-200 font-bold">4.18%</span>
+                <span id="tape-tnx" class="text-slate-300 font-bold">Carregando...</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">Petróleo WTI:</span>
+                <span id="tape-cl" class="text-slate-300 font-bold">Carregando...</span>
             </div>
         </div>
     </div>
@@ -91,7 +91,7 @@
                 </button>
                 <button onclick="trocarAbaPrincipal('macro')" id="tabBtn-macro" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                    <span>Macro B3 & EWZ</span>
+                    <span>Macro B3 & Yahoo Finance</span>
                 </button>
                 <button onclick="trocarAbaPrincipal('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="award" class="w-3.5 h-3.5"></i>
@@ -327,106 +327,147 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- MÓDULO 2: MACRO B3, EWZ & QUANT ENGINE     -->
+        <!-- MÓDULO 2: MACRO B3 & YAHOO FINANCE AO VIVO -->
         <!-- ========================================== -->
         <section id="aba-macro" class="hidden flex flex-col gap-6">
 
-            <!-- Diagnóstico Quantitativo -->
+            <!-- Diagnóstico Quantitativo em Tempo Real -->
             <div id="painel-diagnostico-quant" class="bg-gradient-to-r from-blue-950/50 via-[#0d1322] to-slate-900 border border-blue-900/40 p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Algoritmo de Pressão da Carteira Teórica (50% do IBOV)</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Algoritmo Quantitativo de Pressão da Carteira Teórica B3</span>
                     </div>
                     <h2 id="quant-veredito" class="text-xl font-black text-white mt-1 flex items-center gap-2">
-                        <span class="text-emerald-400">🟢 FORTE PRESSÃO COMPRADORA INSTITUCIONAL (+0.48%)</span>
+                        Calculando dados em tempo real...
                     </h2>
                     <p id="quant-explicacao" class="text-xs text-slate-300 mt-1 max-w-3xl leading-relaxed">
-                        As blue chips estão respaldando altas no Mini-Índice com Vale e grandes bancos em campo positivo. Recuos até a VWAP têm alta probabilidade de absorção passiva na compra.
+                        Conectando à API da B3 (Brapi) para ponderar o impacto de Vale, Petrobras e Bancos no Mini-Índice.
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="bg-[#131b2e] border border-slate-800 p-3 rounded-lg text-right">
                         <p class="text-[10px] text-slate-400 uppercase font-semibold">Tração Teórica Gerada</p>
-                        <p id="quant-pontos-gerados" class="text-lg font-black text-emerald-400 font-mono">+624 pts</p>
+                        <p id="quant-pontos-gerados" class="text-lg font-black text-emerald-400 font-mono">-- pts</p>
                     </div>
-                    <button onclick="carregarDadosMercado()" class="text-xs font-bold px-3 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-all">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Atualizar
+                    <button onclick="carregarDadosMercadoCompleto()" class="text-xs font-bold px-3 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-all">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Atualizar Dados
                     </button>
                 </div>
             </div>
 
-            <!-- Cesta de Ativos de Maior Peso do Índice -->
+            <!-- Dados Oficiais Banco Central do Brasil (SGS) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Selic Meta / Copom</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 font-mono font-bold">Oficial BCB</span>
+                        </div>
+                        <p id="dado-selic" class="text-2xl font-black text-white mt-2 font-mono">--% a.a.</p>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                        <i data-lucide="info" class="w-3 h-3"></i> Taxa básica da economia brasileira
+                    </p>
+                </div>
+
+                <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Taxa DI Diária</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono font-bold">Série 4389</span>
+                        </div>
+                        <p id="dado-di" class="text-2xl font-black text-white mt-2 font-mono">--% a.a.</p>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                        <i data-lucide="info" class="w-3 h-3"></i> Referência para os contratos de DI Futuro
+                    </p>
+                </div>
+
+                <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Dólar PTAX (Fechamento)</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono font-bold">Oficial BCB</span>
+                        </div>
+                        <p id="dado-ptax" class="text-2xl font-black text-white mt-2 font-mono">R$ --</p>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                        <i data-lucide="info" class="w-3 h-3"></i> Base de liquidação financeira do Dólar
+                    </p>
+                </div>
+
+                <div class="bg-[#0d1322] border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">EWZ Variação Hoje</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 font-mono font-bold">Yahoo Finance</span>
+                        </div>
+                        <p id="dado-ewz-resumo" class="text-2xl font-black text-white mt-2 font-mono">--</p>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                        <i data-lucide="compass" class="w-3 h-3"></i> Sentimento do estrangeiro em NY
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cesta de Ações da B3 com Dados 100% Reais (Brapi.dev) -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                     <div>
                         <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                            <i data-lucide="layers" class="w-4 h-4 text-sky-400"></i> Cesta das Ações Âncora da B3 (Cotações em Tempo Real)
+                            <i data-lucide="layers" class="w-4 h-4 text-sky-400"></i> Cesta das Ações Âncora da B3 (Cotações Reais via Brapi API)
                         </h3>
-                        <p class="text-[11px] text-slate-400">Estes 9 ativos respondem por ~50% do volume e da pontuação do Ibovespa. Ponderação direta no Mini-Índice.</p>
+                        <p class="text-[11px] text-slate-400">Os 9 ativos com maior representatividade no Ibovespa (~50% do peso). Ponderação direta na pontuação do WIN.</p>
                     </div>
-                    <span class="text-[10px] font-mono text-slate-400 bg-slate-800 px-2 py-1 rounded">Feed: Brapi JSON</span>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded">Live Data Feed</span>
                 </div>
 
                 <div id="grid-acoes-peso" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                    <!-- Cards carregados via JS com fallback estático -->
-                </div>
-            </div>
-
-            <!-- Gráfico do EWZ em Tempo Real + Matriz de Correlação -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col">
-                    <div class="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                            <h4 class="text-xs font-bold text-white uppercase tracking-wider">EWZ — iShares MSCI Brazil ETF (Nova York)</h4>
-                        </div>
-                        <span class="text-[11px] text-slate-400 font-mono">Pré-mercado US & Sessão Regular</span>
-                    </div>
-                    <div class="w-full h-[420px] p-2 bg-[#060911]">
-                        <div id="tradingview_ewz_chart" style="height:100%;width:100%"></div>
-                    </div>
-                    <div class="px-5 py-2.5 bg-[#0a0f1d] border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>💡 <strong>Dica Operacional:</strong> Movimentos bruscos no EWZ no pré-mercado de NY (05h00 às 09h00) indicam a direção provável do gap de abertura do WIN.</span>
-                    </div>
-                </div>
-
-                <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 mb-1">
-                            <i data-lucide="git-compare" class="w-4 h-4 text-purple-400"></i> Matriz de Correlação do WIN
-                        </h4>
-                        <p class="text-[11px] text-slate-400 mb-4">Vetor de relação estatística com o Mini-Índice:</p>
-                        <div class="w-full h-[280px]">
-                            <canvas id="chartCorrelacao"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-3 border-t border-slate-800 space-y-2 text-xs">
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-400">Dólar Futuro (WDO):</span>
-                            <span class="font-mono font-bold text-rose-400">-0.78 (Inversa Forte)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-400">EWZ Brasil (NY):</span>
-                            <span class="font-mono font-bold text-emerald-400">+0.92 (Direta Forte)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-400">Juros DI1F Futuro:</span>
-                            <span class="font-mono font-bold text-rose-400">-0.75 (Inversa Forte)</span>
-                        </div>
+                    <div class="col-span-full py-8 text-center text-slate-500 text-xs italic">
+                        Carregando cotações em tempo real da B3...
                     </div>
                 </div>
             </div>
 
-            <!-- Calendário Econômico Oficial -->
+            <!-- GRÁFICO REAL DO YAHOO FINANCE VIA CHART.JS (NATIVO, SEM IFRAME) -->
+            <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col">
+                <div class="px-5 py-3 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#090d16]">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Terminal Gráfico Nativo — Yahoo Finance Chart API</h4>
+                    </div>
+                    <!-- Seletor de Ativos do Yahoo Finance -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button onclick="mudarAtivoYahoo('EWZ', this)" class="btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-blue-600 text-white">EWZ (Brasil NY)</button>
+                        <button onclick="mudarAtivoYahoo('ES=F', this)" class="btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">S&P 500 Futuro</button>
+                        <button onclick="mudarAtivoYahoo('BRL=X', this)" class="btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">USD/BRL</button>
+                        <button onclick="mudarAtivoYahoo('^BVSP', this)" class="btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Ibovespa (^BVSP)</button>
+                        <button onclick="mudarAtivoYahoo('^TNX', this)" class="btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">US10Y Yield</button>
+                    </div>
+                </div>
+
+                <div class="w-full h-[400px] p-4 bg-[#060911] relative">
+                    <div id="loading-yahoo-chart" class="absolute inset-0 bg-[#060911]/80 flex items-center justify-center text-xs text-sky-400 font-mono z-10 hidden">
+                        Buscando candles do Yahoo Finance...
+                    </div>
+                    <canvas id="chartYahooCanvas"></canvas>
+                </div>
+
+                <div class="px-5 py-2.5 bg-[#0a0f1d] border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <span>📡 <strong>Fonte:</strong> Yahoo Finance API oficial via proxy seguro com atualização instantânea.</span>
+                    <span id="txt-detalhe-yahoo" class="font-mono text-slate-300">Ativo selecionado: EWZ</span>
+                </div>
+            </div>
+
+            <!-- Calendário Econômico Oficial Investing.com -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
                 <div class="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
                     <div class="flex items-center gap-2">
                         <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-400"></i>
-                        <span class="text-xs font-bold text-white uppercase tracking-wider">Calendário de Notícias de Alto Impacto (Brasil & EUA)</span>
+                        <span class="text-xs font-bold text-white uppercase tracking-wider">Calendário Econômico de Notícias em Tempo Real (Investing.com)</span>
                     </div>
-                    <span class="text-[11px] text-slate-400">Horário de Brasília</span>
+                    <span class="text-[11px] text-slate-400">Horário Oficial de Brasília (GMT-3)</span>
                 </div>
                 <div class="p-2">
                     <iframe 
@@ -597,19 +638,16 @@
             <div class="flex items-center gap-4 text-slate-400 text-xs">
                 <span>Vercel Hosted (Edge CDN)</span>
                 <span>•</span>
-                <span>Brapi & BCB Engine</span>
+                <span>Yahoo Finance & BCB Realtime API</span>
             </div>
         </div>
     </footer>
-
-    <!-- SCRIPT TRADINGVIEW EMBED -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
     <!-- MOTOR JAVASCRIPT PRINCIPAL -->
     <script>
         lucide.createIcons();
 
-        // 1. Relógio da B3 em Tempo Real
+        // 1. Relógio de Brasília
         function atualizarRelogio() {
             const agora = new Date();
             const horas = String(agora.getHours()).padStart(2, '0');
@@ -637,12 +675,11 @@
             });
 
             if (abaId === 'macro') {
-                if (!window.ewzCarregado) {
-                    inicializarGraficoEWZ();
-                    desenharGraficoCorrelacao();
-                    window.ewzCarregado = true;
+                if (!window.macroInicializado) {
+                    carregarDadosMercadoCompleto();
+                    carregarGraficoYahooReal('EWZ');
+                    window.macroInicializado = true;
                 }
-                carregarDadosMercado();
             }
         }
 
@@ -668,153 +705,289 @@
         }
 
         // ==========================================
-        // CARTEIRA TEÓRICA B3 & EWZ ENGINE
+        // YAHOO FINANCE CHART & PROXY API
         // ==========================================
-        const CARTEIRA_IBOV = [
-            { ticker: 'VALE3', nome: 'Vale ON', peso: 12.8, preco: 62.40, varPct: 1.25 },
-            { ticker: 'PETR4', nome: 'Petrobras PN', peso: 8.5, preco: 36.80, varPct: 0.82 },
-            { ticker: 'ITUB4', nome: 'Itaú Unibanco', peso: 7.6, preco: 34.15, varPct: -0.29 },
-            { ticker: 'PETR3', nome: 'Petrobras ON', peso: 4.6, preco: 39.50, varPct: 0.65 },
-            { ticker: 'BBDC4', nome: 'Bradesco PN', peso: 3.8, preco: 13.90, varPct: 0.50 },
-            { ticker: 'BBAS3', nome: 'Banco do Brasil', peso: 3.6, preco: 26.80, varPct: 0.95 },
-            { ticker: 'B3SA3', nome: 'B3 SA', peso: 3.4, preco: 11.20, varPct: -0.45 },
-            { ticker: 'WEGE3', nome: 'WEG ON', peso: 3.1, preco: 52.30, varPct: 1.10 },
-            { ticker: 'ABEV3', nome: 'Ambev ON', peso: 2.6, preco: 12.10, varPct: 0.15 }
-        ];
+        let chartYahooInst = null;
+        let ativoYahooAtual = 'EWZ';
 
-        window.chartCorrelacaoInst = null;
-
-        function inicializarGraficoEWZ() {
-            if (window.TradingView) {
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "AMEX:EWZ",
-                    "interval": "15",
-                    "timezone": "America/Sao_Paulo",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "br",
-                    "toolbar_bg": "#090d16",
-                    "enable_publishing": false,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": false,
-                    "container_id": "tradingview_ewz_chart"
-                });
+        async function fetchYahoo(urlDireta) {
+            // Tenta proxy 1 (corsproxy.io), se falhar usa proxy 2 (allorigins)
+            try {
+                const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(urlDireta)}`);
+                if (res.ok) return await res.json();
+            } catch (e) {
+                console.warn("Proxy 1 falhou, tentando fallback...", e);
             }
+
+            const res2 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(urlDireta)}`);
+            return await res2.json();
         }
 
-        function desenharGraficoCorrelacao() {
-            const canvas = document.getElementById('chartCorrelacao');
+        async function carregarGraficoYahooReal(ticker = 'EWZ') {
+            ativoYahooAtual = ticker;
+            const canvas = document.getElementById('chartYahooCanvas');
+            const loader = document.getElementById('loading-yahoo-chart');
+            const txtDetalhe = document.getElementById('txt-detalhe-yahoo');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (window.chartCorrelacaoInst) window.chartCorrelacaoInst.destroy();
 
-            window.chartCorrelacaoInst = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['EWZ (NY)', 'S&P 500', 'DXY', 'DI1F (Juros)', 'Dólar (WDO)'],
-                    datasets: [{
-                        label: 'Correlação com WIN',
-                        data: [0.92, 0.65, -0.55, -0.75, -0.78],
-                        backgroundColor: [
-                            'rgba(16, 185, 129, 0.85)',
-                            'rgba(56, 189, 248, 0.85)',
-                            'rgba(244, 63, 94, 0.75)',
-                            'rgba(239, 68, 68, 0.85)',
-                            'rgba(239, 68, 68, 0.85)'
-                        ],
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (c) => `Correlação: ${c.parsed.x > 0 ? '+' : ''}${c.parsed.x.toFixed(2)}` } }
-                    },
-                    scales: {
-                        x: { min: -1, max: 1, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
-                        y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 11, weight: 'bold' } } }
-                    }
-                }
-            });
-        }
-
-        async function carregarDadosMercado() {
-            const grid = document.getElementById('grid-acoes-peso');
-            if (!grid) return;
-
-            let dadosFinais = CARTEIRA_IBOV;
+            if (loader) loader.classList.remove('hidden');
+            if (txtDetalhe) txtDetalhe.innerText = `Ativo selecionado: ${ticker} (Buscando candles...)`;
 
             try {
-                const tickersStr = CARTEIRA_IBOV.map(a => a.ticker).join(',');
-                const res = await fetch(`https://brapi.dev/api/quote/${tickersStr}`);
-                const data = await res.json();
-                if (data && data.results && data.results.length > 0) {
-                    dadosFinais = CARTEIRA_IBOV.map(item => {
-                        const quote = data.results.find(r => r.symbol === item.ticker);
-                        return {
-                            ...item,
-                            preco: quote && quote.regularMarketPrice ? quote.regularMarketPrice : item.preco,
-                            varPct: quote && quote.regularMarketChangePercent ? quote.regularMarketChangePercent : item.varPct
-                        };
-                    });
+                const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=15m&range=5d`;
+                const data = await fetchYahoo(url);
+                const res = data.chart.result[0];
+
+                const meta = res.meta;
+                const timestamps = res.timestamp || [];
+                const quotes = res.indicators.quote[0];
+                const closes = quotes.close || [];
+
+                const labels = [];
+                const precosValidos = [];
+
+                for (let i = 0; i < timestamps.length; i++) {
+                    if (closes[i] !== null && closes[i] !== undefined) {
+                        const d = new Date(timestamps[i] * 1000);
+                        const diaMes = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+                        const horaMin = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                        labels.push(`${diaMes} ${horaMin}`);
+                        precosValidos.push(parseFloat(closes[i].toFixed(2)));
+                    }
                 }
+
+                const ctx = canvas.getContext('2d');
+                if (chartYahooInst) chartYahooInst.destroy();
+
+                const gradiente = ctx.createLinearGradient(0, 0, 0, 360);
+                gradiente.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+                gradiente.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+
+                chartYahooInst = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: `${ticker} (Cotação Real - Yahoo Finance)`,
+                            data: precosValidos,
+                            borderColor: '#38bdf8',
+                            borderWidth: 2,
+                            backgroundColor: gradiente,
+                            fill: true,
+                            tension: 0.15,
+                            pointRadius: 0,
+                            pointHoverRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => `Preço: $ ${c.parsed.y?.toFixed(2)}`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                                ticks: { color: '#64748b', maxTicksLimit: 8, font: { size: 10 } }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                                ticks: { color: '#64748b', font: { size: 10 }, callback: (v) => '$ ' + v.toFixed(2) }
+                            }
+                        }
+                    }
+                });
+
+                const ultimoPreco = meta.regularMarketPrice || precosValidos[precosValidos.length - 1];
+                const prevClose = meta.chartPreviousClose || ultimoPreco;
+                const variacaoPct = ((ultimoPreco - prevClose) / prevClose) * 100;
+                const sinal = variacaoPct >= 0 ? '+' : '';
+
+                if (txtDetalhe) {
+                    txtDetalhe.innerHTML = `Ativo: <strong class="text-white">${ticker}</strong> | Último: <strong class="text-sky-400">$ ${ultimoPreco.toFixed(2)}</strong> (${sinal}${variacaoPct.toFixed(2)}%)`;
+                }
+
+                // Se o ativo for EWZ, atualiza o card de resumo
+                if (ticker === 'EWZ') {
+                    const elResumo = document.getElementById('dado-ewz-resumo');
+                    if (elResumo) {
+                        elResumo.innerText = `$ ${ultimoPreco.toFixed(2)} (${sinal}${variacaoPct.toFixed(2)}%)`;
+                        elResumo.className = `text-2xl font-black mt-2 font-mono ${variacaoPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                    }
+                }
+
             } catch (err) {
-                // Mantém fallback dos dados padrão se offline
-            }
-
-            grid.innerHTML = '';
-            let somaContribuicao = 0;
-
-            dadosFinais.forEach(ativo => {
-                const contribuicao = (ativo.varPct * (ativo.peso / 100));
-                somaContribuicao += contribuicao;
-                const cor = ativo.varPct >= 0 ? 'text-emerald-400' : 'text-rose-400';
-                const bgCor = ativo.varPct >= 0 ? 'border-emerald-500/20' : 'border-rose-500/20';
-
-                const card = document.createElement('div');
-                card.className = `bg-[#131b2e] border ${bgCor} p-3 rounded-lg flex flex-col justify-between`;
-                card.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="font-black text-white text-xs">${ativo.ticker}</span>
-                        <span class="text-[10px] text-slate-400 font-mono">${ativo.peso}%</span>
-                    </div>
-                    <div class="mt-2">
-                        <p class="text-base font-bold text-white font-mono">R$ ${ativo.preco.toFixed(2).replace('.', ',')}</p>
-                        <p class="text-xs font-extrabold ${cor} font-mono mt-0.5">${ativo.varPct >= 0 ? '+' : ''}${ativo.varPct.toFixed(2).replace('.', ',')}%</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-
-            const pontosEstimados = Math.round(somaContribuicao * 1300);
-            const elVeredito = document.getElementById('quant-veredito');
-            const elExplicacao = document.getElementById('quant-explicacao');
-            const elPontos = document.getElementById('quant-pontos-gerados');
-
-            if (elPontos) {
-                elPontos.innerText = `${pontosEstimados >= 0 ? '+' : ''}${pontosEstimados} pts`;
-                elPontos.className = `text-lg font-black font-mono ${pontosEstimados >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-            }
-
-            if (elVeredito && elExplicacao) {
-                if (somaContribuicao >= 0.25) {
-                    elVeredito.innerHTML = `<span class="text-emerald-400">🟢 FORTE PRESSÃO COMPRADORA INSTITUCIONAL (+${somaContribuicao.toFixed(2)}%)</span>`;
-                    elExplicacao.innerText = `As blue chips estão respaldando altas no Mini-Índice com Vale e grandes bancos em campo positivo. Recuos até a VWAP têm alta probabilidade de absorção passiva na compra.`;
-                } else if (somaContribuicao <= -0.25) {
-                    elVeredito.innerHTML = `<span class="text-rose-400">🔴 FORTE PRESSÃO VENDEDORA INSTITUCIONAL (${somaContribuicao.toFixed(2)}%)</span>`;
-                    elExplicacao.innerText = `Despejo concentrado nas ações mais pesadas da bolsa (Vale/Bancos/Petrobras). Cuidado com compras no Mini-Índice sem respaldo no book do mercado à vista.`;
-                } else {
-                    elVeredito.innerHTML = `<span class="text-sky-400">🟡 MERCADO EM EQUILÍBRIO / ROTAÇÃO SETORIAL (${somaContribuicao.toFixed(2)}%)</span>`;
-                    elExplicacao.innerText = `As blue chips estão divergindo entre si (ex: Petrobras subindo e Bancos caindo), anulando o efeito direcional líquido. O Mini-Índice tende a atuar em consolidação/range.`;
-                }
+                console.error("Erro ao carregar gráfico Yahoo:", err);
+                if (txtDetalhe) txtDetalhe.innerText = `Erro ao carregar dados de ${ticker}. Verifique a conexão.`;
+            } finally {
+                if (loader) loader.classList.add('hidden');
             }
         }
 
-        // 4. Filtros e Cupons
+        function mudarAtivoYahoo(ticker, btn) {
+            document.querySelectorAll('.btn-yahoo-ativo').forEach(b => {
+                b.className = "btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700";
+            });
+            btn.className = "btn-yahoo-ativo px-2.5 py-1 text-xs font-bold rounded bg-blue-600 text-white";
+            carregarGraficoYahooReal(ticker);
+        }
+
+        // ==========================================
+        // COTAÇÕES DA FITA SUPERIOR (YAHOO FINANCE)
+        // ==========================================
+        async function carregarFitaYahoo() {
+            const mapaTickers = [
+                { id: 'tape-ewz', symbol: 'EWZ' },
+                { id: 'tape-usdbrl', symbol: 'BRL=X' },
+                { id: 'tape-es', symbol: 'ES=F' },
+                { id: 'tape-dxy', symbol: 'DX-Y.NYB' },
+                { id: 'tape-tnx', symbol: '^TNX' },
+                { id: 'tape-cl', symbol: 'CL=F' }
+            ];
+
+            mapaTickers.forEach(async item => {
+                try {
+                    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${item.symbol}?interval=1d&range=1d`;
+                    const data = await fetchYahoo(url);
+                    const meta = data.chart.result[0].meta;
+                    const preco = meta.regularMarketPrice;
+                    const prev = meta.chartPreviousClose || preco;
+                    const pct = ((preco - prev) / prev) * 100;
+                    const cor = pct >= 0 ? 'text-emerald-400' : 'text-rose-400';
+                    const sinal = pct >= 0 ? '+' : '';
+
+                    const el = document.getElementById(item.id);
+                    if (el) {
+                        el.innerHTML = `<span class="${cor}">${preco.toFixed(2)} (${sinal}${pct.toFixed(2)}%)</span>`;
+                    }
+                } catch (e) {
+                    const el = document.getElementById(item.id);
+                    if (el) el.innerText = "Offline";
+                }
+            });
+        }
+        carregarFitaYahoo();
+
+        // ==========================================
+        // CESTA DA B3 (BRAPI) & BANCO CENTRAL (BCB)
+        // ==========================================
+        const CARTEIRA_IBOV = [
+            { ticker: 'VALE3', nome: 'Vale ON', peso: 12.8 },
+            { ticker: 'PETR4', nome: 'Petrobras PN', peso: 8.5 },
+            { ticker: 'ITUB4', nome: 'Itaú Unibanco', peso: 7.6 },
+            { ticker: 'PETR3', nome: 'Petrobras ON', peso: 4.6 },
+            { ticker: 'BBDC4', nome: 'Bradesco PN', peso: 3.8 },
+            { ticker: 'BBAS3', nome: 'Banco do Brasil', peso: 3.6 },
+            { ticker: 'B3SA3', nome: 'B3 SA', peso: 3.4 },
+            { ticker: 'WEGE3', nome: 'WEG ON', peso: 3.1 },
+            { ticker: 'ABEV3', nome: 'Ambev ON', peso: 2.6 }
+        ];
+
+        async function carregarDadosMercadoCompleto() {
+            // A. Banco Central do Brasil (SGS)
+            try {
+                const resSelic = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
+                const dataSelic = await resSelic.json();
+                if (dataSelic?.length > 0) {
+                    document.getElementById('dado-selic').innerText = parseFloat(dataSelic[0].valor).toFixed(2) + '% a.a.';
+                }
+            } catch (e) {}
+
+            try {
+                const resDI = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4389/dados/ultimos/1?formato=json');
+                const dataDI = await resDI.json();
+                if (dataDI?.length > 0) {
+                    document.getElementById('dado-di').innerText = parseFloat(dataDI[0].valor).toFixed(2) + '% a.a.';
+                }
+            } catch (e) {}
+
+            try {
+                const resPtax = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.10844/dados/ultimos/1?formato=json');
+                const dataPtax = await resPtax.json();
+                if (dataPtax?.length > 0) {
+                    const val = parseFloat(dataPtax[0].valor);
+                    document.getElementById('dado-ptax').innerText = 'R$ ' + val.toFixed(4).replace('.', ',');
+                }
+            } catch (e) {}
+
+            // B. Cesta de Blue Chips via Brapi (Dados Reais da B3)
+            const grid = document.getElementById('grid-acoes-peso');
+            if (!grid) return;
+            const tickersStr = CARTEIRA_IBOV.map(a => a.ticker).join(',');
+
+            try {
+                const res = await fetch(`https://brapi.dev/api/quote/${tickersStr}`);
+                const data = await res.json();
+
+                if (data?.results?.length > 0) {
+                    grid.innerHTML = '';
+                    let somaContribuicao = 0;
+
+                    CARTEIRA_IBOV.forEach(ativo => {
+                        const quote = data.results.find(r => r.symbol === ativo.ticker);
+                        const preco = quote?.regularMarketPrice ? quote.regularMarketPrice : 0;
+                        const varPct = quote?.regularMarketChangePercent ? quote.regularMarketChangePercent : 0;
+
+                        const contribuicao = (varPct * (ativo.peso / 100));
+                        somaContribuicao += contribuicao;
+
+                        const cor = varPct >= 0 ? 'text-emerald-400' : 'text-rose-400';
+                        const bgCor = varPct >= 0 ? 'border-emerald-500/20' : 'border-rose-500/20';
+
+                        const card = document.createElement('div');
+                        card.className = `bg-[#131b2e] border ${bgCor} p-3 rounded-lg flex flex-col justify-between`;
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <span class="font-black text-white text-xs">${ativo.ticker}</span>
+                                <span class="text-[10px] text-slate-400 font-mono">${ativo.peso}%</span>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-base font-bold text-white font-mono">R$ ${preco.toFixed(2).replace('.', ',')}</p>
+                                <p class="text-xs font-extrabold ${cor} font-mono mt-0.5">${varPct >= 0 ? '+' : ''}${varPct.toFixed(2).replace('.', ',')}%</p>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+
+                    // Cálculo da Tração Teórica Gerada no Mini-Índice (~1.300 pts por 1% no IBOV a 130k)
+                    const pontosEstimados = Math.round(somaContribuicao * 1300);
+                    const elVeredito = document.getElementById('quant-veredito');
+                    const elExplicacao = document.getElementById('quant-explicacao');
+                    const elPontos = document.getElementById('quant-pontos-gerados');
+
+                    if (elPontos) {
+                        elPontos.innerText = `${pontosEstimados >= 0 ? '+' : ''}${pontosEstimados} pts`;
+                        elPontos.className = `text-lg font-black font-mono ${pontosEstimados >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                    }
+
+                    if (elVeredito && elExplicacao) {
+                        if (somaContribuicao >= 0.25) {
+                            elVeredito.innerHTML = `<span class="text-emerald-400">🟢 FORTE PRESSÃO COMPRADORA INSTITUCIONAL (+${somaContribuicao.toFixed(2)}%)</span>`;
+                            elExplicacao.innerText = `As blue chips estão respaldando altas no Mini-Índice com Vale e grandes bancos em campo positivo. Recuos até a VWAP têm alta probabilidade de absorção passiva na compra.`;
+                        } else if (somaContribuicao <= -0.25) {
+                            elVeredito.innerHTML = `<span class="text-rose-400">🔴 FORTE PRESSÃO VENDEDORA INSTITUCIONAL (${somaContribuicao.toFixed(2)}%)</span>`;
+                            elExplicacao.innerText = `Despejo concentrado nas ações mais pesadas da bolsa (Vale/Bancos/Petrobras). Cuidado com compras no Mini-Índice sem respaldo no book do mercado à vista.`;
+                        } else {
+                            elVeredito.innerHTML = `<span class="text-sky-400">🟡 MERCADO EM EQUILÍBRIO / ROTAÇÃO SETORIAL (${somaContribuicao.toFixed(2)}%)</span>`;
+                            elExplicacao.innerText = `As blue chips estão divergindo entre si (ex: Petrobras subindo e Bancos caindo), anulando o efeito direcional líquido. O Mini-Índice tende a atuar em consolidação/range.`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("Erro ao carregar Brapi:", err);
+                grid.innerHTML = '<div class="col-span-full py-4 text-center text-rose-400 text-xs">Erro ao consultar cotações da B3. Tente atualizar novamente.</div>';
+            }
+        }
+
+        // ==========================================
+        // FILTROS DE MESAS & CUPONS
+        // ==========================================
         function filtrarMesas(cat) {
             document.querySelectorAll('.filtro-btn').forEach(b => {
                 b.className = b.dataset.cat === cat ? "filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white" : "filtro-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700";
@@ -835,7 +1008,7 @@
         }
 
         // ==========================================
-        // MOTOR DE AUDITORIA & GRÁFICOS ZERO7
+        // MOTOR DE AUDITORIA REGULAMENTAR ZERO7
         // ==========================================
         const CONFIG_PLANOS = {
             "Pleno":   { meta: 4997.00, perda_diaria: 1247.00, perda_maxima: 4997.00, max_win: 25, max_wdo: 15 },
@@ -962,7 +1135,7 @@
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
                 let comissaoCsv = Math.abs(limparNumero(getVal(row, ['comissoes', 'comissao', 'taxas'])));
 
-                // Custos Oficiais Zero7: R$ 0,37 WIN / R$ 1,47 WDO / R$ 0,45 BIT por contrato executado
+                // Custos Zero7: R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
                 let custoOp = comissaoCsv > 0 
                     ? comissaoCsv 
                     : (ativo.includes('WIN') ? qtdTotalExecutada * 0.37 
@@ -1187,10 +1360,10 @@
                 tbodyDias.appendChild(tr);
             });
 
-            desenharGraficos(pontosCurva, listaDias, cfg);
+            desenharGraficosAuditor(pontosCurva, listaDias, cfg);
         }
 
-        function desenharGraficos(pontosCurva, listaDias, cfg) {
+        function desenharGraficosAuditor(pontosCurva, listaDias, cfg) {
             const canvasEq = document.getElementById('chartEquity');
             const canvasDiario = document.getElementById('chartDiario');
             if (!canvasEq || !canvasDiario) return;
@@ -1300,7 +1473,6 @@
             });
         }
 
-        // 6. Dados Demo
         function carregarDemo() {
             const demoCSV = `Ativo;Abertura;Fechamento;Qtd Compra;Qtd Venda;Preço Compra;Preço Venda;Res. Intervalo Bruto
 WINZ26;24/10/2026 09:15:00;24/10/2026 09:25:00;25;25;130.200;130.450;1.250,00
