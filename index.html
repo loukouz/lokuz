@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaHub B3 — Hub Trader & Auditor Oficial de Mesas Proprietárias</title>
+    <title>AlphaHub Prop Desk — Terminal de Mesas Proprietárias B3 & Global</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,7 +36,7 @@
         }
     </script>
 
-    <!-- Google Fonts Inter -->
+    <!-- Google Fonts Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -52,7 +52,7 @@
             background-color: #060911;
             color: #f1f5f9;
             font-family: 'Inter', sans-serif;
-            background-image: radial-gradient(rgba(31, 41, 55, 0.25) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(31, 41, 55, 0.22) 1px, transparent 1px);
             background-size: 28px 28px;
         }
 
@@ -78,8 +78,8 @@
             border-bottom: 2px solid #38bdf8;
         }
 
-        .pulse-subtle {
-            box-shadow: 0 0 15px -3px rgba(16, 185, 129, 0.35);
+        .badge-glow {
+            box-shadow: 0 0 12px -2px rgba(56, 189, 248, 0.35);
         }
     </style>
 </head>
@@ -91,41 +91,49 @@
         <span id="toastMsg" class="text-sm font-medium">Operação realizada com sucesso!</span>
     </div>
 
-    <!-- Barra de Alerta Superior (Afiliados / Aviso ao Vivo) -->
-    <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border-b border-blue-900/40 text-xs py-2 px-4 flex items-center justify-between text-slate-300">
-        <div class="max-w-7xl mx-auto w-full flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20 text-[11px]">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> B3 SESSÃO OPERACIONAL
+    <!-- Barra Superior de Mercados ao Vivo (B3 + CME + Forex) -->
+    <div class="bg-gradient-to-r from-blue-950/80 via-slate-950 to-indigo-950/80 border-b border-dark-border text-xs py-2 px-4 text-slate-300">
+        <div class="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20 text-[10px]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> B3 REGULAR (09h-18h)
                 </span>
-                <span class="hidden sm:inline text-slate-400">| WIN / WDO / BIT Futuros auditados conforme regulamentos vigentes.</span>
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-semibold border border-blue-500/20 text-[10px]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> CME GLOBEX (24h)
+                </span>
+                <span class="hidden md:inline text-slate-500">|</span>
+                <span class="hidden md:inline text-slate-400 text-[11px]">S&P 500 (ES) & Nasdaq (NQ) • Mini Índice (WIN) & Mini Dólar (WDO) • EUR/USD</span>
             </div>
             <div class="flex items-center gap-3">
-                <span class="hidden md:inline text-slate-400">Cupom Oficial Zero7:</span>
-                <button onclick="copiarTexto('ALPHA7VIP', 'Cupom ALPHA7VIP copiado! -15% na Zero7')" class="bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 px-2.5 py-0.5 rounded text-[11px] font-mono font-bold flex items-center gap-1 transition-all">
-                    <span>ALPHA7VIP</span>
+                <span class="text-slate-400 text-[11px] hidden lg:inline">Destaque Cupom:</span>
+                <button onclick="copiarTexto('ALPHA7VIP', 'Cupom ALPHA7VIP copiado! -15% na Zero7')" class="bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 px-2 py-0.5 rounded text-[11px] font-mono font-bold flex items-center gap-1 transition-all">
+                    <span>ZERO7: ALPHA7VIP</span>
+                    <i data-lucide="copy" class="w-3 h-3"></i>
+                </button>
+                <button onclick="copiarTexto('APEX80', 'Cupom APEX80 copiado! 80% OFF na Apex')" class="bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-300 px-2 py-0.5 rounded text-[11px] font-mono font-bold flex items-center gap-1 transition-all">
+                    <span>APEX: APEX80</span>
                     <i data-lucide="copy" class="w-3 h-3"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Header Principal / Navegação Global -->
-    <header class="sticky top-0 z-40 bg-[#070b14]/90 backdrop-blur-md border-b border-dark-border px-4 lg:px-8 py-3.5">
+    <!-- Header Principal -->
+    <header class="sticky top-0 z-40 bg-[#070b14]/95 backdrop-blur-md border-b border-dark-border px-4 lg:px-8 py-3.5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
             
             <!-- Logo e Identidade do Projeto -->
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3 cursor-pointer" onclick="navegarAba('auditor')">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20 border border-blue-400/30">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20 border border-blue-400/30">
+                        <i data-lucide="globe-2" class="w-5 h-5 text-white"></i>
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="text-lg font-black tracking-tight text-white font-sans">AlphaHub <span class="text-cyan-400">B3</span></span>
-                            <span class="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">PropDesk</span>
+                            <span class="text-lg font-black tracking-tight text-white font-sans">AlphaHub <span class="text-cyan-400">Desk</span></span>
+                            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20 badge-glow">B3 & Global Prop Terminal</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 leading-none">Terminal Quantitativo & Auditoria de Mesas</p>
+                        <p class="text-[11px] text-slate-400 leading-none">Auditoria B3, Comparador Global & Terminal Quantitativo</p>
                     </div>
                 </div>
 
@@ -139,15 +147,15 @@
             <nav id="menuNavegacao" class="hidden md:flex items-center gap-1.5 bg-dark-card border border-dark-border p-1 rounded-xl text-xs font-semibold text-slate-300">
                 <button onclick="navegarAba('auditor')" id="nav-auditor" class="tab-btn active px-3.5 py-2 rounded-lg transition-all flex items-center gap-2">
                     <i data-lucide="file-check-2" class="w-4 h-4"></i>
-                    <span>Auditor Zero7</span>
+                    <span>Auditor Zero7 & B3</span>
                 </button>
                 <button onclick="navegarAba('comparador')" id="nav-comparador" class="tab-btn px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 hover:text-white">
                     <i data-lucide="layers" class="w-4 h-4"></i>
-                    <span>Comparador & Cupons</span>
+                    <span>Mesas & Cupons (B3 & Global)</span>
                 </button>
                 <button onclick="navegarAba('estrutura')" id="nav-estrutura" class="tab-btn px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 hover:text-white">
                     <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-                    <span>Estrutura B3 (Analytics)</span>
+                    <span>Estrutura (B3 + Global)</span>
                 </button>
                 <button onclick="navegarAba('produtos')" id="nav-produtos" class="tab-btn px-3.5 py-2 rounded-lg transition-all flex items-center gap-2 hover:text-white">
                     <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
@@ -155,17 +163,17 @@
                 </button>
             </nav>
 
-            <!-- Status do Sistema / Acesso Rápido -->
+            <!-- Status do Terminal -->
             <div class="hidden lg:flex items-center gap-3">
                 <div class="text-right">
-                    <div class="text-[11px] font-mono text-slate-400">FEED CLIENT-SIDE</div>
+                    <div class="text-[10px] font-mono text-slate-400">TERMINAL PRIVACY</div>
                     <div class="text-xs font-bold text-emerald-400 flex items-center gap-1 justify-end">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 100% Local / Seguro
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 100% Client-Side
                     </div>
                 </div>
-                <a href="#comunidade" onclick="navegarAba('produtos')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 transition-all">
-                    Comunidade VIP
-                </a>
+                <button onclick="navegarAba('comparador')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white transition-all shadow-md shadow-blue-600/20">
+                    Ver Todos Cupons
+                </button>
             </div>
         </div>
     </header>
@@ -174,7 +182,7 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-6">
 
         <!-- ============================================================== -->
-        <!-- ABA 1: AUDITOR WEB ZERO7 / MESAS PROPRIETÁRIAS                  -->
+        <!-- ABA 1: AUDITOR ZERO7 & B3 (COM TODAS AS REGRAS VALIDADAS)      -->
         <!-- ============================================================== -->
         <section id="aba-auditor" class="aba-conteudo flex flex-col gap-6">
 
@@ -183,12 +191,12 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h2 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
-                            <i data-lucide="shield-alert" class="w-5 h-5 text-blue-400"></i> Auditor Rigoroso Zero7 Tesouraria
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-blue-400"></i> Auditor Rigoroso Zero7 Tesouraria (B3)
                         </h2>
-                        <span class="text-[11px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono font-semibold">Regulamento Oficial 2026</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono font-semibold">Regulamento 2026</span>
                     </div>
                     <p class="text-xs text-slate-400 mt-1 max-w-2xl">
-                        Validação automática de sub-ticks (WIN ≤10 pts, WDO ≤0.5 pt), horário limite (17:30h), teto de consistência diária de 50%, custos de ida e volta e drawdown acumulado.
+                        Anula ganhos de sub-ticks (WIN ≤10 pts, WDO ≤0.5 pt), operações encerradas após as 17:30h e teto diário de 50%, mantendo o débito integral de perdas e custos de ida e volta da B3.
                     </p>
                 </div>
 
@@ -225,12 +233,12 @@
                     </div>
                     <div>
                         <p class="text-sm font-semibold text-slate-200">Arraste aqui o arquivo CSV exportado do Profit</p>
-                        <p class="text-xs text-slate-400 mt-1">Exportação padrão da aba <span class="text-slate-300 font-mono">Operações</span> (Separador ; codificação ISO-8859-1)</p>
+                        <p class="text-xs text-slate-400 mt-1">Exportação da aba <span class="text-slate-300 font-mono">Operações</span> do Profit (Nelogica)</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-[11px] px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 font-mono">Arquivos .csv</span>
                         <span class="text-[11px] text-emerald-400 flex items-center gap-1 font-medium">
-                            <i data-lucide="lock" class="w-3 h-3"></i> O arquivo não sobe para nenhum servidor (processado no browser)
+                            <i data-lucide="lock" class="w-3 h-3"></i> Processamento 100% no seu navegador (sigilo financeiro)
                         </span>
                     </div>
                     <input type="file" id="fileInput" accept=".csv" class="hidden">
@@ -240,24 +248,24 @@
                 <div class="bg-dark-card border border-dark-border rounded-2xl p-5 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-                            <i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i> Como Exportar?
+                            <i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i> Como Auditar?
                         </div>
                         <ol class="text-xs text-slate-400 space-y-1.5 list-decimal list-inside">
                             <li>Abra o <strong class="text-slate-300">Relatório de Performance</strong> no Profit.</li>
-                            <li>Vá na aba <strong class="text-slate-300">Operações</strong>.</li>
-                            <li>Clique com botão direito e escolha <strong class="text-slate-300">Exportar (.csv)</strong>.</li>
+                            <li>Selecione a aba <strong class="text-slate-300">Operações</strong>.</li>
+                            <li>Clique com botão direito e exporte para <strong class="text-slate-300">CSV</strong>.</li>
                         </ol>
                     </div>
 
                     <div class="pt-4 border-t border-dark-border mt-3">
                         <button onclick="carregarExemploDemo()" class="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-all border border-slate-700">
-                            <i data-lucide="play-circle" class="w-4 h-4 text-emerald-400"></i> Testar Dados de Exemplo
+                            <i data-lucide="play-circle" class="w-4 h-4 text-emerald-400"></i> Testar Dados Demo B3
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- BANNER DINÂMICO DE APROVAÇÃO (5 ESTADOS DE CORES) -->
+            <!-- BANNER DINÂMICO DE APROVAÇÃO (5 CORES) -->
             <div id="bannerStatus" class="rounded-2xl p-6 shadow-2xl transition-all duration-300 border border-white/10 hidden">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-white/10 pb-4">
                     <div class="flex items-center gap-2.5">
@@ -364,7 +372,7 @@
                         <tbody id="tabelaCorpo" class="divide-y divide-dark-border/60 text-slate-300 font-mono">
                             <tr>
                                 <td colspan="11" class="p-10 text-center text-slate-500 italic font-sans">
-                                    Nenhum arquivo processado. Arraste o seu relatório CSV do Profit ou clique em "Testar Dados de Exemplo".
+                                    Nenhum arquivo processado. Arraste o seu relatório CSV do Profit ou clique em "Testar Dados Demo B3".
                                 </td>
                             </tr>
                         </tbody>
@@ -396,286 +404,477 @@
                 </div>
             </div>
 
-            <!-- Banner Inferior de Suporte e Afiliação Integrada -->
-            <div class="bg-gradient-to-r from-blue-950/40 via-dark-card to-cyan-950/40 border border-blue-900/40 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
-                        <i data-lucide="tag" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-bold text-white">Precisa reiniciar ou adquirir um novo plano na Zero7?</h4>
-                        <p class="text-xs text-slate-400">Utilize o código de parceiro oficial para obter 15% de desconto no Plano Pleno ou Infinity.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <div class="bg-dark-bg border border-slate-700 px-3 py-1.5 rounded-xl font-mono text-xs font-bold text-cyan-300">
-                        ALPHA7VIP
-                    </div>
-                    <button onclick="copiarTexto('ALPHA7VIP', 'Cupom ALPHA7VIP copiado com sucesso!')" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg shadow-blue-600/20">
-                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Cupom
-                    </button>
-                </div>
-            </div>
-
         </section>
 
         <!-- ============================================================== -->
-        <!-- ABA 2: COMPARADOR DE MESAS & CENTRAL DE CUPONS                  -->
+        <!-- ABA 2: COMPARADOR DE MESAS (B3 BRASIL & GLOBAL / CME / FOREX)  -->
         <!-- ============================================================== -->
         <section id="aba-comparador" class="aba-conteudo flex flex-col gap-6 hidden">
             
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <!-- Cabeçalho do Módulo de Mesas -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-dark-card border border-dark-border p-6 rounded-2xl shadow-xl">
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="layers" class="w-6 h-6 text-cyan-400"></i> Comparador de Mesas Proprietárias B3
+                        <i data-lucide="layers" class="w-6 h-6 text-cyan-400"></i> Comparador de Mesas Proprietárias: B3 & Global
                     </h2>
-                    <p class="text-xs text-slate-400 mt-1">
-                        Análise técnica imparcial de regras, drawdowns, sub-ticks e taxas operacionais das principais tesourarias.
+                    <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                        Análise técnica imparcial de regras, tipos de Drawdown (Intraday Trailing vs EOD vs Estático), plataformas e melhores cupons de desconto ativos para futuros brasileiros, futuros americanos (CME) e Forex.
                     </p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-400">Filtrar por Mercado:</span>
-                    <button class="px-2.5 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold">B3 (Nacional)</button>
-                    <button class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white text-xs font-semibold">Internacional (CME)</button>
+
+                <!-- Filtros e Busca Rápida -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                        <input type="text" id="filtroBuscaMesa" onkeyup="filtrarMesas()" placeholder="Buscar mesa (ex: Apex, FTMO...)" class="bg-dark-bg border border-dark-border pl-9 pr-3 py-1.5 rounded-xl text-xs text-slate-200 outline-none focus:border-cyan-400 w-52">
+                    </div>
+
+                    <div class="flex items-center gap-1 bg-dark-bg border border-dark-border p-1 rounded-xl text-xs">
+                        <button onclick="setFiltroCategoria('todas')" class="filtro-btn active px-3 py-1 rounded-lg text-white font-bold bg-blue-600 transition-all" data-cat="todas">Todas</button>
+                        <button onclick="setFiltroCategoria('b3')" class="filtro-btn px-3 py-1 rounded-lg text-slate-400 font-semibold hover:text-white transition-all" data-cat="b3">B3 Brasil</button>
+                        <button onclick="setFiltroCategoria('cme')" class="filtro-btn px-3 py-1 rounded-lg text-slate-400 font-semibold hover:text-white transition-all" data-cat="cme">Futuros EUA (CME)</button>
+                        <button onclick="setFiltroCategoria('forex')" class="filtro-btn px-3 py-1 rounded-lg text-slate-400 font-semibold hover:text-white transition-all" data-cat="forex">Forex & CFDs</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Grade de Cupons Destacados -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Card 1: Zero7 -->
-                <div class="bg-dark-card border border-blue-500/40 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden shadow-xl">
+            <!-- CARDS DE MESAS (B3 E GLOBAIS) -->
+            <div id="gridMesas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                
+                <!-- 1. Zero7 (B3) -->
+                <div class="card-mesa bg-dark-card border border-blue-500/40 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl hover:border-blue-400 transition-all" data-nome="Zero7 Tesouraria" data-cat="b3">
                     <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-bl-xl">
-                        Mais Popular
+                        Destaque B3
                     </div>
                     <div>
-                        <div class="flex items-center gap-2.5 mb-2">
-                            <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center font-black text-sm">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-black text-sm border border-blue-500/30">
                                 Z7
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold text-white">Zero7 Tesouraria</h3>
-                                <span class="text-[11px] text-emerald-400 font-medium">B3 (WIN, WDO, BIT)</span>
+                                <span class="text-[11px] text-emerald-400 font-medium">B3 (WIN, WDO, BIT Futuros)</span>
                             </div>
                         </div>
-                        <p class="text-xs text-slate-400 mt-2">
-                            Planos Infinity sem prazo de encerramento, repasse de até 100% na conta real e incubadora com saques periódicos.
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Plano Infinity sem limite de tempo para aprovação. Repasse de 100% dos ganhos líquidos na Conta Real e fase de incubadora com premiações.
                         </p>
                         
-                        <div class="my-3 space-y-1.5 text-xs text-slate-300 font-mono">
-                            <div class="flex justify-between"><span>Drawdown:</span> <strong class="text-slate-100">Fixo / Saldo</strong></div>
-                            <div class="flex justify-between"><span>Sub-tick:</span> <strong class="text-amber-400">Ignora ganhos</strong></div>
-                            <div class="flex justify-between"><span>Custo WIN:</span> <strong class="text-slate-100">R$ 0,37/ordem</strong></div>
+                        <div class="my-4 space-y-2 text-xs text-slate-300 font-mono bg-dark-bg/60 p-3 rounded-xl border border-dark-border">
+                            <div class="flex justify-between"><span>Tipo Drawdown:</span> <strong class="text-emerald-400 font-sans">Fixo (Saldo Inicial)</strong></div>
+                            <div class="flex justify-between"><span>Sub-tick Mínimo:</span> <strong class="text-amber-400 font-sans">WIN 10 pts | WDO 0.5 pt</strong></div>
+                            <div class="flex justify-between"><span>Plataforma:</span> <strong class="text-slate-100 font-sans">Profit Desktop</strong></div>
+                            <div class="flex justify-between"><span>Custo Operacional:</span> <strong class="text-slate-100 font-sans">R$ 0,37/WIN | R$ 1,47/WDO</strong></div>
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-dark-border flex items-center justify-between gap-2">
-                        <button onclick="copiarTexto('ALPHA7VIP', 'Cupom ALPHA7VIP da Zero7 copiado!')" class="flex-1 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
-                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> ALPHA7VIP (-15%)
+                        <div class="font-mono text-xs font-bold text-cyan-300 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700">
+                            ALPHA7VIP
+                        </div>
+                        <button onclick="copiarTexto('ALPHA7VIP', 'Cupom ALPHA7VIP da Zero7 copiado! (-15%)')" class="flex-1 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-blue-600/20">
+                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> Copiar Cupom (-15%)
                         </button>
                     </div>
                 </div>
 
-                <!-- Card 2: Axia Investing -->
-                <div class="bg-dark-card border border-dark-border rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+                <!-- 2. Apex Trader Funding (Global / CME) -->
+                <div class="card-mesa bg-dark-card border border-indigo-500/40 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl hover:border-indigo-400 transition-all" data-nome="Apex Trader Funding" data-cat="cme">
+                    <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-bl-xl">
+                        CME EUA #1
+                    </div>
                     <div>
-                        <div class="flex items-center gap-2.5 mb-2">
-                            <div class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-black text-sm">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-black text-sm border border-indigo-500/30">
+                                APX
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Apex Trader Funding</h3>
+                                <span class="text-[11px] text-cyan-400 font-medium">EUA (S&P 500, Nasdaq, Petróleo, Ouro)</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Maior mesa de futuros dos EUA. 100% dos primeiros $25.000 em lucros sacados. Avaliação em apenas 1 dia útil sem limite máximo de prazo.
+                        </p>
+                        
+                        <div class="my-4 space-y-2 text-xs text-slate-300 font-mono bg-dark-bg/60 p-3 rounded-xl border border-dark-border">
+                            <div class="flex justify-between"><span>Tipo Drawdown:</span> <strong class="text-rose-400 font-sans">Trailing Intraday (Pico)</strong></div>
+                            <div class="flex justify-between"><span>Meta de Lucro:</span> <strong class="text-emerald-400 font-sans">$3.000 (Plano 50k)</strong></div>
+                            <div class="flex justify-between"><span>Plataformas:</span> <strong class="text-slate-100 font-sans">Tradovate / NinjaTrader</strong></div>
+                            <div class="flex justify-between"><span>Repasse:</span> <strong class="text-slate-100 font-sans">100% até $25k, depois 90%</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-dark-border flex items-center justify-between gap-2">
+                        <div class="font-mono text-xs font-bold text-indigo-300 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700">
+                            APEX80
+                        </div>
+                        <button onclick="copiarTexto('APEX80', 'Cupom APEX80 copiado! (Até 80% OFF na Apex)')" class="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-indigo-600/20">
+                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> Copiar Cupom (80% OFF)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Topstep (Global / CME) -->
+                <div class="card-mesa bg-dark-card border border-emerald-500/40 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl hover:border-emerald-400 transition-all" data-nome="Topstep" data-cat="cme">
+                    <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-bl-xl">
+                        EOD Trailing
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-black text-sm border border-emerald-500/30">
+                                TS
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Topstep</h3>
+                                <span class="text-[11px] text-cyan-400 font-medium">EUA (CME Futures)</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Referência mundial em estabilidade de regras. Drawdown baseado no fechamento do dia (EOD), sem o risco de trailing ser acionado no meio de um trade aberto.
+                        </p>
+                        
+                        <div class="my-4 space-y-2 text-xs text-slate-300 font-mono bg-dark-bg/60 p-3 rounded-xl border border-dark-border">
+                            <div class="flex justify-between"><span>Tipo Drawdown:</span> <strong class="text-emerald-400 font-sans">End-of-Day (EOD)</strong></div>
+                            <div class="flex justify-between"><span>Perda Máx / Dia:</span> <strong class="text-slate-100 font-sans">Perda diária opcional</strong></div>
+                            <div class="flex justify-between"><span>Plataformas:</span> <strong class="text-slate-100 font-sans">TradingView / Ninja / TSTrader</strong></div>
+                            <div class="flex justify-between"><span>Repasse:</span> <strong class="text-emerald-400 font-sans">100% primeiros $10.000</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-dark-border flex items-center justify-between gap-2">
+                        <div class="font-mono text-xs font-bold text-emerald-300 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700">
+                            TOPSTEP20
+                        </div>
+                        <button onclick="copiarTexto('TOPSTEP20', 'Cupom TOPSTEP20 copiado! (-20%)')" class="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-600/20">
+                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> Copiar Cupom (-20%)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. FTMO (Global / Forex & CFDs) -->
+                <div class="card-mesa bg-dark-card border border-amber-500/40 rounded-2xl p-5 flex flex-col justify-between relative shadow-xl hover:border-amber-400 transition-all" data-nome="FTMO" data-cat="forex">
+                    <div class="absolute top-0 right-0 bg-amber-500 text-black text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-bl-xl">
+                        Forex Global
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm border border-amber-500/30">
+                                FT
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">FTMO</h3>
+                                <span class="text-[11px] text-amber-400 font-medium">Forex, Ouro, Índices Globais & Crypto</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Mesa global mais premiada de Forex. Avaliação estruturada em 2 fases (Challenge + Verification) com drawdown estático baseado no balanço inicial da conta.
+                        </p>
+                        
+                        <div class="my-4 space-y-2 text-xs text-slate-300 font-mono bg-dark-bg/60 p-3 rounded-xl border border-dark-border">
+                            <div class="flex justify-between"><span>Tipo Drawdown:</span> <strong class="text-emerald-400 font-sans">Estático (10% Máx | 5% Dia)</strong></div>
+                            <div class="flex justify-between"><span>Meta Fase 1:</span> <strong class="text-slate-100 font-sans">10% de Lucro</strong></div>
+                            <div class="flex justify-between"><span>Plataformas:</span> <strong class="text-slate-100 font-sans">MT4 / MT5 / cTrader / DXtrade</strong></div>
+                            <div class="flex justify-between"><span>Repasse:</span> <strong class="text-emerald-400 font-sans">80% a 90%</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-dark-border flex items-center justify-between gap-2">
+                        <div class="font-mono text-xs font-bold text-amber-300 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700">
+                            FTMOPRO
+                        </div>
+                        <button onclick="copiarTexto('FTMOPRO', 'Cupom FTMOPRO copiado! (-10%)')" class="flex-1 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-amber-600/20">
+                            <i data-lucide="tag" class="w-3.5 h-3.5"></i> Copiar Cupom (-10%)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Axia Investing (B3) -->
+                <div class="card-mesa bg-dark-card border border-dark-border rounded-2xl p-5 flex flex-col justify-between shadow-xl hover:border-slate-600 transition-all" data-nome="Axia Investing" data-cat="b3">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 text-cyan-400 flex items-center justify-center font-black text-sm border border-slate-700">
                                 AX
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold text-white">Axia Investing</h3>
-                                <span class="text-[11px] text-emerald-400 font-medium">B3 & Ações</span>
+                                <span class="text-[11px] text-emerald-400 font-medium">B3 (Futuros & Ações)</span>
                             </div>
                         </div>
-                        <p class="text-xs text-slate-400 mt-2">
-                            Tradicional mesa proprietária brasileira com repasse gradual, foco em swing trade de ações e day trade de futuros.
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Uma das pioneiras do mercado brasileiro. Modelos de avaliação para futuros e swing trade de ações com plano de carreira estruturado.
                         </p>
                         
-                        <div class="my-3 space-y-1.5 text-xs text-slate-300 font-mono">
-                            <div class="flex justify-between"><span>Drawdown:</span> <strong class="text-slate-100">Trailing EOD</strong></div>
-                            <div class="flex justify-between"><span>Consistência:</span> <strong class="text-slate-100">Exigência média</strong></div>
-                            <div class="flex justify-between"><span>Plataforma:</span> <strong class="text-slate-100">Profit incluso</strong></div>
+                        <div class="my-4 space-y-2 text-xs text-slate-300 font-mono bg-dark-bg/60 p-3 rounded-xl border border-dark-border">
+                            <div class="flex justify-between"><span>Tipo Drawdown:</span> <strong class="text-slate-100 font-sans">Trailing EOD</strong></div>
+                            <div class="flex justify-between"><span>Sub-tick Proibido:</span> <strong class="text-emerald-400 font-sans">Sem restrição estrita</strong></div>
+                            <div class="flex justify-between"><span>Plataformas:</span> <strong class="text-slate-100 font-sans">Profit incluso</strong></div>
+                            <div class="flex justify-between"><span>Repasse:</span> <strong class="text-slate-100 font-sans">80% a 90%</strong></div>
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-dark-border flex items-center justify-between gap-2">
-                        <button onclick="copiarTexto('AXIAHUB10', 'Cupom AXIAHUB10 copiado!')" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-slate-700">
-                            <i data-lucide="tag" class="w-3.5 h-3.5 text-indigo-400"></i> AXIAHUB10 (-10%)
+                        <div class="font-mono text-xs font-bold text-slate-300 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700">
+                            AXIAHUB10
+                        </div>
+                        <button onclick="copiarTexto('AXIAHUB10', 'Cupom AXIAHUB10 copiado! (-10%)')" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-slate-700">
+                            <i data-lucide="tag" class="w-3.5 h-3.5 text-cyan-400"></i> Copiar (-10%)
                         </button>
                     </div>
                 </div>
 
-                <!-- Card 3: Flod Trading -->
-                <div class="bg-dark-card border border-dark-border rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+                <!-- 6. TradeDay (Global / CME) -->
+                <div class="card-mesa bg-dark-card border border-dark-border rounded-2xl p-5 flex flex-col justify-between shadow-xl hover:border-slate-600 transition-all" data-nome="TradeDay" data-cat="cme">
                     <div>
-                        <div class="flex items-center gap-2.5 mb-2">
-                            <div class="w-8 h-8 rounded-lg bg-cyan-600/20 text-cyan-400 flex items-center justify-center font-black text-sm">
-                                FL
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center font-black text-sm border border-slate-700">
+                                TD
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-white">Flod Trading</h3>
-                                <span class="text-[11px] text-emerald-400 font-medium">B3 Futuros</span>
+                                <h3 class="text-sm font-bold text-white">TradeDay</h3>
+                                <span class="text-[11px] text-cyan-400 font-medium">EUA (CME Futuros)</span>
                             </div>
                         </div>
-                        <p class="text-xs text-slate-400 mt-2">
-                            Mesas proprietárias com modelos de 1 fase e planos diretos com foco em agilidade de aprovação para traders de fluxo.
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Mesa focada em transparência absoluta. Drawdown puramente End-of-Day sem cálculo de perda não realizada durante a operação aberta.
                         </p>
                         
-                        <div class="my-3 space-y-1.5 text-xs text-slate-300 font-mono">
-                            <div class="flex justify-between"><span>Avaliação:</span> <strong class="text-slate-100">1 Fase / Rápida</strong></div>
-                            <div class="flex justify-between"><span>Dias Mínimos:</span> <strong class="text-slate-100">3 pregões</strong></div>
-                            <div class="flex justify-between"><span>Repasse:</span> <strong class="text-slate-100">Até 90%</strong></div>
+                        <div class="my-4 space-y-2 text-xs text-slate-300 font-mono bg-dark-bg/60 p-3 rounded-xl border border-dark-border">
+                            <div class="flex justify-between"><span>Tipo Drawdown:</span> <strong class="text-emerald-400 font-sans">End-of-Day Trailing</strong></div>
+                            <div class="flex justify-between"><span>Regra Trailing:</span> <strong class="text-slate-100 font-sans">Trava no saldo inicial</strong></div>
+                            <div class="flex justify-between"><span>Plataformas:</span> <strong class="text-slate-100 font-sans">Tradovate / NinjaTrader</strong></div>
+                            <div class="flex justify-between"><span>Repasse:</span> <strong class="text-emerald-400 font-sans">100% até $10k, após 90%</strong></div>
                         </div>
                     </div>
 
                     <div class="pt-3 border-t border-dark-border flex items-center justify-between gap-2">
-                        <button onclick="copiarTexto('FLODPRO12', 'Cupom FLODPRO12 copiado!')" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-slate-700">
-                            <i data-lucide="tag" class="w-3.5 h-3.5 text-cyan-400"></i> FLODPRO12 (-12%)
+                        <div class="font-mono text-xs font-bold text-slate-300 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700">
+                            TRADEDAY20
+                        </div>
+                        <button onclick="copiarTexto('TRADEDAY20', 'Cupom TRADEDAY20 copiado! (-20%)')" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-slate-700">
+                            <i data-lucide="tag" class="w-3.5 h-3.5 text-emerald-400"></i> Copiar (-20%)
                         </button>
                     </div>
                 </div>
+
             </div>
 
-            <!-- Tabela Comparativa Detalhada -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden shadow-xl">
-                <div class="px-5 py-3.5 border-b border-dark-border bg-[#0a0f1d]">
-                    <h3 class="text-sm font-bold text-white">Quadro Técnico Comparativo de Regras</h3>
+            <!-- TABELA COMPARATIVA COMPLETA (B3 VS CME VS FOREX) -->
+            <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden shadow-xl mt-4">
+                <div class="px-5 py-4 border-b border-dark-border bg-[#0a0f1d] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="table" class="w-4 h-4 text-cyan-400"></i> Matriz Técnica Comparativa de Regras & Parâmetros
+                    </h3>
+                    <span class="text-xs text-slate-400 font-mono">Dados auditados e conferidos mensalmente</span>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs border-collapse">
                         <thead class="bg-[#070b16] text-slate-400 uppercase tracking-wider font-semibold border-b border-dark-border">
                             <tr>
-                                <th class="p-3.5">Mesa / Prop</th>
-                                <th class="p-3.5">Plano Padrão</th>
+                                <th class="p-3.5">Mesa</th>
+                                <th class="p-3.5">Mercado</th>
+                                <th class="p-3.5">Mecânica do Drawdown</th>
                                 <th class="p-3.5">Meta Lucro</th>
-                                <th class="p-3.5">Perda Máxima</th>
                                 <th class="p-3.5">Perda Diária</th>
-                                <th class="p-3.5">Sub-Tick Proibido?</th>
-                                <th class="p-3.5">Teto 50% Consistência</th>
+                                <th class="p-3.5">Sub-Tick / Micro Scalp</th>
+                                <th class="p-3.5">Plataformas</th>
                                 <th class="p-3.5">Repasse</th>
-                                <th class="p-3.5 text-center">Ação</th>
+                                <th class="p-3.5 text-center">Cupom Ativo</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-dark-border/60 text-slate-300 font-mono">
-                            <tr class="hover:bg-dark-subtle/50">
-                                <td class="p-3.5 font-bold font-sans text-white flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> Zero7 (Pleno)
-                                </td>
-                                <td class="p-3.5 font-sans">25 WIN / 15 WDO</td>
-                                <td class="p-3.5 text-emerald-400 font-bold">R$ 4.997,00</td>
-                                <td class="p-3.5 text-rose-400 font-bold">-R$ 4.997,00</td>
-                                <td class="p-3.5 text-rose-400 font-bold">-R$ 1.247,00</td>
-                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[11px] font-bold">Sim (Anula Ganho)</span></td>
-                                <td class="p-3.5 text-cyan-400 font-semibold">Sim (Máx 50%/dia)</td>
-                                <td class="p-3.5 text-emerald-400 font-bold">100% (Real)</td>
-                                <td class="p-3.5 text-center font-sans">
-                                    <button onclick="copiarTexto('ALPHA7VIP', 'Cupom Zero7 copiado!')" class="px-2.5 py-1 rounded bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white font-bold transition-all">Cupom</button>
+                        <tbody id="tabelaComparativaCorpo" class="divide-y divide-dark-border/60 text-slate-300 font-mono">
+                            <tr class="hover:bg-dark-subtle/50" data-cat="b3">
+                                <td class="p-3.5 font-bold font-sans text-white">Zero7 Tesouraria</td>
+                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-bold">B3 (Brasil)</span></td>
+                                <td class="p-3.5 text-emerald-400 font-sans">Fixo (Saldo Inicial)</td>
+                                <td class="p-3.5 text-white font-bold">R$ 4.997 (Pleno)</td>
+                                <td class="p-3.5 text-rose-400">-R$ 1.247 (Bloqueio)</td>
+                                <td class="p-3.5"><span class="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold">Anula Lucro</span></td>
+                                <td class="p-3.5 font-sans">Profit Desktop</td>
+                                <td class="p-3.5 text-emerald-400 font-bold">100% Real</td>
+                                <td class="p-3.5 text-center">
+                                    <button onclick="copiarTexto('ALPHA7VIP', 'Cupom Zero7 copiado!')" class="px-2.5 py-1 rounded bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white font-bold transition-all">ALPHA7VIP</button>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-dark-subtle/50">
-                                <td class="p-3.5 font-bold font-sans text-white flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Axia (Elite 25)
+                            <tr class="hover:bg-dark-subtle/50" data-cat="cme">
+                                <td class="p-3.5 font-bold font-sans text-white">Apex Trader Funding</td>
+                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold">CME (EUA)</span></td>
+                                <td class="p-3.5 text-rose-400 font-sans">Trailing Intraday (Pico)</td>
+                                <td class="p-3.5 text-white font-bold">$3.000 (Conta 50k)</td>
+                                <td class="p-3.5 text-slate-400">Sem trava diária</td>
+                                <td class="p-3.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">Permitido</span></td>
+                                <td class="p-3.5 font-sans">Tradovate / Ninja</td>
+                                <td class="p-3.5 text-emerald-400 font-bold">100% até $25k</td>
+                                <td class="p-3.5 text-center">
+                                    <button onclick="copiarTexto('APEX80', 'Cupom Apex copiado!')" class="px-2.5 py-1 rounded bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white font-bold transition-all">APEX80</button>
                                 </td>
-                                <td class="p-3.5 font-sans">25 WIN / 10 WDO</td>
-                                <td class="p-3.5 text-emerald-400 font-bold">R$ 5.000,00</td>
-                                <td class="p-3.5 text-rose-400 font-bold">-R$ 4.000,00</td>
-                                <td class="p-3.5 text-rose-400 font-bold">-R$ 1.500,00</td>
-                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Não penaliza</span></td>
-                                <td class="p-3.5 text-slate-400">Regra de Pontuação</td>
+                            </tr>
+                            <tr class="hover:bg-dark-subtle/50" data-cat="cme">
+                                <td class="p-3.5 font-bold font-sans text-white">Topstep</td>
+                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold">CME (EUA)</span></td>
+                                <td class="p-3.5 text-emerald-400 font-sans">End-of-Day (EOD)</td>
+                                <td class="p-3.5 text-white font-bold">$3.000 (Conta 50k)</td>
+                                <td class="p-3.5 text-slate-400">Opcional</td>
+                                <td class="p-3.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">Permitido</span></td>
+                                <td class="p-3.5 font-sans">TradingView / Ninja</td>
+                                <td class="p-3.5 text-emerald-400 font-bold">100% até $10k</td>
+                                <td class="p-3.5 text-center">
+                                    <button onclick="copiarTexto('TOPSTEP20', 'Cupom Topstep copiado!')" class="px-2.5 py-1 rounded bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white font-bold transition-all">TOPSTEP20</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-dark-subtle/50" data-cat="forex">
+                                <td class="p-3.5 font-bold font-sans text-white">FTMO</td>
+                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold">Forex / CFDs</span></td>
+                                <td class="p-3.5 text-cyan-400 font-sans">Estático (Balanço)</td>
+                                <td class="p-3.5 text-white font-bold">10% (Fase 1) / 5% (Fase 2)</td>
+                                <td class="p-3.5 text-rose-400">-5% do balanço</td>
+                                <td class="p-3.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">Permitido</span></td>
+                                <td class="p-3.5 font-sans">MT4 / MT5 / cTrader</td>
                                 <td class="p-3.5 text-emerald-400 font-bold">80% a 90%</td>
-                                <td class="p-3.5 text-center font-sans">
-                                    <button onclick="copiarTexto('AXIAHUB10', 'Cupom Axia copiado!')" class="px-2.5 py-1 rounded bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white font-bold transition-all">Cupom</button>
+                                <td class="p-3.5 text-center">
+                                    <button onclick="copiarTexto('FTMOPRO', 'Cupom FTMO copiado!')" class="px-2.5 py-1 rounded bg-amber-600/30 hover:bg-amber-600 text-amber-300 hover:text-white font-bold transition-all">FTMOPRO</button>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-dark-subtle/50">
-                                <td class="p-3.5 font-bold font-sans text-white flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span> Flod (Direto)
+                            <tr class="hover:bg-dark-subtle/50" data-cat="b3">
+                                <td class="p-3.5 font-bold font-sans text-white">Axia Investing</td>
+                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-bold">B3 (Brasil)</span></td>
+                                <td class="p-3.5 text-slate-300 font-sans">Trailing EOD</td>
+                                <td class="p-3.5 text-white font-bold">R$ 5.000 (Elite 25)</td>
+                                <td class="p-3.5 text-rose-400">-R$ 1.500</td>
+                                <td class="p-3.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">Sem anulação</span></td>
+                                <td class="p-3.5 font-sans">Profit incluso</td>
+                                <td class="p-3.5 text-emerald-400 font-bold">80% a 90%</td>
+                                <td class="p-3.5 text-center">
+                                    <button onclick="copiarTexto('AXIAHUB10', 'Cupom Axia copiado!')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition-all border border-slate-700">AXIAHUB10</button>
                                 </td>
-                                <td class="p-3.5 font-sans">20 WIN / 10 WDO</td>
-                                <td class="p-3.5 text-emerald-400 font-bold">R$ 4.500,00</td>
-                                <td class="p-3.5 text-rose-400 font-bold">-R$ 3.500,00</td>
-                                <td class="p-3.5 text-rose-400 font-bold">-R$ 1.000,00</td>
-                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[11px] font-bold">Liberado</span></td>
-                                <td class="p-3.5 text-slate-400">Livre</td>
-                                <td class="p-3.5 text-emerald-400 font-bold">85%</td>
-                                <td class="p-3.5 text-center font-sans">
-                                    <button onclick="copiarTexto('FLODPRO12', 'Cupom Flod copiado!')" class="px-2.5 py-1 rounded bg-cyan-600/30 hover:bg-cyan-600 text-cyan-300 hover:text-white font-bold transition-all">Cupom</button>
+                            </tr>
+                            <tr class="hover:bg-dark-subtle/50" data-cat="cme">
+                                <td class="p-3.5 font-bold font-sans text-white">TradeDay</td>
+                                <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-bold">CME (EUA)</span></td>
+                                <td class="p-3.5 text-emerald-400 font-sans">End-of-Day Trailing</td>
+                                <td class="p-3.5 text-white font-bold">$3.000 (50k)</td>
+                                <td class="p-3.5 text-slate-400">Sem perda diária</td>
+                                <td class="p-3.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">Permitido</span></td>
+                                <td class="p-3.5 font-sans">Tradovate / Ninja</td>
+                                <td class="p-3.5 text-emerald-400 font-bold">100% até $10k</td>
+                                <td class="p-3.5 text-center">
+                                    <button onclick="copiarTexto('TRADEDAY20', 'Cupom TradeDay copiado!')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold transition-all border border-slate-700">TRADEDAY20</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </section>
 
         <!-- ============================================================== -->
-        <!-- ABA 3: ESTRUTURA DE MERCADO B3 (DATA-DRIVEN SEM CALLS)         -->
+        <!-- ABA 3: ESTRUTURA DE MERCADO (B3 + MACRO GLOBAL)                -->
         <!-- ============================================================== -->
         <section id="aba-estrutura" class="aba-conteudo flex flex-col gap-6 hidden">
             
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-dark-card border border-dark-border p-6 rounded-2xl shadow-xl">
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="bar-chart-2" class="w-6 h-6 text-emerald-400"></i> Estrutura Quantitativa de Mercado B3
+                        <i data-lucide="bar-chart-2" class="w-6 h-6 text-emerald-400"></i> Painel Estrutural B3 & Macro Global
                     </h2>
-                    <p class="text-xs text-slate-400 mt-1">
-                        Painel estatístico referencial. <span class="text-amber-400 font-semibold">Sem recomendações de investimento ou calls.</span> Em conformidade com a Resolução CVM 20/2021.
+                    <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                        Indicadores de liquidez, volatilidade e correlações institucionais. <strong class="text-amber-400">Conteúdo 100% analítico e sem recomendações de compra ou venda (CVM 20/2021).</strong>
                     </p>
                 </div>
-                <div class="flex items-center gap-2 font-mono text-xs text-slate-400">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Dados de Fechamento / D-1 B3
+                <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Sincronia de Fechamento / D-1
                 </div>
             </div>
 
-            <!-- Grade de Níveis Institucionais -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
-                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ajuste Oficial Mini Índice (WIN)</span>
-                    <div class="text-xl font-black text-white mt-1 font-mono">131.840 pts</div>
-                    <div class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1 font-mono">
-                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i> +0.42% vs Anterior
+            <!-- Grade 1: Indicadores Nacionais B3 -->
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> Mercado Brasileiro (B3)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ajuste Oficial Mini Índice (WIN)</span>
+                        <div class="text-xl font-black text-white mt-1 font-mono">131.840 pts</div>
+                        <div class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1 font-mono">
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i> +0.42% vs D-1
+                        </div>
                     </div>
-                </div>
 
-                <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
-                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ajuste Oficial Mini Dólar (WDO)</span>
-                    <div class="text-xl font-black text-white mt-1 font-mono">5.412,50 pts</div>
-                    <div class="text-[11px] text-rose-400 flex items-center gap-1 mt-1 font-mono">
-                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5"></i> -0.18% vs Anterior
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ajuste Oficial Mini Dólar (WDO)</span>
+                        <div class="text-xl font-black text-white mt-1 font-mono">5.412,50 pts</div>
+                        <div class="text-[11px] text-rose-400 flex items-center gap-1 mt-1 font-mono">
+                            <i data-lucide="arrow-down-right" class="w-3.5 h-3.5"></i> -0.18% vs D-1
+                        </div>
                     </div>
-                </div>
 
-                <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
-                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Curva DI Futuro (DI1F27)</span>
-                    <div class="text-xl font-black text-cyan-400 mt-1 font-mono">11.85% a.a.</div>
-                    <span class="text-[11px] text-slate-500 mt-1 block">Spread 27/29: +38 bps</span>
-                </div>
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">DI Futuro 2027 (DI1F27)</span>
+                        <div class="text-xl font-black text-cyan-400 mt-1 font-mono">11.85% a.a.</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Spread DI27 / DI29: +38 bps</span>
+                    </div>
 
-                <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
-                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Volatilidade Média Diária (ATR 20)</span>
-                    <div class="text-xl font-black text-amber-400 mt-1 font-mono">1.820 pts (WIN)</div>
-                    <span class="text-[11px] text-slate-500 mt-1 block">WDO: 42.5 pts</span>
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Volatilidade Média ATR (20)</span>
+                        <div class="text-xl font-black text-amber-400 mt-1 font-mono">1.820 pts (WIN)</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">WDO: 42.5 pts</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Visualização de Perfil de Volume & Faixas Institucionais -->
+            <!-- Grade 2: Indicadores Macro Globais (CME & DXY) -->
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Mercado Global & Americano (CME / FED)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">S&P 500 Futuro (ES)</span>
+                        <div class="text-xl font-black text-white mt-1 font-mono">5.824,25 pts</div>
+                        <div class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1 font-mono">
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i> +0.35%
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Nasdaq 100 Futuro (NQ)</span>
+                        <div class="text-xl font-black text-white mt-1 font-mono">20.410,50 pts</div>
+                        <div class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1 font-mono">
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i> +0.58%
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Índice Dólar Global (DXY)</span>
+                        <div class="text-xl font-black text-cyan-400 mt-1 font-mono">103.85</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Força global frente a cesta de moedas</span>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Treasury 10 Anos EUA (US10Y)</span>
+                        <div class="text-xl font-black text-rose-400 mt-1 font-mono">4.24% a.a.</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Pressão sobre mercados emergentes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Volume Profile & Liquidez Zonas -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Volume Profile Mock / Zonas de Liquidez -->
                 <div class="lg:col-span-2 bg-dark-card border border-dark-border rounded-2xl p-5 shadow-xl flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between border-b border-dark-border pb-3 mb-4">
-                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                                <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> Distribuição de Volume por Faixa de Preço (WIN)
-                            </h3>
-                            <span class="text-xs font-mono text-slate-400">POC: 131.750 pts</span>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> Distribuição de Liquidez por Faixa de Preço (WIN)
+                            </h4>
+                            <span class="text-xs font-mono text-amber-300 font-bold">POC: 131.750 pts</span>
                         </div>
 
-                        <!-- Barras de Volume Profile Institucional -->
                         <div class="space-y-2 text-xs font-mono">
                             <div class="flex items-center gap-3">
-                                <span class="w-20 text-slate-400 text-right">132.300 (VAH)</span>
+                                <span class="w-24 text-slate-400 text-right">132.300 (VAH)</span>
                                 <div class="flex-1 bg-dark-bg rounded h-4 overflow-hidden flex">
                                     <div class="bg-blue-600/60 h-full" style="width: 35%"></div>
                                 </div>
@@ -683,7 +882,7 @@
                             </div>
 
                             <div class="flex items-center gap-3">
-                                <span class="w-20 text-slate-400 text-right">132.050</span>
+                                <span class="w-24 text-slate-400 text-right">132.050</span>
                                 <div class="flex-1 bg-dark-bg rounded h-4 overflow-hidden flex">
                                     <div class="bg-blue-600/70 h-full" style="width: 58%"></div>
                                 </div>
@@ -691,7 +890,7 @@
                             </div>
 
                             <div class="flex items-center gap-3 font-bold text-amber-300">
-                                <span class="w-20 text-right">131.750 (POC)</span>
+                                <span class="w-24 text-right">131.750 (POC)</span>
                                 <div class="flex-1 bg-dark-bg rounded h-5 overflow-hidden flex border border-amber-400/40">
                                     <div class="bg-amber-500 h-full" style="width: 95%"></div>
                                 </div>
@@ -699,7 +898,7 @@
                             </div>
 
                             <div class="flex items-center gap-3">
-                                <span class="w-20 text-slate-400 text-right">131.400</span>
+                                <span class="w-24 text-slate-400 text-right">131.400</span>
                                 <div class="flex-1 bg-dark-bg rounded h-4 overflow-hidden flex">
                                     <div class="bg-blue-600/70 h-full" style="width: 62%"></div>
                                 </div>
@@ -707,7 +906,7 @@
                             </div>
 
                             <div class="flex items-center gap-3">
-                                <span class="w-20 text-slate-400 text-right">131.100 (VAL)</span>
+                                <span class="w-24 text-slate-400 text-right">131.100 (VAL)</span>
                                 <div class="flex-1 bg-dark-bg rounded h-4 overflow-hidden flex">
                                     <div class="bg-blue-600/50 h-full" style="width: 28%"></div>
                                 </div>
@@ -717,51 +916,51 @@
                     </div>
 
                     <div class="mt-4 pt-3 border-t border-dark-border text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>Área de Maior Liquidez Institucional (Value Area 70%)</span>
-                        <span class="text-cyan-400 font-mono">131.100 — 132.300</span>
+                        <span>Área de Valor (Value Area 70%)</span>
+                        <span class="text-cyan-400 font-mono">131.100 — 132.300 pts</span>
                     </div>
                 </div>
 
-                <!-- Calendário Econômico de Alto Impacto -->
+                <!-- Calendário Econômico B3 + EUA -->
                 <div class="bg-dark-card border border-dark-border rounded-2xl p-5 shadow-xl flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between border-b border-dark-border pb-3 mb-3">
-                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                                <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i> Eventos Críticos (Horários)
-                            </h3>
-                            <span class="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold">ALTA VOLATILIDADE</span>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i> Horários Críticos (Volatilidade)
+                            </h4>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-bold">ALERTA RISCO</span>
                         </div>
 
-                        <div class="space-y-3 text-xs">
-                            <div class="p-2.5 rounded-xl bg-dark-bg border border-dark-border">
+                        <div class="space-y-2.5 text-xs">
+                            <div class="p-2 rounded-xl bg-dark-bg border border-dark-border">
                                 <div class="flex justify-between items-center font-bold">
-                                    <span class="text-slate-200">Payroll (EUA) / Emprego</span>
-                                    <span class="text-rose-400 font-mono">09:30h</span>
+                                    <span class="text-slate-200">Payroll EUA / Non-Farm</span>
+                                    <span class="text-rose-400 font-mono">09:30h (BRT)</span>
                                 </div>
-                                <p class="text-[11px] text-slate-400 mt-1">Impacto violento em Dólar Futuro e curva de juros.</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Impacta Dólar Futuro (WDO) e S&P 500 (ES).</p>
                             </div>
 
-                            <div class="p-2.5 rounded-xl bg-dark-bg border border-dark-border">
+                            <div class="p-2 rounded-xl bg-dark-bg border border-dark-border">
                                 <div class="flex justify-between items-center font-bold">
-                                    <span class="text-slate-200">Decisão de Juros Copom (B3)</span>
-                                    <span class="text-amber-400 font-mono">18:30h</span>
+                                    <span class="text-slate-200">Abertura NYSE (Nova York)</span>
+                                    <span class="text-cyan-400 font-mono">10:30h (BRT)</span>
                                 </div>
-                                <p class="text-[11px] text-slate-400 mt-1">Definição da taxa Selic de referência nacional.</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Entrada do fluxo estrangeiro no Mini Índice.</p>
                             </div>
 
-                            <div class="p-2.5 rounded-xl bg-dark-bg border border-dark-border">
+                            <div class="p-2 rounded-xl bg-dark-bg border border-dark-border">
                                 <div class="flex justify-between items-center font-bold">
-                                    <span class="text-slate-200">Abertura NYSE / S&P500</span>
-                                    <span class="text-cyan-400 font-mono">10:30h</span>
+                                    <span class="text-slate-200">Decisão Taxa FOMC (EUA)</span>
+                                    <span class="text-amber-400 font-mono">15:00h (BRT)</span>
                                 </div>
-                                <p class="text-[11px] text-slate-400 mt-1">Entrada de fluxo estrangeiro direto no Mini Índice.</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Discurso de política monetária global.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-3 border-t border-dark-border text-[11px] text-amber-400 flex items-center gap-1.5">
+                    <div class="mt-3 pt-2.5 border-t border-dark-border text-[11px] text-amber-400 flex items-center gap-1.5">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
-                        Evite abrir novas posições 5 min antes de indicadores triple star.
+                        Atenção a ordens a mercado durante esses instantes.
                     </div>
                 </div>
             </div>
@@ -772,17 +971,17 @@
         <!-- ============================================================== -->
         <section id="aba-produtos" class="aba-conteudo flex flex-col gap-6 hidden">
             
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-dark-card border border-dark-border p-6 rounded-2xl shadow-xl">
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="sparkles" class="w-6 h-6 text-amber-400"></i> Ferramentas Pro & Soluções Especializadas
+                        <i data-lucide="sparkles" class="w-6 h-6 text-amber-400"></i> Ferramentas Pro, Softwares & Add-ons
                     </h2>
                     <p class="text-xs text-slate-400 mt-1">
-                        Softwares desktop, utilitários de gestão de risco e recursos avançados para traders consistentes.
+                        Softwares desktop, utilitários de gestão de risco e recursos avançados para operadores de tesouraria e mesas proprietárias.
                     </p>
                 </div>
                 <div class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                    Acesso Antecipado & Descontos de Lançamento
+                    Lançamentos & Acesso Antecipado
                 </div>
             </div>
 
@@ -795,13 +994,13 @@
                             <i data-lucide="monitor" class="w-6 h-6"></i>
                         </div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400">Software Desktop Offline</span>
-                        <h3 class="text-base font-bold text-white mt-1">AlphaAuditor Desktop (PyQt6)</h3>
+                        <h3 class="text-base font-bold text-white mt-1">AlphaAuditor Pro Desktop (Python / PyQt6)</h3>
                         <p class="text-xs text-slate-400 mt-2">
                             Audite relatórios com milhões de linhas instantaneamente sem depender de conexão com internet, com gráficos de curva de patrimônio e relatórios em PDF com carimbo de aprovação.
                         </p>
                         <ul class="text-xs text-slate-300 space-y-1.5 mt-4">
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Executável nativo Windows (.exe)</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Exportação automática para PDF</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Suporte a Profit e NinjaTrader CSV</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Licença perpétua sem mensalidades</li>
                         </ul>
                     </div>
@@ -817,21 +1016,21 @@
                     </div>
                 </div>
 
-                <!-- Produto 2: Trava de Risco MT5 B3 -->
+                <!-- Produto 2: Trava de Risco MT5 / Tradovate -->
                 <div class="bg-dark-card border border-dark-border hover:border-slate-700 rounded-2xl p-6 flex flex-col justify-between shadow-xl transition-all">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-indigo-600/10 text-indigo-400 flex items-center justify-center mb-4 border border-indigo-500/20">
                             <i data-lucide="shield-check" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">EA Utilitário MT5</span>
-                        <h3 class="text-base font-bold text-white mt-1">Guardião de Risco B3 (MT5)</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Robô Utilitário MT5 & CME</span>
+                        <h3 class="text-base font-bold text-white mt-1">Guardião de Risco B3 & CME</h3>
                         <p class="text-xs text-slate-400 mt-2">
-                            Robô utilitário que trava a sua boleta caso atinja o limite de perda diária da mesa ou tente abrir mais contratos do que o permitido pelo regulamento do plano.
+                            Robô que trava a boleta caso o trader atinja a perda diária do plano ou tente abrir posições maiores que o lote regulamentar.
                         </p>
                         <ul class="text-xs text-slate-300 space-y-1.5 mt-4">
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Trava rígida de lote máximo</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Bloqueio diário automático de perda</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Encerramento automático às 17:28h</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Bloqueio automático ao bater o stop diário</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Encerramento automático antes das 17:30h</li>
                         </ul>
                     </div>
 
@@ -855,15 +1054,15 @@
                         <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/20">
                             <i data-lucide="crown" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Comunidade & Conteúdo</span>
-                        <h3 class="text-base font-bold text-white mt-1">AlphaClub — Sala de Análise</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Comunidade & Descontos</span>
+                        <h3 class="text-base font-bold text-white mt-1">AlphaClub — Sala Quantitativa</h3>
                         <p class="text-xs text-slate-400 mt-2">
-                            Acesso à comunidade fechada no Discord com discussões puramente quantitativas de ajuste, volatilidade de opções e preparação pré-mercado diária.
+                            Comunidade fechada para operadores de mesa com relatórios quantitativos diários de ajuste e os maiores descontos do mercado em testes.
                         </p>
                         <ul class="text-xs text-slate-300 space-y-1.5 mt-4">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Relatório diário de pontos de liquidez</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Descontos exclusivos de até 30% em mesas</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Suporte técnico nos scripts</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Níveis diários de POC, VAH e VAL (B3 e CME)</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Descontos exclusivos de até 90% em parceiros</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Scripts em Python e diário automatizado</li>
                         </ul>
                     </div>
 
@@ -882,30 +1081,30 @@
 
     </main>
 
-    <!-- FOOTER INSTITUCIONAL / COMPLIANCE CVM -->
+    <!-- FOOTER INSTITUCIONAL / COMPLIANCE CVM & CFTC -->
     <footer class="bg-[#050811] border-t border-dark-border mt-12 py-8 px-4 lg:px-8 text-xs text-slate-500">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-6">
             
             <div class="max-w-md">
                 <div class="flex items-center gap-2 text-slate-300 font-bold mb-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> AlphaHub B3 Tecnologia Financeira
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> AlphaHub Prop Desk Tecnologia
                 </div>
                 <p class="text-[11px] leading-relaxed text-slate-400">
-                    Terminal de análise de risco e agregador de dados estatísticos para operadores de mercado financeiro e tesourarias proprietárias. Todas as auditorias são processadas localmente no navegador do usuário.
+                    Terminal quantitativo e agregador estatístico para operadores de tesouraria proprietária nacional (B3) e internacional (CME/Forex). O processamento de arquivos é realizado inteiramente no navegador do usuário, garantindo sigilo financeiro e zero armazenamento de dados em servidores.
                 </p>
             </div>
 
-            <!-- Isenção Legal CVM Resolução 20/2021 -->
+            <!-- Isenção Legal CVM & CFTC -->
             <div class="max-w-xl bg-dark-card border border-dark-border p-4 rounded-xl text-[11px] leading-relaxed">
-                <strong class="text-slate-300 block mb-1">Aviso Legal & Isenção Regulatória (CVM)</strong>
-                A plataforma AlphaHub B3 não fornece recomendações de investimento, consultoria, análise de valores mobiliários ou sinais de compra e venda, operando em estrita conformidade com a Resolução CVM 20/2021. Os dados exibidos possuem finalidade exclusivamente matemática, estatística e educacional. As regras de mesas proprietárias aqui representadas pertencem aos seus respectivos titulares.
+                <strong class="text-slate-300 block mb-1">Aviso Regulatório & Isenção de Responsabilidade (CVM 20/2021 & CFTC 4.41)</strong>
+                A plataforma AlphaHub não emite recomendações de compra, venda, consultoria ou análise de valores mobiliários, estando dispensada de credenciamento analítico nos termos da Resolução CVM nº 20/2021. As operações em mesas proprietárias (B3 ou Internacionais) ocorrem em contas de simulação remunerada ou avaliação técnica. Resultados simulados não garantem lucros futuros. Os nomes e marcas de mesas proprietárias pertencem exclusivamente aos seus respectivos titulares.
             </div>
 
         </div>
 
         <div class="max-w-7xl mx-auto mt-6 pt-4 border-t border-dark-border/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-600 gap-2">
-            <span>© 2026 AlphaHub B3. Todos os direitos reservados.</span>
-            <span>Segurança: Client-side CSV Parsing (Sem armazenamento de dados pessoais).</span>
+            <span>© 2026 AlphaHub Prop Desk. Todos os direitos reservados.</span>
+            <span>Segurança: 100% Client-side Processing (Zero Server Storage).</span>
         </div>
     </footer>
 
@@ -916,7 +1115,7 @@
         // Inicializa ícones Lucide
         lucide.createIcons();
 
-        // Configuração Oficial de Planos Zero7
+        // Configuração Oficial de Planos Zero7 (B3)
         const CONFIG_PLANOS = {
             "Pleno": { meta: 4997.00, perda_diaria: 1247.00, perda_maxima: 4997.00, max_win: 25, max_wdo: 15, premio_incubadora: 1250.00 },
             "Junior": { meta: 1997.00, perda_diaria: 497.00, perda_maxima: 1997.00, max_win: 10, max_wdo: 6, premio_incubadora: 500.00 },
@@ -929,7 +1128,7 @@
         let dadosBrutosEmMemoria = null;
         let operacoesAuditadasCache = [];
 
-        // Navegação de Abas
+        // Navegação de Abas Principais
         function navegarAba(abaId) {
             document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => {
@@ -940,9 +1139,7 @@
             const btnNav = document.getElementById(`nav-${abaId}`);
 
             if (abaSelecionada) abaSelecionada.classList.remove('hidden');
-            if (btnNav) {
-                btnNav.classList.add('active');
-            }
+            if (btnNav) btnNav.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -972,7 +1169,54 @@
             }
         }
 
-        // Funções Utilitárias
+        // Filtro de Mesas por Categoria e Busca
+        let categoriaAtiva = 'todas';
+
+        function setFiltroCategoria(cat) {
+            categoriaAtiva = cat;
+            document.querySelectorAll('.filtro-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = "filtro-btn active px-3 py-1 rounded-lg text-white font-bold bg-blue-600 transition-all";
+                } else {
+                    btn.className = "filtro-btn px-3 py-1 rounded-lg text-slate-400 font-semibold hover:text-white transition-all";
+                }
+            });
+            filtrarMesas();
+        }
+
+        function filtrarMesas() {
+            const termoBusca = (document.getElementById('filtroBuscaMesa').value || '').toLowerCase().trim();
+            const cards = document.querySelectorAll('.card-mesa');
+            const linhasTabela = document.querySelectorAll('#tabelaComparativaCorpo tr');
+
+            cards.forEach(card => {
+                const cat = card.getAttribute('data-cat');
+                const nome = (card.getAttribute('data-nome') || '').toLowerCase();
+                const matchCat = (categoriaAtiva === 'todas' || cat === categoriaAtiva);
+                const matchBusca = (nome.includes(termoBusca));
+
+                if (matchCat && matchBusca) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            linhasTabela.forEach(tr => {
+                const cat = tr.getAttribute('data-cat');
+                const textoTr = tr.innerText.toLowerCase();
+                const matchCat = (categoriaAtiva === 'todas' || cat === categoriaAtiva);
+                const matchBusca = textoTr.includes(termoBusca);
+
+                if (matchCat && matchBusca) {
+                    tr.classList.remove('hidden');
+                } else {
+                    tr.classList.add('hidden');
+                }
+            });
+        }
+
+        // Funções de Formatação
         function formatarMoeda(val) {
             if (isNaN(val) || val === null) return 'R$ 0,00';
             return 'R$ ' + Number(val).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -1004,7 +1248,7 @@
             return null;
         }
 
-        // Feedback de Toast e Cópia
+        // Toast de Feedback
         function showToast(msg, isSuccess = true) {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toastMsg');
@@ -1034,7 +1278,7 @@
             showToast(mensagemSucesso || "Copiado com sucesso!");
         }
 
-        // Dropzone e Leitura de Arquivo
+        // Upload de Arquivo
         const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('fileInput');
 
@@ -1136,7 +1380,7 @@
 
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
 
-                // Custo B3 Oficial Zero7 (Nota 1): R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
+                // Custo B3 Oficial Zero7: R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
                 // NÃO lê a coluna TET (que representa tempo entre trades em segundos)
                 let custoOp = 0.0;
                 if (ativo.includes('WIN')) {
@@ -1146,7 +1390,7 @@
                 } else if (ativo.includes('BIT')) {
                     custoOp = qtdTotalExecutada * 0.45;
                 } else {
-                    custoOp = qtdTotalExecutada * 0.37; // fallback padrão mini-índice
+                    custoOp = qtdTotalExecutada * 0.37;
                 }
 
                 custosTotais += custoOp;
@@ -1167,10 +1411,10 @@
                     // 1. Limite de Lote por Plano
                     if (ativo.includes('WIN') && cfg.max_win > 0 && qtdPos > cfg.max_win) {
                         conforme = false;
-                        motivo = `VIOLAÇÃO: Lote (${int(qtdPos)}) > Máx WIN (${cfg.max_win})`;
+                        motivo = `VIOLAÇÃO: Lote (${int(qtdPos)}) > Máx WIN (${cfg['max_win']})`;
                     } else if (ativo.includes('WDO') && cfg.max_wdo > 0 && qtdPos > cfg.max_wdo) {
                         conforme = false;
-                        motivo = `VIOLAÇÃO: Lote (${int(qtdPos)}) > Máx WDO (${cfg.max_wdo})`;
+                        motivo = `VIOLAÇÃO: Lote (${int(qtdPos)}) > Máx WDO (${cfg['max_wdo']})`;
                     }
 
                     // 2. Sub-tick (Micro-scalp com lucro)
@@ -1306,7 +1550,7 @@
             document.getElementById('cardQtdLosses').innerText = `${countLosses} trades negativos`;
             document.getElementById('txtTotalOps').innerText = `${operacoesProcessadas.length} operações auditadas`;
 
-            // BANNER DINÂMICO DE APROVAÇÃO (CORES E MENSAGENS)
+            // BANNER DINÂMICO DE APROVAÇÃO (5 CORES)
             const banner = document.getElementById('bannerStatus');
             const bannerTitulo = document.getElementById('bannerTitulo');
             const bannerValido = document.getElementById('bannerValido');
@@ -1326,10 +1570,10 @@
                 corBg = "#050811"; // Preto se quebrou o drawdown
                 tituloTxt = `❌ CONTA REPROVADA POR DRAWDOWN MÁXIMO (${formatarMoeda(piorDrawdown)})`;
                 faltaTxt = "DRAWDOWN EXCEDIDO";
-                subinfo.innerText = `Limite de Perda: -${formatarMoeda(cfg.perda_maxima)}`;
+                subinfo.innerText = `Limite de Perda Máxima: -${formatarMoeda(cfg.perda_maxima)}`;
             } else if (saldoFinalZero7 >= cfg.meta && qtdDiasOperados >= minDias) {
                 corBg = "#065f46"; // Verde se meta atingida com dias válidos
-                tituloTxt = "🎉 META CONCLUÍDA! VOCÊ ESTÁ APTO A SOLICITAR AVALIAÇÃO NA ZERO7";
+                tituloTxt = "🎉 META CONCLUÍDA! VOCÊ ESTÁ APTO A SOLICITAR APROVAÇÃO NA ZERO7";
                 faltaTxt = "R$ 0,00 (META ATINGIDA)";
                 subinfo.innerText = `Dias operados: ${qtdDiasOperados} / Mínimo: ${minDias} pregões`;
             } else if (progressoPct >= 75.0) {
@@ -1431,7 +1675,7 @@
             showToast("Relatório auditado exportado!");
         }
 
-        // Amostra de Teste Pronta para o Usuário
+        // Dados Demo B3
         function carregarExemploDemo() {
             const csvExemplo = `Subconta;Ativo;Abertura;Fechamento;Qtd Compra;Qtd Venda;Preço Compra;Preço Venda;Res. Intervalo Bruto;Total;TET
 Simulador;WINV24;14/10/2026 09:15:10;14/10/2026 09:25:30;20;20;131500;131750;1000,00;1000,00;25
