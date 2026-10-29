@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditor Zero7 - Hub Trader</title>
+    <!-- Tailwind CSS para o Design Moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PapaParse para ler CSV no navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#0b0f19] text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Topo / Header -->
+    <header class="bg-[#070a12] border-b border-slate-800 px-6 py-4 flex items-center justify-between">
+        <div>
+            <h1 class="text-lg font-bold text-white flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-blue-500"></span> Auditor Regulamentar Zero7
+            </h1>
+            <p class="text-xs text-slate-400">Plataforma de análise de conformidade e gestão de risco para mesas proprietárias</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <select id="selectFase" class="bg-[#1e293b] border border-slate-700 text-xs rounded px-3 py-1.5 text-slate-200 outline-none">
+                <option value="Avaliação">Fase: Avaliação</option>
+                <option value="Incubadora">Fase: Incubadora</option>
+                <option value="Conta Real">Fase: Conta Real</option>
+            </select>
+            <select id="selectPlano" class="bg-[#1e293b] border border-slate-700 text-xs rounded px-3 py-1.5 text-slate-200 outline-none">
+                <option value="Pleno">Plano: Pleno (R$ 4.997)</option>
+                <option value="Junior">Plano: Júnior (R$ 1.997)</option>
+                <option value="Senior">Plano: Sênior (R$ 9.997)</option>
+                <option value="Trainee">Plano: Trainee (R$ 997)</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Área Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 flex flex-col gap-6">
+
+        <!-- Caixa de Upload (Dropzone) -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-700 hover:border-blue-500 bg-[#131b2e]/50 rounded-xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3">
+            <div class="p-3 bg-blue-500/10 text-blue-400 rounded-full">
+                <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-slate-200">Arraste o seu relatório CSV do Profit aqui</p>
+                <p class="text-xs text-slate-400 mt-1">ou clique para selecionar o arquivo da aba Operações</p>
+            </div>
+            <input type="file" id="fileInput" accept=".csv" class="hidden">
+        </div>
+
+        <!-- Banner Dinâmico de Status -->
+        <div id="bannerStatus" class="bg-[#7f1d1d] border border-red-900/50 rounded-xl p-5 shadow-lg hidden">
+            <h2 id="bannerTitulo" class="text-base font-bold text-white uppercase tracking-wide">Aguardando Ficheiro</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/10">
+                <div>
+                    <p class="text-xs text-slate-300 font-medium">VALOR ACEITE PELA MESA ZERO7</p>
+                    <p id="bannerValido" class="text-2xl font-black text-white mt-0.5">R$ 0,00</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-300 font-medium">PROGRESSO DA META</p>
+                    <p id="bannerPct" class="text-2xl font-black text-white mt-0.5">0.0%</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-300 font-medium">FALTA P/ PEDIR SOLICITAÇÃO</p>
+                    <p id="bannerFalta" class="text-2xl font-black text-white mt-0.5">R$ 0,00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cartões Analíticos -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="bg-[#131b2e] border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Lucro Bruto</p>
+                <p id="cardLucroBruto" class="text-lg font-bold text-emerald-400 mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#131b2e] border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Prejuízo Bruto</p>
+                <p id="cardPrejuizoBruto" class="text-lg font-bold text-rose-400 mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#131b2e] border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Custos TET (Ida/Volta)</p>
+                <p id="cardCustos" class="text-lg font-bold text-rose-500 mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#131b2e] border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Saldo Líquido Real</p>
+                <p id="cardLiquidoReal" class="text-lg font-bold text-sky-400 mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#131b2e] border border-slate-800 p-4 rounded-xl">
+                <p class="text-xs text-slate-400 font-medium">Lucro Descartado</p>
+                <p id="cardAnulado" class="text-lg font-bold text-amber-400 mt-1">R$ 0,00</p>
+            </div>
+        </div>
+
+        <!-- Tabela de Operações -->
+        <div class="bg-[#131b2e] border border-slate-800 rounded-xl overflow-hidden flex flex-col flex-1">
+            <div class="px-5 py-4 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="text-sm font-bold text-white">Registo Detalhado de Operações Auditadas</h3>
+                <span id="txtTotalOps" class="text-xs text-slate-400">0 operações carregadas</span>
+            </div>
+            <div class="overflow-x-auto max-h-[450px]">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-[#090d16] text-slate-400 sticky top-0 uppercase tracking-wider font-semibold">
+                        <tr>
+                            <th class="p-3">Data</th>
+                            <th class="p-3">Ativo</th>
+                            <th class="p-3">Abertura</th>
+                            <th class="p-3">Fechamento</th>
+                            <th class="p-3 text-center">Qtd</th>
+                            <th class="p-3 text-center">Pontos</th>
+                            <th class="p-3 text-right">Res. Bruto</th>
+                            <th class="p-3 text-right">Custos TET</th>
+                            <th class="p-3 text-right">Saldo Zero7</th>
+                            <th class="p-3 text-center">Status</th>
+                            <th class="p-3">Motivo da Conformidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaCorpo" class="divide-y divide-slate-800/60 text-slate-300">
+                        <tr>
+                            <td colspan="11" class="p-8 text-center text-slate-500 italic">Carregue um arquivo CSV para visualizar os dados.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Script de Processamento em JavaScript -->
+    <script>
+        lucide.createIcons();
+
+        const CONFIG_PLANOS = {
+            "Pleno": { meta: 4997.00, perda_diaria: 1247.00, perda_maxima: 4997.00, max_win: 25, max_wdo: 15 },
+            "Junior": { meta: 1997.00, perda_diaria: 497.00, perda_maxima: 1997.00, max_win: 10, max_wdo: 6 },
+            "Senior": { meta: 9997.00, perda_diaria: 2497.00, perda_maxima: 9997.00, max_win: 50, max_wdo: 30 },
+            "Trainee": { meta: 997.00, perda_diaria: 247.00, perda_maxima: 997.00, max_win: 5, max_wdo: 3 }
+        };
+
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropzone.addEventListener('click', () => fileInput.click());
+        dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('border-blue-500'); });
+        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-blue-500'));
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-blue-500');
+            if (e.dataTransfer.files.length) processarCSV(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) processarCSV(e.target.files[0]);
+        });
+
+        function formatarMoeda(val) {
+            return 'R$ ' + val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function limparNumero(val) {
+            if (!val) return 0.0;
+            let s = String(val).replace('R$', '').replace('pts', '').trim();
+            s = s.replace(/\./g, '').replace(',', '.');
+            let num = parseFloat(s);
+            return isNaN(num) ? 0.0 : num;
+        }
+
+        function processarCSV(file) {
+            Papa.parse(file, {
+                header: true,
+                delimiter: ";",
+                encoding: "ISO-8859-1",
+                skipEmptyLines: true,
+                complete: function(results) {
+                    analisarDados(results.data);
+                }
+            });
+        }
+
+        function analisarDados(data) {
+            const planoKey = document.getElementById('selectPlano').value;
+            const fase = document.getElementById('selectFase').value;
+            const cfg = CONFIG_PLANOS[planoKey];
+
+            let lucroBrutoTotal = 0;
+            let prejuizoBrutoTotal = 0;
+            let custosTotais = 0;
+            let lucroAnuladoTotal = 0;
+            let saldoZero7Total = 0;
+
+            let operacoesProcessadas = [];
+            let diasAcumulado = {};
+
+            data.forEach(row => {
+                let ativo = (row['Ativo'] || '').toUpperCase().trim();
+                let abertura = row['Abertura'] || '';
+                let fechamento = row['Fechamento'] || '';
+                let qtdC = limparNumero(row['Qtd Compra'] || 0);
+                let qtdV = limparNumero(row['Qtd Venda'] || 0);
+                let qtdPos = Math.max(qtdC, qtdV);
+                let qtdTotal = qtdC + qtdV > 0 ? (qtdC + qtdV) : (qtdPos * 2);
+
+                let pCompra = limparNumero(row['Preço Compra'] || 0);
+                let pVenda = limparNumero(row['Preço Venda'] || 0);
+                let pontos = Math.abs(pVenda - pCompra);
+
+                let bruto = limparNumero(row['Res. Intervalo Bruto'] || row['Total'] || row['Res. Operação'] || 0);
+                let tetCsv = Math.abs(limparNumero(row['TET'] || row['Comissões'] || 0));
+
+                // Custos TET ou contingência ida/volta
+                let custoOp = tetCsv > 0 ? tetCsv : (ativo.includes('WIN') ? qtdTotal * 0.37 : (ativo.includes('WDO') ? qtdTotal * 1.47 : 0));
+                custosTotais += custoOp;
+
+                if (bruto > 0) lucroBrutoTotal += bruto;
+                if (bruto < 0) prejuizoBrutoTotal += bruto;
+
+                let conforme = true;
+                let motivo = "Conforme";
+
+                if (fase !== "Conta Real") {
+                    if (ativo.includes('WIN') && cfg.max_win > 0 && qtdPosIndex > cfg.max_win) {
+                        conforme = false; motivo = `Lote > Máx WIN (${cfg.max_win})`;
+                    }
+                    if (conforme && bruto > 0) {
+                        if (ativo.includes('WIN') && pontos <= 10.0) { conforme = false; motivo = "Ignorado: WIN <= 10 pts"; }
+                        if (ativo.includes('WDO') && pontos <= 0.5) { conforme = false; motivo = "Ignorado: WDO <= 0.5 pt"; }
+                    }
+                }
+
+                let saldoTrade = 0;
+                let status = "Aceito";
+
+                if (!conforme) {
+                    status = "Desconsiderado";
+                    if (bruto > 0) {
+                        lucroAnuladoTotal += bruto;
+                        saldoTrade = 0.0 - custoOp;
+                    } else {
+                        saldoTrade = bruto - custoOp;
+                    }
+                } else {
+                    saldoTrade = bruto - custoOp;
+                }
+
+                saldoZero7Total += saldoTrade;
+
+                // Agrupamento por dia
+                let dataDia = abertura.split(' ')[0] || 'Geral';
+                if (!diasAcumulado[dataDia]) diasAcumulado[dataDia] = 0;
+                diasAcumulado[dataDia] += saldoTrade;
+
+                operacoesProcessadas.push({
+                    data: dataDia,
+                    ativo: ativo,
+                    abertura: abertura.split(' ')[1] || '',
+                    fechamento: fechamento.split(' ')[1] || '',
+                    qtd: qtdPos,
+                    pontos: pontos.toFixed(1),
+                    bruto: bruto,
+                    custo: custoOp,
+                    saldo: saldoTrade,
+                    status: status,
+                    motivo: motivo
+                });
+            });
+
+            // Regra dos 50% de consistência diária (Avaliação)
+            let excessoTeto = 0;
+            let teto50 = cfg.meta * 0.50;
+            if (fase === "Avaliação") {
+                Object.values(diasAcumulado).forEach(valDia => {
+                    if (valDia > teto50) excessoTeto += (valDia - teto50);
+                });
+            }
+
+            let saldoFinalZero7 = saldoZero7Total - excessoTeto;
+            let saldoLiquidoReal = lucroBrutoTotal + prejuizoBrutoTotal - custosTotais;
+            let progressoPct = (saldoFinalZero7 / cfg.meta) * 100;
+            let faltaMeta = Math.max(0, cfg.meta - saldoFinalZero7);
+
+            // Atualizar Interface
+            document.getElementById('cardLucroBruto').innerText = formatarMoeda(lucroBrutoTotal);
+            document.getElementById('cardPrejuizoBruto').innerText = formatarMoeda(prejuizoBrutoTotal);
+            document.getElementById('cardCustos').innerText = '- ' + formatarMoeda(custosTotais);
+            document.getElementById('cardLiquidoReal').innerText = formatarMoeda(saldoLiquidoReal);
+            document.getElementById('cardAnulado').innerText = formatarMoeda(lucroAnuladoTotal + excessoTeto);
+            document.getElementById('txtTotalOps').innerText = `${operacoesProcessadas.length} operações carregadas`;
+
+            // Atualizar Banner Principal
+            const banner = document.getElementById('bannerStatus');
+            banner.classList.remove('hidden');
+
+            let corBg = "#7f1d1d";
+            let statusTxt = "📍 INÍCIO DA JORNADA";
+
+            if (saldoFinalZero7 >= cfg.meta) {
+                corBg = "#065f46"; statusTxt = "🎉 META CONCLUÍDA! APTO A SOLICITAR APROVAÇÃO";
+            } else if (progressoPct >= 75) {
+                corBg = "#854d0e"; statusTxt = "⚡ RETA FINAL DA AVALIAÇÃO";
+            } else if (progressoPct >= 50) {
+                corBg = "#1e40af"; statusTxt = "🚀 MEIO DO CAMINHO ALCANÇADO";
+            }
+
+            banner.className = `rounded-xl p-5 shadow-lg border border-white/10 text-white`;
+            banner.style.backgroundColor = corBg;
+            document.getElementById('bannerTitulo').innerText = statusTxt;
+            document.getElementById('bannerValido').innerText = formatarMoeda(saldoFinalZero7);
+            document.getElementById('bannerPct').innerText = progressoPct.toFixed(1) + '%';
+            document.getElementById('bannerFalta').innerText = saldoFinalZero7 >= cfg.meta ? "R$ 0,00 (CONCLUÍDO)" : formatarMoeda(faltaMeta);
+
+            // Preencher Tabela
+            const tbody = document.getElementById('tabelaCorpo');
+            tbody.innerHTML = '';
+
+            operacoesProcessadas.forEach(op => {
+                let tr = document.createElement('tr');
+                let tagClass = op.status === "Desconsiderado" ? "bg-rose-950/40 text-rose-300" : "hover:bg-slate-800/40";
+                tr.className = tagClass;
+
+                tr.innerHTML = `
+                    <td class="p-3">${op.data}</td>
+                    <td class="p-3 font-bold">${op.ativo}</td>
+                    <td class="p-3">${op.abertura}</td>
+                    <td class="p-3">${op.fechamento}</td>
+                    <td class="p-3 text-center">${op.qtd}</td>
+                    <td class="p-3 text-center">${op.pontos}</td>
+                    <td class="p-3 text-right">${formatarMoeda(op.bruto)}</td>
+                    <td class="p-3 text-right text-rose-400">-${formatarMoeda(op.custo)}</td>
+                    <td class="p-3 text-right font-bold">${formatarMoeda(op.saldo)}</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${op.status === 'Aceito' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}">${op.status}</span></td>
+                    <td class="p-3 text-slate-400">${op.motivo}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
