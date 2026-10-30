@@ -463,7 +463,7 @@
                 <div id="grid-acoes-peso" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-2"></div>
             </div>
 
-            <!-- TERMINAL GRÁFICO NATIVO YAHOO FINANCE (100% CHART.JS - SEM TRADINGVIEW) -->
+            <!-- TERMINAL GRÁFICO NATIVO YAHOO FINANCE (100% CHART.JS) -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col">
                 <div class="px-5 py-3 border-b border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#090d16]">
                     <div class="flex items-center gap-2">
@@ -515,23 +515,39 @@
                 </div>
             </div>
 
-            <!-- Calendário Econômico Oficial Investing.com -->
-            <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-                <div class="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-400"></i>
-                        <span class="text-xs font-bold text-white uppercase tracking-wider">Calendário Econômico de Notícias em Tempo Real (Investing.com)</span>
+            <!-- CALENDÁRIO ECONÔMICO MACRO INSTITUCIONAL (DARK MODE TOTAL + FILTRO DE PAÍSES) -->
+            <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col">
+                <div class="px-5 py-4 border-b border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#090d16]">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-400"></i>
+                            <h4 class="text-xs font-bold text-white uppercase tracking-wider">Calendário Econômico Institucional (Tempo Real)</h4>
+                            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">Dark Mode 100%</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Indicadores macroeconômicos com projeção, consenso, resultado prévio e impacto na volatilidade.</p>
                     </div>
-                    <span class="text-[11px] text-slate-400">Horário Oficial de Brasília (GMT-3)</span>
+
+                    <!-- Filtros Rápidos de Países e Relevância -->
+                    <div class="flex items-center gap-2 flex-wrap text-xs">
+                        <span class="text-slate-400 font-semibold mr-1">Filtro Países:</span>
+                        <button onclick="mudarFiltroCalendario('br,us', '0,1', this)" class="btn-cal-filtro px-2.5 py-1 font-bold rounded bg-blue-600 text-white transition-all">🇧🇷 Brasil + 🇺🇸 EUA (Foco B3)</button>
+                        <button onclick="mudarFiltroCalendario('us', '0,1', this)" class="btn-cal-filtro px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">🇺🇸 Apenas EUA</button>
+                        <button onclick="mudarFiltroCalendario('br', '0,1', this)" class="btn-cal-filtro px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">🇧🇷 Apenas Brasil</button>
+                        <button onclick="mudarFiltroCalendario('br,us,eu,gb,jp,cn', '0,1', this)" class="btn-cal-filtro px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">🌐 Global (G7 + CN)</button>
+                        <button onclick="mudarFiltroCalendario(calPaisesAtuais, '1', this)" class="btn-cal-filtro px-2.5 py-1 font-bold rounded bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 transition-all">⚡ Apenas 3★ (Alto Impacto)</button>
+                    </div>
                 </div>
-                <div class="p-2">
-                    <iframe 
-                        src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&features=datepicker,timezone&countries=32,5&calType=day&timeZone=12&lang=12" 
-                        width="100%" 
-                        height="440" 
-                        frameborder="0" 
-                        allowtransparency="true">
-                    </iframe>
+
+                <!-- Container do Widget Dark Mode sem fundo branco -->
+                <div class="w-full h-[560px] bg-[#060911] p-2 relative overflow-hidden">
+                    <div id="container-calendario-dark" class="w-full h-full">
+                        <!-- Widget carregado dinamicamente via JS -->
+                    </div>
+                </div>
+
+                <div class="px-5 py-2.5 bg-[#0a0f1d] border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <span>💡 <strong>Dica de Risco:</strong> Evite posicionar ordens a mercado 2 minutos antes e depois de divulgações de 3 estrelas (Payroll, CPI, Decisão Copom/Fed).</span>
+                    <span class="font-mono text-slate-500 text-[10px]">Horário Oficial de Brasília (GMT-3)</span>
                 </div>
             </div>
 
@@ -728,6 +744,7 @@
             if (abaId === 'macro') {
                 if (!window.macroChartCarregado) {
                     carregarGraficoYahooNativo(ativoGraficoAtual, rangeGraficoAtual, intervalGraficoAtual);
+                    carregarCalendarioEconomico(calPaisesAtuais, calImportanciaAtual);
                     window.macroChartCarregado = true;
                 }
                 carregarDadosMercadoCompleto();
@@ -753,6 +770,57 @@
                 if (window.chartEquityInst) window.chartEquityInst.resize();
                 if (window.chartDiarioInst) window.chartDiarioInst.resize();
             }
+        }
+
+        // ==========================================
+        // CALENDÁRIO ECONÔMICO MACRO (DARK MODE & PAÍSES)
+        // ==========================================
+        let calPaisesAtuais = 'br,us';
+        let calImportanciaAtual = '0,1';
+
+        function carregarCalendarioEconomico(paises = 'br,us', importancia = '0,1') {
+            calPaisesAtuais = paises;
+            calImportanciaAtual = importancia;
+            const container = document.getElementById('container-calendario-dark');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            const widgetWrapper = document.createElement('div');
+            widgetWrapper.className = 'tradingview-widget-container';
+            widgetWrapper.style.width = '100%';
+            widgetWrapper.style.height = '100%';
+
+            const widgetInner = document.createElement('div');
+            widgetInner.className = 'tradingview-widget-container__widget';
+            widgetInner.style.width = '100%';
+            widgetInner.style.height = '100%';
+
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-events.js';
+            script.async = true;
+            script.text = JSON.stringify({
+                "colorTheme": "dark",
+                "isTransparent": true,
+                "width": "100%",
+                "height": "100%",
+                "locale": "br",
+                "importanceFilter": importancia,
+                "countryFilter": paises
+            });
+
+            widgetWrapper.appendChild(widgetInner);
+            widgetWrapper.appendChild(script);
+            container.appendChild(widgetWrapper);
+        }
+
+        function mudarFiltroCalendario(paises, importancia, btn) {
+            document.querySelectorAll('.btn-cal-filtro').forEach(b => {
+                b.className = "btn-cal-filtro px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all";
+            });
+            if (btn) btn.className = "btn-cal-filtro px-2.5 py-1 font-bold rounded bg-blue-600 text-white transition-all";
+            carregarCalendarioEconomico(paises, importancia);
         }
 
         // ==========================================
@@ -1313,7 +1381,6 @@
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
                 let comissaoCsv = Math.abs(limparNumero(getVal(row, ['comissoes', 'comissao', 'taxas'])));
 
-                // Custos Zero7: R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
                 let custoOp = comissaoCsv > 0 
                     ? comissaoCsv 
                     : (ativo.includes('WIN') ? qtdTotalExecutada * 0.37 
