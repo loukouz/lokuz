@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse para auditoria client-side de relatórios CSV do Profit -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Chart.js para Curva de Capital, Drawdown e Gráfico Nativo Yahoo -->
+    <!-- Chart.js para Curva de Capital, Drawdown e Gráfico Principal Yahoo -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -73,7 +73,6 @@
     <header class="bg-[#090d16] border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- Símbolo: Olho no Box Neon -->
                 <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                     <i data-lucide="eye" class="w-5 h-5 text-white stroke-[2.2]"></i>
                 </div>
@@ -82,7 +81,7 @@
                         <span class="font-extrabold tracking-tight text-white text-sm sm:text-base">LOKUZ HUB</span>
                         <span class="text-[10px] uppercase font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded">Terminal Pro</span>
                     </div>
-                    <p class="text-[11px] text-slate-400 hidden sm:block">Auditoria de Mesas, Macro B3 & Gestão Quantitativa</p>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">Auditoria de Mesas, Sentimento B3 & Gestão Quantitativa</p>
                 </div>
             </div>
 
@@ -94,7 +93,7 @@
                 </button>
                 <button onclick="trocarAbaPrincipal('macro')" id="tabBtn-macro" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                    <span>Macro B3 & Yahoo Finance</span>
+                    <span>Sentimento & Macro B3</span>
                 </button>
                 <button onclick="trocarAbaPrincipal('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="award" class="w-3.5 h-3.5"></i>
@@ -329,32 +328,75 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- MÓDULO 2: MACRO B3 & YAHOO FINANCE         -->
+        <!-- MÓDULO 2: SENTIMENTO & MACRO B3            -->
         <!-- ========================================== -->
         <section id="aba-macro" class="hidden flex flex-col gap-6">
 
-            <!-- Diagnóstico Quantitativo Dinâmico -->
-            <div id="painel-diagnostico-quant" class="bg-gradient-to-r from-blue-950/50 via-[#0d1322] to-slate-900 border border-blue-900/40 p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Algoritmo Quantitativo de Pressão da Carteira Teórica B3</span>
+            <!-- ============================================================== -->
+            <!-- 1. BARÔMETRO DE SENTIMENTO INSTITUCIONAL B3 (MARKET BREADTH)   -->
+            <!-- ============================================================== -->
+            <div class="bg-[#090f1d] border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Barómetro de Sentimento Institucional da B3</h3>
+                            <span class="text-[10px] font-mono text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded">Cesta Completa (82% Ibov)</span>
+                        </div>
+                        <h2 id="sentimento-status-texto" class="text-lg font-black text-white mt-1 flex items-center gap-2">
+                            <span class="text-emerald-400">FORTE PRESSÃO COMPRADORA INSTITUCIONAL</span>
+                        </h2>
+                        <p id="sentimento-explicacao" class="text-xs text-slate-300 mt-0.5 max-w-3xl leading-relaxed">
+                            O fluxo ponderado das 28 ações âncora e dos ETFs de referência está a gerar tração compradora no índice à vista.
+                        </p>
                     </div>
-                    <h2 id="quant-veredito" class="text-xl font-black text-white mt-1 flex items-center gap-2">
-                        <span class="text-emerald-400">🟢 FORTE PRESSÃO COMPRADORA INSTITUCIONAL</span>
-                    </h2>
-                    <p id="quant-explicacao" class="text-xs text-slate-300 mt-1 max-w-3xl leading-relaxed">
-                        Calculando a ponderação das ações selecionadas sobre o Mini-Índice em tempo real.
-                    </p>
+
+                    <div class="flex items-center gap-3 self-end md:self-auto">
+                        <div class="bg-[#131b2e] border border-slate-800 p-2.5 rounded-xl text-right">
+                            <p class="text-[10px] text-slate-400 uppercase font-semibold">Tração Teórica no WIN</p>
+                            <p id="sentimento-pontos-win" class="text-lg font-black text-emerald-400 font-mono">+680 pts</p>
+                        </div>
+                        <button onclick="atualizarSentimentoCompleto()" class="text-xs font-bold px-3 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-all">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                            <span>Atualizar</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="bg-[#131b2e] border border-slate-800 p-3 rounded-lg text-right">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Tração Teórica Gerada</p>
-                        <p id="quant-pontos-gerados" class="text-lg font-black text-emerald-400 font-mono">+624 pts</p>
+
+                <!-- Barra de Força Compradora vs Vendedora Ponderada -->
+                <div class="flex flex-col gap-1.5 pt-2 border-t border-slate-800/80">
+                    <div class="flex justify-between items-center text-xs font-mono font-bold">
+                        <span id="txt-forca-alta" class="text-emerald-400 flex items-center gap-1">
+                            <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> Pressão Compradora: 68.4%
+                        </span>
+                        <span id="txt-forca-baixa" class="text-rose-400 flex items-center gap-1">
+                            Pressão Vendedora: 31.6% <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+                        </span>
                     </div>
-                    <button onclick="carregarDadosMercadoCompleto()" class="text-xs font-bold px-3 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-all">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Atualizar
-                    </button>
+                    <div class="w-full h-2.5 rounded-full bg-slate-900 border border-slate-800 flex overflow-hidden">
+                        <div id="barra-sentimento-alta" class="h-full bg-emerald-500 transition-all duration-500" style="width: 68.4%;"></div>
+                        <div id="barra-sentimento-baixa" class="h-full bg-rose-500 transition-all duration-500" style="width: 31.6%;"></div>
+                    </div>
+                </div>
+
+                <!-- Termómetro de Sentimento por Setores Âncora -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 text-xs font-mono">
+                    <div class="bg-[#11192e] border border-slate-800/90 p-2.5 rounded-lg flex flex-col justify-between">
+                        <span class="text-slate-400 text-[10px] font-sans">Bancos & Finanças (~25%)</span>
+                        <span id="sent-bancos" class="text-sm font-black text-emerald-400 mt-1">+0.62% ▲</span>
+                    </div>
+                    <div class="bg-[#11192e] border border-slate-800/90 p-2.5 rounded-lg flex flex-col justify-between">
+                        <span class="text-slate-400 text-[10px] font-sans">Mineração / Vale (~15%)</span>
+                        <span id="sent-mineracao" class="text-sm font-black text-emerald-400 mt-1">+1.25% ▲</span>
+                    </div>
+                    <div class="bg-[#11192e] border border-slate-800/90 p-2.5 rounded-lg flex flex-col justify-between">
+                        <span class="text-slate-400 text-[10px] font-sans">Petróleo & Energia (~20%)</span>
+                        <span id="sent-petroleo" class="text-sm font-black text-emerald-400 mt-1">+0.82% ▲</span>
+                    </div>
+                    <div class="bg-[#11192e] border border-slate-800/90 p-2.5 rounded-lg flex flex-col justify-between">
+                        <span class="text-slate-400 text-[10px] font-sans">ETFs & Câmbio / Gringo</span>
+                        <span id="sent-etfs" class="text-sm font-black text-emerald-400 mt-1">+0.85% ▲</span>
+                    </div>
                 </div>
             </div>
 
@@ -414,7 +456,7 @@
             </div>
 
             <!-- ============================================================== -->
-            <!-- MINI GRAPHIC CARDS & WATCHLIST COM LINHA BASE TRACEJADA         -->
+            <!-- 2. MINI GRAPHIC CARDS & WATCHLIST COM A CESTA COMPLETA         -->
             <!-- ============================================================== -->
             <div class="bg-[#090f1d] border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-col gap-4">
                 
@@ -424,8 +466,14 @@
                         <button onclick="mudarAbaMercado('tendencias', this)" class="btn-aba-mercado px-3.5 py-1.5 text-xs font-bold rounded-lg text-white bg-slate-800/90 border border-slate-700/80 shadow-sm transition-all flex-shrink-0">
                             Tendências de mercado
                         </button>
-                        <button onclick="mudarAbaMercado('ativo', this)" class="btn-aba-mercado px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all flex-shrink-0">
-                            Ativo
+                        <button onclick="mudarAbaMercado('bancos', this)" class="btn-aba-mercado px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all flex-shrink-0">
+                            Bancos
+                        </button>
+                        <button onclick="mudarAbaMercado('commodities', this)" class="btn-aba-mercado px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all flex-shrink-0">
+                            Commodities & Energia
+                        </button>
+                        <button onclick="mudarAbaMercado('etfs', this)" class="btn-aba-mercado px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all flex-shrink-0">
+                            ETFs & Macro
                         </button>
                         <button onclick="mudarAbaMercado('ganhadoras', this)" class="btn-aba-mercado px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-slate-800/50 transition-all flex-shrink-0">
                             Ganhadoras
@@ -439,7 +487,7 @@
                     </div>
 
                     <div class="flex items-center gap-2 self-end sm:self-auto">
-                        <span class="text-[11px] font-mono text-slate-400 hidden sm:inline">Mini gráficos com linha base de fecho</span>
+                        <span id="contador-ativos-exibidos" class="text-[11px] font-mono text-slate-400 hidden sm:inline">28 ativos monitorados</span>
                         <button onclick="scrollarCardsDireita()" class="w-7 h-7 rounded-full bg-[#131b2e] border border-slate-700 hover:border-sky-500 hover:bg-slate-800 flex items-center justify-center text-slate-300 transition-all" title="Avançar carrossel">
                             <i data-lucide="chevron-right" class="w-4 h-4"></i>
                         </button>
@@ -457,7 +505,7 @@
                 <div id="painel-lista-mercado" class="hidden">
                     <div class="bg-[#0b1222] border border-slate-800/90 rounded-xl overflow-hidden divide-y divide-slate-800/60 font-mono">
                         <div class="px-4 py-2 bg-[#080d19] text-[11px] font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center">
-                            <span>Mercado B3 & Ativos Globais</span>
+                            <span>Mercado B3, ETFs & Índices Globais</span>
                             <span>Cotação / Histórico Intraday</span>
                         </div>
                         <div id="lista-rows-container">
@@ -752,6 +800,7 @@
                     carregarGraficoYahooNativo(ativoGraficoAtual, rangeGraficoAtual, intervalGraficoAtual);
                     carregarCalendarioEconomico(calPaisesAtuais, calImportanciaAtual);
                     renderizarMiniCardsECurvas();
+                    atualizarSentimentoCompleto();
                     window.macroInicializado = true;
                 }
                 carregarDadosMercadoCompleto();
@@ -779,82 +828,47 @@
             }
         }
 
-        // ==========================================
-        // DADOS REAIS DOS ATIVOS PARA MINI CARDS
-        // ==========================================
-        const ATIVOS_MINI_CARDS = [
-            { 
-                id: 'USDBRL', 
-                ticker: 'USD/BRL', 
-                nome: 'Dólar dos Estados Unidos/Real ...', 
-                preco: 5.4120, 
-                varPct: 0.01, 
-                prevClose: 5.4115,
-                historico: [5.4115, 5.4116, 5.4125, 5.4128, 5.4130, 5.4132, 5.4130, 5.4125, 5.4120, 5.4119, 5.4118, 5.4119, 5.4120] 
-            },
-            { 
-                id: 'IBOV', 
-                ticker: 'IBOV', 
-                nome: 'IBOVESPA', 
-                preco: 128450, 
-                varPct: -1.06, 
-                prevClose: 129826,
-                historico: [129826, 129400, 129100, 128900, 128650, 128800, 128500, 128350, 128400, 128300, 128450] 
-            },
-            { 
-                id: 'BRLJPY', 
-                ticker: 'BRL/JPY', 
-                nome: 'Real Brasileiro/Iene Japonês', 
-                preco: 28.12, 
-                varPct: -0.28, 
-                prevClose: 28.20,
-                historico: [28.20, 28.16, 28.14, 28.19, 28.11, 28.15, 28.09, 28.12] 
-            },
-            { 
-                id: 'BTC', 
-                ticker: 'BTC', 
-                nome: 'Bitcoin', 
-                preco: 362450, 
-                varPct: -3.44, 
-                prevClose: 375362,
-                historico: [375362, 374000, 373100, 371500, 369800, 366200, 361000, 362450] 
-            },
-            { 
-                id: 'HAPV3', 
-                ticker: 'HAPV3', 
-                nome: 'Hapvida Participações e Investi...', 
-                preco: 3.75, 
-                varPct: -0.47, 
-                prevClose: 3.77,
-                historico: [3.77, 3.76, 3.79, 3.81, 3.78, 3.75, 3.74, 3.76, 3.75] 
-            },
-            { 
-                id: 'VALE3', 
-                ticker: 'VALE3', 
-                nome: 'Vale S.A. ON', 
-                preco: 62.40, 
-                varPct: 1.25, 
-                prevClose: 61.63,
-                historico: [61.63, 61.80, 62.10, 62.25, 62.15, 62.50, 62.35, 62.40] 
-            },
-            { 
-                id: 'PETR4', 
-                ticker: 'PETR4', 
-                nome: 'Petróleo Brasileiro PN', 
-                preco: 36.80, 
-                varPct: 0.82, 
-                prevClose: 36.50,
-                historico: [36.50, 36.60, 36.75, 36.90, 37.05, 36.70, 36.80] 
-            },
-            { 
-                id: 'ITUB4', 
-                ticker: 'ITUB4', 
-                nome: 'Itaú Unibanco Holding PN', 
-                preco: 34.15, 
-                varPct: -0.29, 
-                prevClose: 34.25,
-                historico: [34.25, 34.30, 34.20, 34.10, 34.05, 34.18, 34.15] 
-            }
+        // ==============================================================
+        // CESTA COMPLETA B3 (28 ATIVOS + ETFS + MACRO)
+        // ==============================================================
+        const CESTA_COMPLETA_B3 = [
+            // A. ÂNCORAS GLOBAIS & ETFS (SENTIMENTO EXTERNO)
+            { id: 'EWZ', ticker: 'EWZ', nome: 'iShares MSCI Brazil ETF (NY)', setor: 'etfs', peso: 10.0, preco: 28.45, varPct: 0.85, prevClose: 28.21, historico: [28.21, 28.25, 28.32, 28.40, 28.38, 28.45] },
+            { id: 'BOVA11', ticker: 'BOVA11', nome: 'iShares Ibovespa Fundo de Índice', setor: 'etfs', peso: 8.0, preco: 124.50, varPct: 0.65, prevClose: 123.70, historico: [123.70, 123.90, 124.20, 124.60, 124.50] },
+            { id: 'USDBRL', ticker: 'USD/BRL', nome: 'Dólar Comercial Spot', setor: 'etfs', peso: 5.0, preco: 5.4120, varPct: -0.35, prevClose: 5.4310, historico: [5.4310, 5.4280, 5.4210, 5.4150, 5.4120] },
+            { id: 'IBOV', ticker: 'IBOV', nome: 'Índice Bovespa à Vista', setor: 'etfs', peso: 5.0, preco: 128450, varPct: 0.62, prevClose: 127660, historico: [127660, 127900, 128200, 128500, 128450] },
+            
+            // B. MINERAÇÃO & MATERIAIS BÁSICOS (~15% IBOV)
+            { id: 'VALE3', ticker: 'VALE3', nome: 'Vale S.A. ON', setor: 'commodities', peso: 12.8, preco: 62.40, varPct: 1.25, prevClose: 61.63, historico: [61.63, 61.80, 62.10, 62.25, 62.15, 62.50, 62.40] },
+            { id: 'GGBR4', ticker: 'GGBR4', nome: 'Gerdau S.A. PN', setor: 'commodities', peso: 1.7, preco: 18.70, varPct: 0.55, prevClose: 18.60, historico: [18.60, 18.65, 18.72, 18.70] },
+            { id: 'CSNA3', ticker: 'CSNA3', nome: 'Companhia Siderúrgica Nacional', setor: 'commodities', peso: 1.2, preco: 12.40, varPct: -1.10, prevClose: 12.54, historico: [12.54, 12.48, 12.42, 12.40] },
+            { id: 'SUZB3', ticker: 'SUZB3', nome: 'Suzano S.A. ON', setor: 'commodities', peso: 2.2, preco: 54.10, varPct: 1.30, prevClose: 53.40, historico: [53.40, 53.70, 54.00, 54.10] },
+            { id: 'KLBN11', ticker: 'KLBN11', nome: 'Klabin S.A. Unt', setor: 'commodities', peso: 1.0, preco: 21.80, varPct: 0.45, prevClose: 21.70, historico: [21.70, 21.75, 21.80] },
+
+            // C. PETRÓLEO, GÁS & ENERGIA (~20% IBOV)
+            { id: 'PETR4', ticker: 'PETR4', nome: 'Petróleo Brasileiro PN', setor: 'commodities', peso: 8.5, preco: 36.80, varPct: 0.82, prevClose: 36.50, historico: [36.50, 36.60, 36.75, 36.90, 36.80] },
+            { id: 'PETR3', ticker: 'PETR3', nome: 'Petróleo Brasileiro ON', setor: 'commodities', peso: 4.6, preco: 39.50, varPct: 0.65, prevClose: 39.24, historico: [39.24, 39.35, 39.45, 39.50] },
+            { id: 'PRIO3', ticker: 'PRIO3', nome: 'PRIO S.A. ON', setor: 'commodities', peso: 2.0, preco: 43.80, varPct: 1.75, prevClose: 43.05, historico: [43.05, 43.30, 43.70, 43.80] },
+            { id: 'ELET3', ticker: 'ELET3', nome: 'Eletrobras ON', setor: 'commodities', peso: 1.6, preco: 38.60, varPct: -0.30, prevClose: 38.72, historico: [38.72, 38.65, 38.60] },
+            { id: 'EQTL3', ticker: 'EQTL3', nome: 'Equatorial Energia ON', setor: 'commodities', peso: 2.1, preco: 32.40, varPct: -0.15, prevClose: 32.45, historico: [32.45, 32.40] },
+            { id: 'CPLE6', ticker: 'CPLE6', nome: 'Copel PNB', setor: 'commodities', peso: 1.4, preco: 9.85, varPct: 0.25, prevClose: 9.82, historico: [9.82, 9.85] },
+
+            // D. BANCOS & SETOR FINANCEIRO (~25% IBOV)
+            { id: 'ITUB4', ticker: 'ITUB4', nome: 'Itaú Unibanco Holding PN', setor: 'bancos', peso: 7.6, preco: 34.15, varPct: -0.29, prevClose: 34.25, historico: [34.25, 34.30, 34.20, 34.15] },
+            { id: 'BBDC4', ticker: 'BBDC4', nome: 'Banco Bradesco PN', setor: 'bancos', peso: 3.8, preco: 13.90, varPct: 0.50, prevClose: 13.83, historico: [13.83, 13.88, 13.90] },
+            { id: 'BBAS3', ticker: 'BBAS3', nome: 'Banco do Brasil ON', setor: 'bancos', peso: 3.6, preco: 26.80, varPct: 0.95, prevClose: 26.55, historico: [26.55, 26.70, 26.80] },
+            { id: 'B3SA3', ticker: 'B3SA3', nome: 'B3 S.A. Brasil Bolsa Balcão', setor: 'bancos', peso: 3.4, preco: 11.20, varPct: -0.45, prevClose: 11.25, historico: [11.25, 11.20] },
+            { id: 'BPAC11', ticker: 'BPAC11', nome: 'Banco BTG Pactual Units', setor: 'bancos', peso: 2.3, preco: 35.80, varPct: 0.40, prevClose: 35.66, historico: [35.66, 35.80] },
+            { id: 'ITSA4', ticker: 'ITSA4', nome: 'Itaúsa PN', setor: 'bancos', peso: 1.9, preco: 10.35, varPct: -0.10, prevClose: 10.36, historico: [10.36, 10.35] },
+
+            // E. CONSUMO, VAREJO & SERVIÇOS
+            { id: 'WEGE3', ticker: 'WEGE3', nome: 'WEG S.A. ON', setor: 'outros', peso: 3.1, preco: 52.30, varPct: 1.10, prevClose: 51.73, historico: [51.73, 52.00, 52.30] },
+            { id: 'ABEV3', ticker: 'ABEV3', nome: 'Ambev S.A. ON', setor: 'outros', peso: 2.6, preco: 12.10, varPct: 0.15, prevClose: 12.08, historico: [12.08, 12.10] },
+            { id: 'RENT3', ticker: 'RENT3', nome: 'Localiza Rent a Car ON', setor: 'outros', peso: 2.4, preco: 44.50, varPct: -0.80, prevClose: 44.86, historico: [44.86, 44.60, 44.50] },
+            { id: 'RADL3', ticker: 'RADL3', nome: 'Raia Drogasil ON', setor: 'outros', peso: 1.9, preco: 25.20, varPct: 0.20, prevClose: 25.15, historico: [25.15, 25.20] },
+            { id: 'JBSS3', ticker: 'JBSS3', nome: 'JBS S.A. ON', setor: 'outros', peso: 1.8, preco: 34.90, varPct: -0.60, prevClose: 35.11, historico: [35.11, 34.90] },
+            { id: 'EMBR3', ticker: 'EMBR3', nome: 'Embraer S.A. ON', setor: 'outros', peso: 1.2, preco: 49.50, varPct: 2.15, prevClose: 48.46, historico: [48.46, 49.00, 49.50] },
+            { id: 'HAPV3', ticker: 'HAPV3', nome: 'Hapvida Participações ON', setor: 'outros', peso: 1.0, preco: 3.75, varPct: -0.47, prevClose: 3.77, historico: [3.77, 3.76, 3.75] }
         ];
 
         let filtroAbaMercadoAtual = 'tendencias';
@@ -879,7 +893,63 @@
 
         function scrollarCardsDireita() {
             const container = document.getElementById('carrossel-cards-container');
-            if (container) container.scrollBy({ left: 320, behavior: 'smooth' });
+            if (container) container.scrollBy({ left: 340, behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // CÁLCULO DINÂMICO DO SENTIMENTO GERAL
+        // ==========================================
+        function atualizarSentimentoCompleto() {
+            let somaAlta = 0;
+            let somaBaixa = 0;
+            let somaPonderadaGeral = 0;
+
+            let somaBancos = 0, pesoBancos = 0;
+            let somaMineracao = 0, pesoMineracao = 0;
+            let somaPetroleo = 0, pesoPetroleo = 0;
+            let somaEtfs = 0, pesoEtfs = 0;
+
+            CESTA_COMPLETA_B3.forEach(a => {
+                const impacto = (a.varPct * (a.peso / 100));
+                somaPonderadaGeral += impacto;
+
+                if (a.varPct >= 0) somaAlta += a.peso;
+                else somaBaixa += a.peso;
+
+                if (a.setor === 'bancos') { somaBancos += a.varPct * a.peso; pesoBancos += a.peso; }
+                if (a.id === 'VALE3' || a.id === 'GGBR4' || a.id === 'CSNA3') { somaMineracao += a.varPct * a.peso; pesoMineracao += a.peso; }
+                if (a.id.includes('PETR') || a.id === 'PRIO3' || a.id === 'ELET3') { somaPetroleo += a.varPct * a.peso; pesoPetroleo += a.peso; }
+                if (a.setor === 'etfs') { somaEtfs += a.varPct * a.peso; pesoEtfs += a.peso; }
+            });
+
+            const totalPeso = somaAlta + somaBaixa;
+            const pctAlta = ((somaAlta / totalPeso) * 100).toFixed(1);
+            const pctBaixa = ((somaBaixa / totalPeso) * 100).toFixed(1);
+
+            document.getElementById('barra-sentimento-alta').style.width = pctAlta + '%';
+            document.getElementById('barra-sentimento-baixa').style.width = pctBaixa + '%';
+            document.getElementById('txt-forca-alta').innerHTML = `<i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> Pressão Compradora: ${pctAlta}%`;
+            document.getElementById('txt-forca-baixa').innerHTML = `Pressão Vendedora: ${pctBaixa}% <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>`;
+
+            const pontosEstimados = Math.round(somaPonderadaGeral * 1300);
+            const elPts = document.getElementById('sentimento-pontos-win');
+            if (elPts) {
+                elPts.innerText = `${pontosEstimados >= 0 ? '+' : ''}${pontosEstimados} pts`;
+                elPts.className = `text-lg font-black font-mono ${pontosEstimados >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
+
+            const medBancos = (somaBancos / pesoBancos).toFixed(2);
+            const medMin = (somaMineracao / pesoMineracao).toFixed(2);
+            const medPetr = (somaPetroleo / pesoPetroleo).toFixed(2);
+            const medEtf = (somaEtfs / pesoEtfs).toFixed(2);
+
+            const formatSetor = (val) => `<span class="${val >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${val >= 0 ? '+' : ''}${val}% ${val >= 0 ? '▲' : '▼'}</span>`;
+            document.getElementById('sent-bancos').innerHTML = formatSetor(medBancos);
+            document.getElementById('sent-mineracao').innerHTML = formatSetor(medMin);
+            document.getElementById('sent-petroleo').innerHTML = formatSetor(medPetr);
+            document.getElementById('sent-etfs').innerHTML = formatSetor(medEtf);
+
+            lucide.createIcons();
         }
 
         // ==========================================
@@ -914,7 +984,7 @@
 
             const getY = (val) => h - padY - ((val - minP) / range) * (h - padY * 2);
 
-            // 1. Linha Tracejada do Fecho Anterior (Baseline exata das fotos)
+            // 1. Linha Tracejada do Fecho Anterior (Baseline das fotos)
             const yBase = getY(refClose);
             ctx.save();
             ctx.beginPath();
@@ -950,10 +1020,14 @@
             const container = document.getElementById('carrossel-cards-container');
             if (!container) return;
 
-            let lista = [...ATIVOS_MINI_CARDS];
-            if (filtroAbaMercadoAtual === 'ganhadoras') lista = lista.filter(a => a.varPct > 0).sort((a,b) => b.varPct - a.varPct);
-            if (filtroAbaMercadoAtual === 'perdedoras') lista = lista.filter(a => a.varPct < 0).sort((a,b) => a.varPct - b.varPct);
+            let lista = [...CESTA_COMPLETA_B3];
+            if (filtroAbaMercadoAtual === 'bancos') lista = lista.filter(a => a.setor === 'bancos');
+            else if (filtroAbaMercadoAtual === 'commodities') lista = lista.filter(a => a.setor === 'commodities');
+            else if (filtroAbaMercadoAtual === 'etfs') lista = lista.filter(a => a.setor === 'etfs');
+            else if (filtroAbaMercadoAtual === 'ganhadoras') lista = lista.filter(a => a.varPct > 0).sort((a,b) => b.varPct - a.varPct);
+            else if (filtroAbaMercadoAtual === 'perdedoras') lista = lista.filter(a => a.varPct < 0).sort((a,b) => a.varPct - b.varPct);
 
+            document.getElementById('contador-ativos-exibidos').innerText = `${lista.length} ativos exibidos`;
             container.innerHTML = '';
 
             lista.forEach((ativo, idx) => {
@@ -1005,7 +1079,7 @@
             if (!container) return;
             container.innerHTML = '';
 
-            ATIVOS_MINI_CARDS.forEach((ativo, idx) => {
+            CESTA_COMPLETA_B3.forEach((ativo, idx) => {
                 const isAlta = ativo.varPct >= 0;
                 const corTexto = isAlta ? 'text-emerald-400' : 'text-rose-400';
                 const seta = isAlta ? '▲' : '▼';
@@ -1014,9 +1088,10 @@
                 const row = document.createElement('div');
                 row.className = "px-4 py-2.5 hover:bg-slate-800/40 flex items-center justify-between gap-3 text-xs transition-colors group cursor-pointer";
                 row.innerHTML = `
-                    <div class="w-36 flex-shrink-0">
+                    <div class="w-44 flex-shrink-0">
                         <div class="flex items-center gap-2">
                             <span class="font-black text-white text-xs group-hover:text-sky-400 transition-colors">${ativo.ticker}</span>
+                            <span class="text-[9px] font-mono text-slate-400 bg-slate-800 px-1 rounded">${ativo.peso}%</span>
                         </div>
                         <span class="text-[10px] text-slate-400 truncate block font-sans">${ativo.nome}</span>
                     </div>
