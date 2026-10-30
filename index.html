@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse para auditoria client-side de CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Chart.js para Curva de Capital e Drawdown -->
+    <!-- Chart.js para Curva de Capital e Gráfico Nativo Yahoo Finance -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,7 +27,7 @@
 </head>
 <body class="bg-[#060911] text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- FITA SUPERIOR DE COTAÇÕES REAIS (YAHOO FINANCE VIA API VERCEL) -->
+    <!-- FITA SUPERIOR DE COTAÇÕES REAIS (YAHOO FINANCE VIA VERCEL SERVERLESS) -->
     <div class="w-full bg-[#03060c] border-b border-slate-800/80 px-4 py-2 flex items-center justify-between text-xs overflow-x-auto gap-4">
         <div class="flex items-center gap-4 flex-shrink-0">
             <span class="inline-flex items-center gap-1.5 font-bold text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
@@ -99,7 +99,7 @@
                 </button>
                 <button onclick="trocarAbaPrincipal('macro')" id="tabBtn-macro" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                    <span>Macro B3 & Carteira Teórica</span>
+                    <span>Macro B3 & Yahoo Finance</span>
                 </button>
                 <button onclick="trocarAbaPrincipal('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="award" class="w-3.5 h-3.5"></i>
@@ -334,7 +334,7 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- MÓDULO 2: MACRO B3 & CARTEIRA TEÓRICA IBOV -->
+        <!-- MÓDULO 2: MACRO B3 & YAHOO FINANCE         -->
         <!-- ========================================== -->
         <section id="aba-macro" class="hidden flex flex-col gap-6">
 
@@ -472,22 +472,55 @@
                 <div id="grid-acoes-peso" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-2"></div>
             </div>
 
-            <!-- GRÁFICO REAL DO EWZ (NYSE ARCA) EM TEMPO REAL -->
+            <!-- TERMINAL GRÁFICO NATIVO YAHOO FINANCE (100% CHART.JS - SEM TRADINGVIEW) -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col">
-                <div class="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-[#090d16]">
+                <div class="px-5 py-3 border-b border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#090d16]">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                        <h4 class="text-xs font-bold text-white uppercase tracking-wider">EWZ — iShares MSCI Brazil ETF (NYSE Arca • Nova York)</h4>
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="line-chart" class="w-4 h-4 text-sky-400"></i> Terminal Gráfico Yahoo Finance (API Nativa)
+                        </h4>
                     </div>
-                    <span class="text-[11px] text-slate-400 font-mono">Feed Direto NYSE Arca</span>
+
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <!-- Seletor de Ativos -->
+                        <div class="flex items-center gap-1 bg-[#131b2e] p-1 rounded-lg border border-slate-700/80">
+                            <button onclick="selecionarAtivoGrafico('EWZ', this)" class="btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded bg-blue-600 text-white transition-all">EWZ (NY)</button>
+                            <button onclick="selecionarAtivoGrafico('ES=F', this)" class="btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">S&P Fut</button>
+                            <button onclick="selecionarAtivoGrafico('BRL=X', this)" class="btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">USD/BRL</button>
+                            <button onclick="selecionarAtivoGrafico('^BVSP', this)" class="btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">Ibov (^BVSP)</button>
+                            <button onclick="selecionarAtivoGrafico('^TNX', this)" class="btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">US10Y</button>
+                            <button onclick="selecionarAtivoGrafico('CL=F', this)" class="btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">Petróleo</button>
+                        </div>
+
+                        <!-- Seletor de Timeframe -->
+                        <div class="flex items-center gap-1 bg-[#131b2e] p-1 rounded-lg border border-slate-700/80">
+                            <button onclick="selecionarTimeframe('1d', '5m', this)" class="btn-yahoo-tf px-2 py-0.5 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">1D</button>
+                            <button onclick="selecionarTimeframe('5d', '15m', this)" class="btn-yahoo-tf px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white transition-all">5D</button>
+                            <button onclick="selecionarTimeframe('1mo', '1h', this)" class="btn-yahoo-tf px-2 py-0.5 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">1M</button>
+                            <button onclick="selecionarTimeframe('6mo', '1d', this)" class="btn-yahoo-tf px-2 py-0.5 text-xs font-bold rounded text-slate-400 hover:text-white transition-all">6M</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="w-full h-[420px] p-2 bg-[#060911]">
-                    <div id="tradingview_ewz_widget" style="height:100%;width:100%"></div>
+                <!-- Painel com Canvas do Chart.js -->
+                <div class="w-full h-[400px] p-4 bg-[#060911] relative">
+                    <div id="loading-yahoo-chart" class="absolute inset-0 bg-[#060911]/85 backdrop-blur-xs flex items-center justify-center text-xs text-sky-400 font-mono z-10 hidden">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-sky-400"></i> Carregando candles da API do Yahoo Finance...
+                        </span>
+                    </div>
+                    <canvas id="chartYahooCanvas"></canvas>
                 </div>
 
-                <div class="px-5 py-2.5 bg-[#0a0f1d] border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                    <span>💡 <strong>Dica Quant:</strong> Movimentos no EWZ no pré-mercado de Nova York (05h00 às 09h00) sinalizam a direção provável do gap de abertura do WIN na B3.</span>
+                <!-- Barra de Status do Ativo -->
+                <div class="px-5 py-2.5 bg-[#0a0f1d] border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                        <span id="badge-ticker-nome" class="font-bold text-white text-xs">EWZ — iShares MSCI Brazil ETF</span>
+                        <span id="badge-ticker-preco" class="font-mono text-sky-400 font-bold text-xs">$ 28.45</span>
+                        <span id="badge-ticker-var" class="font-mono text-emerald-400 font-bold text-xs">+0.85%</span>
+                    </div>
+                    <span class="text-slate-500 font-mono text-[10px]">Alimentado por /api/yahoo (Vercel Serverless)</span>
                 </div>
             </div>
 
@@ -665,13 +698,10 @@
             <div class="flex items-center gap-4 text-slate-400 text-xs">
                 <span>Vercel Hosted (Edge Serverless)</span>
                 <span>•</span>
-                <span>Yahoo Finance Engine (/api/yahoo)</span>
+                <span>Chart.js Native Canvas Engine</span>
             </div>
         </div>
     </footer>
-
-    <!-- SCRIPT DE EMBED OFICIAL TRADINGVIEW (NYSE ARCA) -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
     <!-- MOTOR JAVASCRIPT PRINCIPAL -->
     <script>
@@ -705,35 +735,15 @@
             });
 
             if (abaId === 'macro') {
-                if (!window.ewzWidgetCarregado) {
-                    renderizarWidgetEWZ();
-                    window.ewzWidgetCarregado = true;
+                if (!window.macroChartCarregado) {
+                    carregarGraficoYahooNativo(ativoGraficoAtual, rangeGraficoAtual, intervalGraficoAtual);
+                    window.macroChartCarregado = true;
                 }
                 carregarDadosMercadoCompleto();
             }
         }
 
-        // 3. Renderização do Gráfico Oficial do EWZ (NYSE Arca)
-        function renderizarWidgetEWZ() {
-            if (window.TradingView) {
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "AMEX:EWZ",
-                    "interval": "15",
-                    "timezone": "America/Sao_Paulo",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "br",
-                    "toolbar_bg": "#090d16",
-                    "enable_publishing": false,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": true,
-                    "container_id": "tradingview_ewz_widget"
-                });
-            }
-        }
-
-        // 4. Troca de Sub-Abas do Auditor
+        // 3. Troca de Sub-Abas do Auditor
         function trocarSubAbaAuditor(subAbaId) {
             const subAbas = ['trades', 'dias', 'graficos'];
             subAbas.forEach(s => {
@@ -752,6 +762,161 @@
                 if (window.chartEquityInst) window.chartEquityInst.resize();
                 if (window.chartDiarioInst) window.chartDiarioInst.resize();
             }
+        }
+
+        // ==========================================
+        // GRÁFICO NATIVO YAHOO FINANCE (CHART.JS)
+        // ==========================================
+        let chartYahooInst = null;
+        let ativoGraficoAtual = 'EWZ';
+        let rangeGraficoAtual = '5d';
+        let intervalGraficoAtual = '15m';
+
+        const NOMES_TICKERS = {
+            'EWZ': 'EWZ — iShares MSCI Brazil ETF (Nova York)',
+            'ES=F': 'S&P 500 Futuro (CME Chicago)',
+            'BRL=X': 'USD/BRL Câmbio Spot',
+            '^BVSP': 'Índice Ibovespa à Vista',
+            '^TNX': 'US 10-Year Treasury Yield',
+            'CL=F': 'Petróleo Bruto WTI Futuro'
+        };
+
+        async function carregarGraficoYahooNativo(ticker, range, interval) {
+            ativoGraficoAtual = ticker;
+            rangeGraficoAtual = range;
+            intervalGraficoAtual = interval;
+
+            const canvas = document.getElementById('chartYahooCanvas');
+            const loader = document.getElementById('loading-yahoo-chart');
+            if (!canvas) return;
+
+            if (loader) loader.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`/api/yahoo?chart=1&symbol=${encodeURIComponent(ticker)}&range=${range}&interval=${interval}`);
+                if (!res.ok) throw new Error("Erro na rota /api/yahoo");
+
+                const dadosChart = await res.json();
+                if (!dadosChart) throw new Error("Sem dados retornados para este ativo");
+
+                const meta = dadosChart.meta || {};
+                const timestamps = dadosChart.timestamp || [];
+                const quotes = dadosChart.indicators?.quote?.[0];
+                const closes = quotes?.close || [];
+
+                const labels = [];
+                const precosValidos = [];
+
+                for (let i = 0; i < timestamps.length; i++) {
+                    if (closes[i] !== null && closes[i] !== undefined) {
+                        const d = new Date(timestamps[i] * 1000);
+                        let label;
+                        if (range === '1d') {
+                            label = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                        } else if (range === '5d') {
+                            label = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                        } else {
+                            label = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+                        }
+                        labels.push(label);
+                        precosValidos.push(parseFloat(closes[i].toFixed(2)));
+                    }
+                }
+
+                const ultimoPreco = meta.regularMarketPrice || precosValidos[precosValidos.length - 1] || 0;
+                const prevClose = meta.chartPreviousClose || precosValidos[0] || ultimoPreco;
+                const variacaoPct = prevClose > 0 ? ((ultimoPreco - prevClose) / prevClose) * 100 : 0;
+                const isAlta = variacaoPct >= 0;
+
+                // Cor adaptativa: Verde se alta no dia, Vermelho/Rosa se queda
+                const corLinha = isAlta ? '#10b981' : '#f43f5e';
+                const corGradienteInicio = isAlta ? 'rgba(16, 185, 129, 0.25)' : 'rgba(244, 63, 94, 0.25)';
+
+                const ctx = canvas.getContext('2d');
+                if (chartYahooInst) chartYahooInst.destroy();
+
+                const gradiente = ctx.createLinearGradient(0, 0, 0, 360);
+                gradiente.addColorStop(0, corGradienteInicio);
+                gradiente.addColorStop(1, 'rgba(6, 9, 17, 0.0)');
+
+                chartYahooInst = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: NOMES_TICKERS[ticker] || ticker,
+                            data: precosValidos,
+                            borderColor: corLinha,
+                            borderWidth: 2,
+                            backgroundColor: gradiente,
+                            fill: true,
+                            tension: 0.15,
+                            pointRadius: 0,
+                            pointHoverRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (c) => `Preço: ${ticker.includes('BRL') ? 'R$ ' : '$ '}${c.parsed.y?.toFixed(2)}`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.03)' },
+                                ticks: { color: '#64748b', maxTicksLimit: 8, font: { size: 10 } }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                                ticks: {
+                                    color: '#64748b',
+                                    font: { size: 10 },
+                                    callback: (v) => (ticker.includes('BRL') ? 'R$ ' : '$ ') + v.toFixed(2)
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Atualiza a barra de status inferior do gráfico
+                const elNome = document.getElementById('badge-ticker-nome');
+                const elPreco = document.getElementById('badge-ticker-preco');
+                const elVar = document.getElementById('badge-ticker-var');
+
+                if (elNome) elNome.innerText = NOMES_TICKERS[ticker] || ticker;
+                if (elPreco) elPreco.innerText = `${ticker.includes('BRL') ? 'R$ ' : '$ '}${ultimoPreco.toFixed(2)}`;
+                if (elVar) {
+                    elVar.innerText = `${isAlta ? '+' : ''}${variacaoPct.toFixed(2)}%`;
+                    elVar.className = `font-mono font-bold text-xs ${isAlta ? 'text-emerald-400' : 'text-rose-400'}`;
+                }
+
+            } catch (err) {
+                console.error("Falha ao carregar gráfico Yahoo:", err);
+            } finally {
+                if (loader) loader.classList.add('hidden');
+            }
+        }
+
+        function selecionarAtivoGrafico(ticker, btn) {
+            document.querySelectorAll('.btn-yahoo-ticker').forEach(b => {
+                b.className = "btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white transition-all";
+            });
+            btn.className = "btn-yahoo-ticker px-2.5 py-1 text-xs font-bold rounded bg-blue-600 text-white transition-all";
+            carregarGraficoYahooNativo(ticker, rangeGraficoAtual, intervalGraficoAtual);
+        }
+
+        function selecionarTimeframe(range, interval, btn) {
+            document.querySelectorAll('.btn-yahoo-tf').forEach(b => {
+                b.className = "btn-yahoo-tf px-2 py-0.5 text-xs font-bold rounded text-slate-400 hover:text-white transition-all";
+            });
+            btn.className = "btn-yahoo-tf px-2 py-0.5 text-xs font-bold rounded bg-blue-600 text-white transition-all";
+            carregarGraficoYahooNativo(ativoGraficoAtual, range, interval);
         }
 
         // ==========================================
@@ -802,22 +967,11 @@
                 });
 
             } catch (err) {
-                // Fallback seguro usando AwesomeAPI caso esteja abrindo localmente sem Vercel Serverless
-                console.warn("Aviso: /api/yahoo não respondeu. Acionando AwesomeAPI de contingência.", err);
-                try {
-                    const resAwesome = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
-                    const dataAwesome = await resAwesome.json();
-                    if (dataAwesome?.USDBRL) {
-                        const bid = parseFloat(dataAwesome.USDBRL.bid).toFixed(4).replace('.', ',');
-                        const pct = parseFloat(dataAwesome.USDBRL.pctChange);
-                        const cor = pct >= 0 ? 'text-emerald-400' : 'text-rose-400';
-                        document.getElementById('tape-usdbrl').innerHTML = `<span class="${cor}">R$ ${bid} (${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%)</span>`;
-                    }
-                } catch (e) {}
+                console.warn("Aviso: /api/yahoo não respondeu. Acionando contingência.", err);
             }
         }
         carregarYahooApiReal();
-        setInterval(carregarYahooApiReal, 20000); // Atualiza a cada 20 segundos
+        setInterval(carregarYahooApiReal, 20000);
 
         // ==========================================
         // CARTEIRA COMPLETA DO IBOVESPA (25 ATIVOS ÂNCORA)
@@ -1159,7 +1313,6 @@
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
                 let comissaoCsv = Math.abs(limparNumero(getVal(row, ['comissoes', 'comissao', 'taxas'])));
 
-                // Custos Zero7: R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
                 let custoOp = comissaoCsv > 0 
                     ? comissaoCsv 
                     : (ativo.includes('WIN') ? qtdTotalExecutada * 0.37 
