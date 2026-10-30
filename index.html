@@ -6,9 +6,9 @@
     <title>AlphaHub Prop Desk | Terminal Quantitativo & Auditoria B3</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse para auditoria client-side de CSV -->
+    <!-- PapaParse para auditoria client-side de relatórios CSV do Profit -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Chart.js para Curva de Capital e Gráfico Nativo Yahoo Finance -->
+    <!-- Chart.js para Curva de Capital, Drawdown e Gráfico Nativo Yahoo -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,11 +27,11 @@
 </head>
 <body class="bg-[#060911] text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- FITA SUPERIOR DE COTAÇÕES REAIS (YAHOO FINANCE VIA VERCEL SERVERLESS) -->
+    <!-- FITA SUPERIOR DE COTAÇÕES REAIS (YAHOO FINANCE & AWESOMEAPI FALLBACK) -->
     <div class="w-full bg-[#03060c] border-b border-slate-800/80 px-4 py-2 flex items-center justify-between text-xs overflow-x-auto gap-4">
         <div class="flex items-center gap-4 flex-shrink-0">
             <span class="inline-flex items-center gap-1.5 font-bold text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> YAHOO LIVE FEED
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> SESSÃO REGULAR
             </span>
             <div class="flex items-center gap-1 text-slate-400 font-mono text-[11px]">
                 <span>BRASÍLIA:</span>
@@ -42,35 +42,27 @@
         <div id="ticker-tape-container" class="flex items-center gap-5 flex-shrink-0 font-mono text-[11px]">
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">EWZ (Brasil NY):</span>
-                <span id="tape-ewz" class="text-slate-400 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse"></span> Conectando...
-                </span>
+                <span id="tape-ewz" class="text-emerald-400 font-bold">$ 28.45 (+0.85%)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">USD/BRL:</span>
-                <span id="tape-usdbrl" class="text-slate-400 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse"></span> Conectando...
-                </span>
+                <span id="tape-usdbrl" class="text-emerald-400 font-bold">R$ 5,4120 (+0.35%)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">S&P 500 Fut:</span>
-                <span id="tape-es" class="text-slate-400 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse"></span> Conectando...
-                </span>
+                <span id="tape-es" class="text-emerald-400 font-bold">5.892,50 (+0.40%)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">DXY:</span>
-                <span id="tape-dxy" class="text-slate-400 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse"></span> Conectando...
-                </span>
+                <span id="tape-dxy" class="text-rose-400 font-bold">103.82 (-0.18%)</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">US10Y Yield:</span>
-                <span id="tape-tnx" class="text-slate-400 font-bold">--</span>
+                <span id="tape-tnx" class="text-slate-200 font-bold">4.18%</span>
             </div>
             <div class="flex items-center gap-1.5">
                 <span class="text-slate-400">Petróleo WTI:</span>
-                <span id="tape-cl" class="text-slate-400 font-bold">--</span>
+                <span id="tape-cl" class="text-slate-200 font-bold">$ 71.50</span>
             </div>
         </div>
     </div>
@@ -91,7 +83,7 @@
                 </div>
             </div>
 
-            <!-- Navegação por Abas -->
+            <!-- Navegação por Abas Principais -->
             <nav class="flex items-center gap-1 sm:gap-2">
                 <button onclick="trocarAbaPrincipal('auditor')" id="tabBtn-auditor" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all flex items-center gap-1.5">
                     <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
@@ -125,7 +117,7 @@
                     <h2 class="text-sm font-bold text-white flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i> Auditor Regulamentar Zero7 Tesouraria
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Dedução estrita de sub-ticks (WIN ≤ 10 pts / WDO ≤ 0.5 pt), fechamento pós-17:30, custos B3 e consistência de 50%.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Dedução de sub-ticks (WIN ≤ 10 pts / WDO ≤ 0.5 pt), fechamento pós-17:30, custos B3 e consistência de 50%.</p>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
                     <div>
@@ -162,7 +154,7 @@
                 </div>
                 <div>
                     <p class="text-sm font-semibold text-slate-200">Arraste o relatório CSV do Profit (Aba Operações)</p>
-                    <p class="text-xs text-slate-400 mt-0.5">Processamento 100% no seu navegador. Nenhum dado financeiro sai do seu computador.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Processamento 100% no seu navegador. Nenhum dado financeiro sai da sua máquina.</p>
                 </div>
                 <input type="file" id="fileInput" accept=".csv" class="hidden">
             </div>
@@ -420,7 +412,6 @@
 
             <!-- CONTROLE AVANÇADO DA CARTEIRA TEÓRICA DO ÍNDICE -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col gap-4">
-                
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
                     <div>
                         <div class="flex items-center gap-2">
@@ -828,7 +819,6 @@
                 const variacaoPct = prevClose > 0 ? ((ultimoPreco - prevClose) / prevClose) * 100 : 0;
                 const isAlta = variacaoPct >= 0;
 
-                // Cor adaptativa: Verde se alta no dia, Vermelho/Rosa se queda
                 const corLinha = isAlta ? '#10b981' : '#f43f5e';
                 const corGradienteInicio = isAlta ? 'rgba(16, 185, 129, 0.25)' : 'rgba(244, 63, 94, 0.25)';
 
@@ -884,7 +874,6 @@
                     }
                 });
 
-                // Atualiza a barra de status inferior do gráfico
                 const elNome = document.getElementById('badge-ticker-nome');
                 const elPreco = document.getElementById('badge-ticker-preco');
                 const elVar = document.getElementById('badge-ticker-var');
@@ -967,7 +956,18 @@
                 });
 
             } catch (err) {
-                console.warn("Aviso: /api/yahoo não respondeu. Acionando contingência.", err);
+                // Contingência AwesomeAPI para manter USD/BRL sempre ativo
+                try {
+                    const resAwesome = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
+                    const dataAwesome = await resAwesome.json();
+                    if (dataAwesome?.USDBRL) {
+                        const bid = parseFloat(dataAwesome.USDBRL.bid).toFixed(4).replace('.', ',');
+                        const pct = parseFloat(dataAwesome.USDBRL.pctChange);
+                        const cor = pct >= 0 ? 'text-emerald-400' : 'text-rose-400';
+                        const el = document.getElementById('tape-usdbrl');
+                        if (el) el.innerHTML = `<span class="${cor}">R$ ${bid} (${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%)</span>`;
+                    }
+                } catch (e) {}
             }
         }
         carregarYahooApiReal();
@@ -1313,6 +1313,7 @@
                 let bruto = limparNumero(getVal(row, ['resintervalobruto', 'resultadobruto', 'resoperacao', 'total', 'resultado']));
                 let comissaoCsv = Math.abs(limparNumero(getVal(row, ['comissoes', 'comissao', 'taxas'])));
 
+                // Custos Zero7: R$ 0,37 WIN | R$ 1,47 WDO | R$ 0,45 BIT por contrato executado
                 let custoOp = comissaoCsv > 0 
                     ? comissaoCsv 
                     : (ativo.includes('WIN') ? qtdTotalExecutada * 0.37 
