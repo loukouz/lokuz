@@ -27,7 +27,7 @@
 </head>
 <body class="bg-[#060911] text-slate-100 min-h-screen flex flex-col antialiased">
 
-    <!-- FITA SUPERIOR DE COTAÇÕES REAIS (YAHOO FINANCE & AWESOMEAPI FALLBACK) -->
+    <!-- FITA SUPERIOR DE COTAÇÕES REAIS -->
     <div class="w-full bg-[#03060c] border-b border-slate-800/80 px-4 py-2 flex items-center justify-between text-xs overflow-x-auto gap-4">
         <div class="flex items-center gap-4 flex-shrink-0">
             <span class="inline-flex items-center gap-1.5 font-bold text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
@@ -67,11 +67,10 @@
         </div>
     </div>
 
-    <!-- HEADER PRINCIPAL COM NOVO NOME E SÍMBOLO DO OLHO -->
+    <!-- HEADER PRINCIPAL COM NOME LOKUZ HUB E SÍMBOLO DO OLHO -->
     <header class="bg-[#090d16] border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- Símbolo: Olho no Box Neon -->
                 <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                     <i data-lucide="eye" class="w-5 h-5 text-white stroke-[2.2]"></i>
                 </div>
@@ -411,57 +410,86 @@
                 </div>
             </div>
 
-            <!-- CONTROLE AVANÇADO DA CARTEIRA TEÓRICA DO ÍNDICE -->
+            <!-- CONTROLE AVANÇADO DA CARTEIRA DO IBOVESPA COM 3 TIPOS DE VISUALIZAÇÃO -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col gap-4">
+                
+                <!-- Barra 1: Título + Métricas de Cobertura + Seletor de Modo de Visualização -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
                     <div>
                         <div class="flex items-center gap-2">
                             <i data-lucide="sliders" class="w-4 h-4 text-sky-400"></i>
-                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Configuração da Cesta do Ibovespa</h3>
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Ações Âncora do Ibovespa (Carteira Teórica)</h3>
                         </div>
                         <p class="text-xs text-slate-400 mt-0.5">
-                            Escolha a quantidade de ações âncora a monitorar e ordene por peso, desempenho percentual ou impacto direto no Mini-Índice.
+                            Monitore a pressão intraday, mini gráficos de tendência e o impacto de cada ativo no índice futuro.
                         </p>
                     </div>
 
-                    <!-- Badge de Cobertura Ponderada -->
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <!-- Badge de Cobertura -->
                         <div class="bg-[#182032] border border-slate-700/80 px-3 py-1.5 rounded-lg text-right">
                             <span class="text-[10px] text-slate-400 block font-semibold uppercase">Cobertura do Ibovespa</span>
                             <span id="badge-peso-coberto" class="text-sm font-black text-sky-400 font-mono">52.4% do IBOV</span>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Barra de Ações: Filtro de Quantidade e Ordenação -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="text-slate-400 font-semibold mr-1">Exibir:</span>
-                        <button onclick="definirQtdAcoes(5, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Top 5 (~38%)</button>
-                        <button onclick="definirQtdAcoes(10, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-blue-600 text-white">Top 10 (~52%)</button>
-                        <button onclick="definirQtdAcoes(15, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Top 15 (~63%)</button>
-                        <button onclick="definirQtdAcoes(25, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Top 25 (~78%)</button>
-                        <button onclick="definirQtdAcoes('todas', this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Todas</button>
-                        
-                        <div class="flex items-center gap-1 ml-2">
-                            <span class="text-slate-500 text-[11px]">Qtd:</span>
-                            <input type="number" id="inputQtdCustom" min="1" max="25" value="10" onchange="definirQtdManual(this.value)" class="w-14 bg-[#182032] border border-slate-700 rounded px-2 py-0.5 text-center text-white font-mono outline-none focus:border-blue-500">
+                        <!-- SELETOR DOS 3 TIPOS DE VISUALIZAÇÃO (GRADE, CARDS SPARKLINE, LISTA) -->
+                        <div class="flex items-center bg-[#131b2e] p-1 rounded-lg border border-slate-700/80">
+                            <button onclick="mudarModoVisualizacao('grade', this)" id="btn-view-grade" title="Visualização em Grade Clássica" class="btn-view-mode px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white flex items-center gap-1.5 transition-all">
+                                <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+                                <span class="hidden sm:inline">Grade</span>
+                            </button>
+                            <button onclick="mudarModoVisualizacao('cards_spark', this)" id="btn-view-cards" title="Cards com Mini Gráfico (Sparkline)" class="btn-view-mode px-2.5 py-1 text-xs font-bold rounded bg-blue-600 text-white flex items-center gap-1.5 transition-all">
+                                <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                                <span class="hidden sm:inline">Cards Gráficos</span>
+                            </button>
+                            <button onclick="mudarModoVisualizacao('lista', this)" id="btn-view-lista" title="Lista Compacta com Mini Gráficos" class="btn-view-mode px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white flex items-center gap-1.5 transition-all">
+                                <i data-lucide="list" class="w-3.5 h-3.5"></i>
+                                <span class="hidden sm:inline">Lista</span>
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex items-center gap-2">
-                        <span class="text-slate-400 font-semibold">Ordenar por:</span>
-                        <select id="selectOrdenacaoAcoes" onchange="mudarOrdenacaoAcoes(this.value)" class="bg-[#182032] border border-slate-700 rounded-lg px-2.5 py-1 text-slate-200 outline-none font-semibold">
-                            <option value="peso">Maior Peso Teórico (%)</option>
-                            <option value="pontos">Maior Impacto em Pontos no WIN</option>
-                            <option value="alta">Maior Alta (%)</option>
-                            <option value="queda">Maior Queda (%)</option>
-                        </select>
+                <!-- Barra 2: Abas de Categorias (Tendências, Ganhadoras, Perdedoras) + Filtro de Quantidade -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs">
+                    
+                    <!-- Abas de Categoria (Estilo TradingView / Investing) -->
+                    <div class="flex items-center gap-1 border-b lg:border-b-0 border-slate-800 pb-2 lg:pb-0 overflow-x-auto">
+                        <button onclick="mudarCategoriaAcoes('peso', this)" class="btn-aba-cat px-3 py-1.5 font-bold rounded-lg bg-blue-600 text-white flex items-center gap-1.5 transition-all flex-shrink-0">
+                            <span>Tendências (Maior Peso)</span>
+                        </button>
+                        <button onclick="mudarCategoriaAcoes('ganhadoras', this)" class="btn-aba-cat px-3 py-1.5 font-bold rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-slate-800/60 flex items-center gap-1.5 transition-all flex-shrink-0">
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            <span>Ganhadoras</span>
+                        </button>
+                        <button onclick="mudarCategoriaAcoes('perdedoras', this)" class="btn-aba-cat px-3 py-1.5 font-bold rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800/60 flex items-center gap-1.5 transition-all flex-shrink-0">
+                            <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 text-rose-400"></i>
+                            <span>Perdedoras</span>
+                        </button>
+                        <button onclick="mudarCategoriaAcoes('todas', this)" class="btn-aba-cat px-3 py-1.5 font-bold rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 transition-all flex-shrink-0">
+                            <span>Todas da Cesta</span>
+                        </button>
+                    </div>
+
+                    <!-- Filtro de Quantidade Customizada -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="text-slate-400 font-semibold mr-1">Exibir:</span>
+                        <button onclick="definirQtdAcoes(5, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Top 5</button>
+                        <button onclick="definirQtdAcoes(10, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-blue-600 text-white">Top 10</button>
+                        <button onclick="definirQtdAcoes(15, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Top 15</button>
+                        <button onclick="definirQtdAcoes(25, this)" class="btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700">Top 25</button>
+                        
+                        <div class="flex items-center gap-1 ml-1">
+                            <span class="text-slate-500 text-[11px]">Qtd:</span>
+                            <input type="number" id="inputQtdCustom" min="1" max="25" value="10" onchange="definirQtdManual(this.value)" class="w-12 bg-[#182032] border border-slate-700 rounded px-1.5 py-0.5 text-center text-white font-mono outline-none focus:border-blue-500">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Grid Dinâmico das Ações -->
-                <div id="grid-acoes-peso" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-2"></div>
+                <!-- Container Principal Dinâmico (Altera entre Grade, Cards Gráficos e Lista) -->
+                <div id="container-visualizacao-acoes" class="mt-2">
+                    <!-- Injetado dinamicamente via JavaScript -->
+                </div>
             </div>
 
             <!-- TERMINAL GRÁFICO NATIVO YAHOO FINANCE (100% CHART.JS) -->
@@ -516,7 +544,7 @@
                 </div>
             </div>
 
-            <!-- CALENDÁRIO ECONÔMICO MACRO INSTITUCIONAL (DARK MODE TOTAL + FILTRO DE PAÍSES) -->
+            <!-- CALENDÁRIO ECONÔMICO MACRO INSTITUCIONAL (DARK MODE 100%) -->
             <div class="bg-[#0d1322] border border-slate-800 rounded-xl overflow-hidden shadow-lg flex flex-col">
                 <div class="px-5 py-4 border-b border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#090d16]">
                     <div>
@@ -541,9 +569,7 @@
 
                 <!-- Container do Widget Dark Mode sem fundo branco -->
                 <div class="w-full h-[560px] bg-[#060911] p-2 relative overflow-hidden">
-                    <div id="container-calendario-dark" class="w-full h-full">
-                        <!-- Widget carregado dinamicamente via JS -->
-                    </div>
+                    <div id="container-calendario-dark" class="w-full h-full"></div>
                 </div>
 
                 <div class="px-5 py-2.5 bg-[#0a0f1d] border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
@@ -697,16 +723,21 @@
     <!-- RODAPÉ & DISCLAIMER CVM -->
     <footer class="bg-[#050810] border-t border-slate-800/80 py-8 px-4 sm:px-6 mt-12 text-slate-500 text-xs">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <p class="font-bold text-slate-300">Lokuz Hub Financial Technology & Analytics © 2026</p>
-                <p class="text-[11px] mt-1 max-w-2xl leading-relaxed">
-                    <strong>Aviso Legal Regulatório:</strong> O Lokuz Hub é uma plataforma tecnológica de processamento analítico de dados. Não somos instituição financeira, corretora, nem casa de análise credenciada. Nos termos da <strong>Resolução CVM nº 20/2021</strong>, nenhuma funcionalidade, estatística ou dado apresentado constitui análise de valores mobiliários, consultoria ou indicação de compra/venda de ativos financeiros.
-                </p>
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 rounded bg-blue-600 flex items-center justify-center text-white">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-300">Lokuz Hub Financial Technology & Analytics © 2026</p>
+                    <p class="text-[11px] mt-0.5 max-w-2xl leading-relaxed">
+                        <strong>Aviso Legal Regulatório:</strong> O Lokuz Hub é uma plataforma de processamento analítico de dados. Nos termos da <strong>Resolução CVM nº 20/2021</strong>, nenhuma funcionalidade ou estatística constitui análise de valores mobiliários, consultoria ou indicação de compra/venda de ativos.
+                    </p>
+                </div>
             </div>
             <div class="flex items-center gap-4 text-slate-400 text-xs">
                 <span>Vercel Hosted (Edge Serverless)</span>
                 <span>•</span>
-                <span>Chart.js Native Canvas Engine</span>
+                <span>Chart.js & Native Sparklines Engine</span>
             </div>
         </div>
     </footer>
@@ -772,6 +803,311 @@
                 if (window.chartDiarioInst) window.chartDiarioInst.resize();
             }
         }
+
+        // ==========================================
+        // GERADOR NATIVO DE MINI-GRÁFICOS (SPARKLINES)
+        // ==========================================
+        function gerarSparklineSVG(varPct, corHex, largura = 110, altura = 34) {
+            const isAlta = varPct >= 0;
+            const pts = [];
+            const numPontos = 14;
+            const yBase = altura * 0.45; // Linha de fechamento anterior
+
+            // Gera caminho realista de ondas simulando o pregão do dia
+            for (let i = 0; i < numPontos; i++) {
+                const progresso = i / (numPontos - 1);
+                const oscilacao = Math.sin(i * 1.3) * (altura * 0.22);
+                let y;
+                if (isAlta) {
+                    y = yBase - (progresso * (altura * 0.32)) + oscilacao;
+                } else {
+                    y = yBase + (progresso * (altura * 0.35)) + oscilacao;
+                }
+                y = Math.max(3, Math.min(altura - 3, y));
+                const x = (i / (numPontos - 1)) * largura;
+                pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+            }
+
+            const pathD = `M ${pts.join(' L ')}`;
+
+            return `
+                <svg width="${largura}" height="${altura}" class="overflow-visible" viewBox="0 0 ${largura} ${altura}">
+                    <!-- Linha tracejada do fechamento anterior (linha base) -->
+                    <line x1="0" y1="${yBase}" x2="${largura}" y2="${yBase}" stroke="#475569" stroke-dasharray="2,2" stroke-width="0.9" opacity="0.65" />
+                    <!-- Curva da oscilação do ativo -->
+                    <path d="${pathD}" fill="none" stroke="${corHex}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            `;
+        }
+
+        // ==========================================
+        // CARTEIRA COMPLETA DO IBOVESPA (25 ATIVOS ÂNCORA)
+        // ==========================================
+        const CARTEIRA_COMPLETA_IBOV = [
+            { ticker: 'VALE3', nome: 'Vale ON', setor: 'Mineração', peso: 12.8, preco: 62.40, varPct: 1.25 },
+            { ticker: 'PETR4', nome: 'Petrobras PN', setor: 'Petróleo', peso: 8.5, preco: 36.80, varPct: 0.82 },
+            { ticker: 'ITUB4', nome: 'Itaú Unibanco', setor: 'Bancos', peso: 7.6, preco: 34.15, varPct: -0.29 },
+            { ticker: 'PETR3', nome: 'Petrobras ON', setor: 'Petróleo', peso: 4.6, preco: 39.50, varPct: 0.65 },
+            { ticker: 'BBDC4', nome: 'Bradesco PN', setor: 'Bancos', peso: 3.8, preco: 13.90, varPct: 0.50 },
+            { ticker: 'BBAS3', nome: 'Banco do Brasil', setor: 'Bancos', peso: 3.6, preco: 26.80, varPct: 0.95 },
+            { ticker: 'B3SA3', nome: 'B3 SA', setor: 'Bolsa', peso: 3.4, preco: 11.20, varPct: -0.45 },
+            { ticker: 'WEGE3', nome: 'WEG ON', setor: 'Bens de Capital', peso: 3.1, preco: 52.30, varPct: 1.10 },
+            { ticker: 'ABEV3', nome: 'Ambev ON', setor: 'Bebidas', peso: 2.6, preco: 12.10, varPct: 0.15 },
+            { ticker: 'RENT3', nome: 'Localiza ON', setor: 'Locação', peso: 2.4, preco: 44.50, varPct: -0.80 },
+            { ticker: 'BPAC11', nome: 'BTG Pactual', setor: 'Bancos', peso: 2.3, preco: 35.80, varPct: 0.40 },
+            { ticker: 'SUZB3', nome: 'Suzano ON', setor: 'Papel & Celulose', peso: 2.2, preco: 54.10, varPct: 1.30 },
+            { ticker: 'EQTL3', nome: 'Equatorial ON', setor: 'Energia', peso: 2.1, preco: 32.40, varPct: -0.15 },
+            { ticker: 'PRIO3', nome: 'PRIO ON', setor: 'Petróleo', peso: 2.0, preco: 43.80, varPct: 1.75 },
+            { ticker: 'RADL3', nome: 'RaiaDrogasil', setor: 'Varejo Farmacêutico', peso: 1.9, preco: 25.20, varPct: 0.20 },
+            { ticker: 'JBSS3', nome: 'JBS ON', setor: 'Alimentos', peso: 1.8, preco: 34.90, varPct: -0.60 },
+            { ticker: 'GGBR4', nome: 'Gerdau PN', setor: 'Siderurgia', peso: 1.7, preco: 18.70, varPct: 0.55 },
+            { ticker: 'ELET3', nome: 'Eletrobras ON', setor: 'Energia', peso: 1.6, preco: 38.60, varPct: -0.30 },
+            { ticker: 'CSAN3', nome: 'Cosan ON', setor: 'Agronegócio', peso: 1.5, preco: 12.40, varPct: -1.10 },
+            { ticker: 'CPLE6', nome: 'Copel PNB', setor: 'Energia', peso: 1.4, preco: 9.85, varPct: 0.25 },
+            { ticker: 'VIVT3', nome: 'Telefônica Brasil', setor: 'Telecomunicações', peso: 1.3, preco: 51.20, varPct: 0.10 },
+            { ticker: 'LREN3', nome: 'Lojas Renner', setor: 'Varejo', peso: 1.3, preco: 16.30, varPct: -0.90 },
+            { ticker: 'EMBR3', nome: 'Embraer ON', setor: 'Aeroespacial', peso: 1.2, preco: 49.50, varPct: 2.15 },
+            { ticker: 'CMIG4', nome: 'Cemig PN', setor: 'Energia', peso: 1.1, preco: 11.45, varPct: 0.35 },
+            { ticker: 'KLBN11', nome: 'Klabin Unt', setor: 'Papel & Celulose', peso: 1.0, preco: 21.80, varPct: 0.45 }
+        ];
+
+        let dadosAtuaisAcoes = [...CARTEIRA_COMPLETA_IBOV];
+        let qtdAcoesExibidas = 10;
+        let modoVisualizacaoAtual = 'cards_spark'; // 'grade', 'cards_spark', 'lista'
+        let categoriaFiltroAtual = 'peso';         // 'peso', 'ganhadoras', 'perdedoras', 'todas'
+
+        function mudarModoVisualizacao(modo, btn) {
+            modoVisualizacaoAtual = modo;
+            document.querySelectorAll('.btn-view-mode').forEach(b => {
+                b.className = "btn-view-mode px-2.5 py-1 text-xs font-bold rounded text-slate-400 hover:text-white flex items-center gap-1.5 transition-all";
+            });
+            if (btn) btn.className = "btn-view-mode px-2.5 py-1 text-xs font-bold rounded bg-blue-600 text-white flex items-center gap-1.5 transition-all";
+            renderizarCestaDinamica();
+        }
+
+        function mudarCategoriaAcoes(cat, btn) {
+            categoriaFiltroAtual = cat;
+            document.querySelectorAll('.btn-aba-cat').forEach(b => {
+                b.className = "btn-aba-cat px-3 py-1.5 font-bold rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5 transition-all flex-shrink-0";
+            });
+            if (btn) btn.className = "btn-aba-cat px-3 py-1.5 font-bold rounded-lg bg-blue-600 text-white flex items-center gap-1.5 transition-all flex-shrink-0";
+            renderizarCestaDinamica();
+        }
+
+        function definirQtdAcoes(qtd, btn) {
+            qtdAcoesExibidas = parseInt(qtd);
+            document.querySelectorAll('.btn-filtro-qtd').forEach(b => {
+                b.className = "btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700";
+            });
+            if (btn) btn.className = "btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-blue-600 text-white";
+            const inputCustom = document.getElementById('inputQtdCustom');
+            if (inputCustom) inputCustom.value = qtdAcoesExibidas;
+            renderizarCestaDinamica();
+        }
+
+        function definirQtdManual(val) {
+            let n = parseInt(val);
+            if (isNaN(n) || n < 1) n = 1;
+            if (n > CARTEIRA_COMPLETA_IBOV.length) n = CARTEIRA_COMPLETA_IBOV.length;
+            qtdAcoesExibidas = n;
+            document.querySelectorAll('.btn-filtro-qtd').forEach(b => {
+                b.className = "btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700";
+            });
+            renderizarCestaDinamica();
+        }
+
+        function renderizarCestaDinamica() {
+            const container = document.getElementById('container-visualizacao-acoes');
+            if (!container) return;
+
+            // 1. Filtragem por Categoria
+            let listaFiltrada = [...dadosAtuaisAcoes];
+            if (categoriaFiltroAtual === 'ganhadoras') {
+                listaFiltrada = listaFiltrada.filter(a => a.varPct > 0).sort((a, b) => b.varPct - a.varPct);
+            } else if (categoriaFiltroAtual === 'perdedoras') {
+                listaFiltrada = listaFiltrada.filter(a => a.varPct < 0).sort((a, b) => a.varPct - b.varPct);
+            } else if (categoriaFiltroAtual === 'peso') {
+                listaFiltrada.sort((a, b) => b.peso - a.peso);
+            }
+
+            // 2. Corte pela Quantidade
+            const selecionadas = listaFiltrada.slice(0, qtdAcoesExibidas);
+            container.innerHTML = '';
+
+            let somaContribuicao = 0;
+            let somaPesoCoberto = 0;
+
+            selecionadas.forEach(ativo => {
+                somaContribuicao += (ativo.varPct * (ativo.peso / 100));
+                somaPesoCoberto += ativo.peso;
+            });
+
+            // Atualiza o Badge de Cobertura
+            const badgePeso = document.getElementById('badge-peso-coberto');
+            if (badgePeso) {
+                badgePeso.innerText = `${somaPesoCoberto.toFixed(1)}% do IBOV (${selecionadas.length} ações)`;
+            }
+
+            // Atualiza Diagnóstico Quantitativo
+            const pontosEstimados = Math.round(somaContribuicao * 1300);
+            const elVeredito = document.getElementById('quant-veredito');
+            const elExplicacao = document.getElementById('quant-explicacao');
+            const elPontos = document.getElementById('quant-pontos-gerados');
+
+            if (elPontos) {
+                elPontos.innerText = `${pontosEstimados >= 0 ? '+' : ''}${pontosEstimados} pts`;
+                elPontos.className = `text-lg font-black font-mono ${pontosEstimados >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
+
+            if (elVeredito && elExplicacao) {
+                if (somaContribuicao >= 0.25) {
+                    elVeredito.innerHTML = `<span class="text-emerald-400">🟢 FORTE PRESSÃO COMPRADORA INSTITUCIONAL (+${somaContribuicao.toFixed(2)}%)</span>`;
+                    elExplicacao.innerText = `As ${selecionadas.length} ações monitoradas (${somaPesoCoberto.toFixed(1)}% do índice) estão gerando tração compradora no Mini-Índice. Recuos na VWAP têm suporte passivo na compra.`;
+                } else if (somaContribuicao <= -0.25) {
+                    elVeredito.innerHTML = `<span class="text-rose-400">🔴 FORTE PRESSÃO VENDEDORA INSTITUCIONAL (${somaContribuicao.toFixed(2)}%)</span>`;
+                    elExplicacao.innerText = `Despejo concentrado nas ações mais pesadas da cesta (${somaPesoCoberto.toFixed(1)}% do índice). Risco elevado de rompimento falso para compradores no Mini-Índice.`;
+                } else {
+                    elVeredito.innerHTML = `<span class="text-sky-400">🟡 MERCADO EM EQUILÍBRIO / ROTAÇÃO SETORIAL (${somaContribuicao.toFixed(2)}%)</span>`;
+                    elExplicacao.innerText = `As ações monitoradas apresentam forças opostas entre commodities e setor financeiro, anulando a direção líquida. Tendência a pregão de range/lateralização.`;
+                }
+            }
+
+            // ========================================================
+            // RENDERIZAÇÃO CONFORME O MODO SELECIONADO:
+            // ========================================================
+
+            // MODO 1: CARDS COM MINI GRÁFICO (SPARKLINE) — ESTILO IMAGEM 1
+            if (modoVisualizacaoAtual === 'cards_spark') {
+                const gridCards = document.createElement('div');
+                gridCards.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3';
+
+                selecionadas.forEach(ativo => {
+                    const isAlta = ativo.varPct >= 0;
+                    const corTexto = isAlta ? 'text-emerald-400' : 'text-rose-400';
+                    const corHex = isAlta ? '#10b981' : '#f43f5e';
+                    const bgBorda = isAlta ? 'border-emerald-500/20' : 'border-rose-500/20';
+                    const seta = isAlta ? '▲' : '▼';
+                    const sparklineSvg = gerarSparklineSVG(ativo.varPct, corHex, 105, 32);
+
+                    const card = document.createElement('div');
+                    card.className = `bg-[#0a0f1d] border ${bgBorda} hover:border-slate-600 rounded-xl p-3.5 flex flex-col justify-between transition-all group`;
+                    card.innerHTML = `
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="font-black text-white text-sm tracking-wide group-hover:text-sky-400 transition-colors">${ativo.ticker}</span>
+                                <p class="text-[10px] text-slate-400 truncate max-w-[130px]">${ativo.nome}</p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[9px] font-mono text-slate-400 bg-slate-800/80 px-1.5 py-0.5 rounded font-bold">${ativo.peso.toFixed(1)}%</span>
+                                <i data-lucide="check-circle" class="w-3.5 h-3.5 text-slate-600 group-hover:text-sky-400 transition-colors"></i>
+                            </div>
+                        </div>
+
+                        <div class="mt-2.5">
+                            <span class="text-xs font-bold text-slate-200 font-mono">R$ ${ativo.preco.toFixed(2).replace('.', ',')}</span>
+                        </div>
+
+                        <div class="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                            <div class="overflow-hidden flex items-center">
+                                ${sparklineSvg}
+                            </div>
+                            <div class="text-right flex-shrink-0 ml-2">
+                                <span class="text-xs font-black ${corTexto} font-mono flex items-center justify-end gap-1">
+                                    <span>${isAlta ? '+' : ''}${ativo.varPct.toFixed(2).replace('.', ',')}%</span>
+                                    <span class="text-[9px]">${seta}</span>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    gridCards.appendChild(card);
+                });
+
+                container.appendChild(gridCards);
+            }
+
+            // MODO 2: LISTA COMPACTA COM MINI SPARKLINE — ESTILO IMAGEM 2
+            else if (modoVisualizacaoAtual === 'lista') {
+                const listWrapper = document.createElement('div');
+                listWrapper.className = 'bg-[#0a0f1d] border border-slate-800/90 rounded-xl overflow-hidden divide-y divide-slate-800/60 font-mono';
+
+                selecionadas.forEach(ativo => {
+                    const isAlta = ativo.varPct >= 0;
+                    const corTexto = isAlta ? 'text-emerald-400' : 'text-rose-400';
+                    const corHex = isAlta ? '#10b981' : '#f43f5e';
+                    const seta = isAlta ? '▲' : '▼';
+                    const sparklineSvg = gerarSparklineSVG(ativo.varPct, corHex, 130, 26);
+
+                    const row = document.createElement('div');
+                    row.className = 'px-4 py-2.5 hover:bg-slate-800/40 flex items-center justify-between gap-3 text-xs transition-colors';
+                    row.innerHTML = `
+                        <!-- Lado Esquerdo: Ticker e Nome -->
+                        <div class="w-36 flex-shrink-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-black text-white text-xs">${ativo.ticker}</span>
+                                <span class="text-[9px] text-slate-400 bg-slate-800 px-1 rounded">${ativo.peso.toFixed(1)}%</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 truncate block font-sans">${ativo.nome}</span>
+                        </div>
+
+                        <!-- Centro: Mini Gráfico Sparkline com linha base tracejada -->
+                        <div class="flex-1 hidden sm:flex items-center justify-center">
+                            ${sparklineSvg}
+                        </div>
+
+                        <!-- Lado Direito: Preço e Variação -->
+                        <div class="text-right flex items-center gap-4 flex-shrink-0">
+                            <div>
+                                <span class="text-slate-100 font-bold block">R$ ${ativo.preco.toFixed(2).replace('.', ',')}</span>
+                                <span class="text-[11px] font-extrabold ${corTexto}">
+                                    ${isAlta ? '+' : ''}${ativo.varPct.toFixed(2).replace('.', ',')}% ${seta}
+                                </span>
+                            </div>
+                            <button class="p-1 text-slate-600 hover:text-sky-400 transition-colors">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    listWrapper.appendChild(row);
+                });
+
+                container.appendChild(listWrapper);
+            }
+
+            // MODO 3: GRADE CLÁSSICA (ORIGINAL COMPACTA)
+            else if (modoVisualizacaoAtual === 'grade') {
+                const gridCards = document.createElement('div');
+                gridCards.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3';
+
+                selecionadas.forEach(ativo => {
+                    const isAlta = ativo.varPct >= 0;
+                    const cor = isAlta ? 'text-emerald-400' : 'text-rose-400';
+                    const bgCor = isAlta ? 'border-emerald-500/20' : 'border-rose-500/20';
+                    const pontosTrade = Math.round((ativo.varPct * (ativo.peso / 100)) * 1300);
+
+                    const card = document.createElement('div');
+                    card.className = `bg-[#131b2e] border ${bgCor} p-3 rounded-lg flex flex-col justify-between`;
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="font-black text-white text-xs">${ativo.ticker}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">${ativo.peso.toFixed(1)}%</span>
+                        </div>
+                        <div class="mt-2">
+                            <p class="text-base font-bold text-white font-mono">R$ ${ativo.preco.toFixed(2).replace('.', ',')}</p>
+                            <div class="flex items-center justify-between mt-0.5">
+                                <span class="text-xs font-extrabold ${cor} font-mono">${isAlta ? '+' : ''}${ativo.varPct.toFixed(2).replace('.', ',')}%</span>
+                                <span class="text-[10px] font-mono ${pontosTrade >= 0 ? 'text-emerald-400/80' : 'text-rose-400/80'}">${pontosTrade >= 0 ? '+' : ''}${pontosTrade} pts</span>
+                            </div>
+                        </div>
+                    `;
+                    gridCards.appendChild(card);
+                });
+
+                container.appendChild(gridCards);
+            }
+
+            lucide.createIcons();
+        }
+        renderizarCestaDinamica();
 
         // ==========================================
         // CALENDÁRIO ECONÔMICO MACRO (DARK MODE & PAÍSES)
@@ -1025,7 +1361,6 @@
                 });
 
             } catch (err) {
-                // Contingência AwesomeAPI para manter USD/BRL sempre ativo
                 try {
                     const resAwesome = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
                     const dataAwesome = await resAwesome.json();
@@ -1041,147 +1376,6 @@
         }
         carregarYahooApiReal();
         setInterval(carregarYahooApiReal, 20000);
-
-        // ==========================================
-        // CARTEIRA COMPLETA DO IBOVESPA (25 ATIVOS ÂNCORA)
-        // ==========================================
-        const CARTEIRA_COMPLETA_IBOV = [
-            { ticker: 'VALE3', nome: 'Vale ON', peso: 12.8, preco: 62.40, varPct: 1.25 },
-            { ticker: 'PETR4', nome: 'Petrobras PN', peso: 8.5, preco: 36.80, varPct: 0.82 },
-            { ticker: 'ITUB4', nome: 'Itaú Unibanco', peso: 7.6, preco: 34.15, varPct: -0.29 },
-            { ticker: 'PETR3', nome: 'Petrobras ON', peso: 4.6, preco: 39.50, varPct: 0.65 },
-            { ticker: 'BBDC4', nome: 'Bradesco PN', peso: 3.8, preco: 13.90, varPct: 0.50 },
-            { ticker: 'BBAS3', nome: 'Banco do Brasil', peso: 3.6, preco: 26.80, varPct: 0.95 },
-            { ticker: 'B3SA3', nome: 'B3 SA', peso: 3.4, preco: 11.20, varPct: -0.45 },
-            { ticker: 'WEGE3', nome: 'WEG ON', peso: 3.1, preco: 52.30, varPct: 1.10 },
-            { ticker: 'ABEV3', nome: 'Ambev ON', peso: 2.6, preco: 12.10, varPct: 0.15 },
-            { ticker: 'RENT3', nome: 'Localiza ON', peso: 2.4, preco: 44.50, varPct: -0.80 },
-            { ticker: 'BPAC11', nome: 'BTG Pactual', peso: 2.3, preco: 35.80, varPct: 0.40 },
-            { ticker: 'SUZB3', nome: 'Suzano ON', peso: 2.2, preco: 54.10, varPct: 1.30 },
-            { ticker: 'EQTL3', nome: 'Equatorial ON', peso: 2.1, preco: 32.40, varPct: -0.15 },
-            { ticker: 'PRIO3', nome: 'PRIO ON', peso: 2.0, preco: 43.80, varPct: 1.75 },
-            { ticker: 'RADL3', nome: 'RaiaDrogasil', peso: 1.9, preco: 25.20, varPct: 0.20 },
-            { ticker: 'JBSS3', nome: 'JBS ON', peso: 1.8, preco: 34.90, varPct: -0.60 },
-            { ticker: 'GGBR4', nome: 'Gerdau PN', peso: 1.7, preco: 18.70, varPct: 0.55 },
-            { ticker: 'ELET3', nome: 'Eletrobras ON', peso: 1.6, preco: 38.60, varPct: -0.30 },
-            { ticker: 'CSAN3', nome: 'Cosan ON', peso: 1.5, preco: 12.40, varPct: -1.10 },
-            { ticker: 'CPLE6', nome: 'Copel PNB', peso: 1.4, preco: 9.85, varPct: 0.25 },
-            { ticker: 'VIVT3', nome: 'Telefônica Brasil', peso: 1.3, preco: 51.20, varPct: 0.10 },
-            { ticker: 'LREN3', nome: 'Lojas Renner', peso: 1.3, preco: 16.30, varPct: -0.90 },
-            { ticker: 'EMBR3', nome: 'Embraer ON', peso: 1.2, preco: 49.50, varPct: 2.15 },
-            { ticker: 'CMIG4', nome: 'Cemig PN', peso: 1.1, preco: 11.45, varPct: 0.35 },
-            { ticker: 'KLBN11', nome: 'Klabin Unt', peso: 1.0, preco: 21.80, varPct: 0.45 }
-        ];
-
-        let dadosAtuaisAcoes = [...CARTEIRA_COMPLETA_IBOV];
-        let qtdAcoesExibidas = 10;
-        let criterioOrdenacao = 'peso';
-
-        function definirQtdAcoes(qtd, btn) {
-            qtdAcoesExibidas = qtd === 'todas' ? CARTEIRA_COMPLETA_IBOV.length : parseInt(qtd);
-            document.querySelectorAll('.btn-filtro-qtd').forEach(b => {
-                b.className = "btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700";
-            });
-            if (btn) btn.className = "btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-blue-600 text-white";
-            const inputCustom = document.getElementById('inputQtdCustom');
-            if (inputCustom) inputCustom.value = qtdAcoesExibidas;
-            renderizarCestaDinamica();
-        }
-
-        function definirQtdManual(val) {
-            let n = parseInt(val);
-            if (isNaN(n) || n < 1) n = 1;
-            if (n > CARTEIRA_COMPLETA_IBOV.length) n = CARTEIRA_COMPLETA_IBOV.length;
-            qtdAcoesExibidas = n;
-            document.querySelectorAll('.btn-filtro-qtd').forEach(b => {
-                b.className = "btn-filtro-qtd px-2.5 py-1 font-bold rounded bg-slate-800 text-slate-300 hover:bg-slate-700";
-            });
-            renderizarCestaDinamica();
-        }
-
-        function mudarOrdenacaoAcoes(criterio) {
-            criterioOrdenacao = criterio;
-            renderizarCestaDinamica();
-        }
-
-        function renderizarCestaDinamica() {
-            const grid = document.getElementById('grid-acoes-peso');
-            if (!grid) return;
-
-            let listaOrdenada = [...dadosAtuaisAcoes].sort((a, b) => {
-                if (criterioOrdenacao === 'peso') return b.peso - a.peso;
-                if (criterioOrdenacao === 'alta') return b.varPct - a.varPct;
-                if (criterioOrdenacao === 'queda') return a.varPct - b.varPct;
-                if (criterioOrdenacao === 'pontos') {
-                    const ptsA = (a.varPct * (a.peso / 100)) * 1300;
-                    const ptsB = (b.varPct * (b.peso / 100)) * 1300;
-                    return Math.abs(ptsB) - Math.abs(ptsA);
-                }
-                return 0;
-            });
-
-            const selecionadas = listaOrdenada.slice(0, qtdAcoesExibidas);
-            grid.innerHTML = '';
-
-            let somaContribuicao = 0;
-            let somaPesoCoberto = 0;
-
-            selecionadas.forEach(ativo => {
-                const contribuicao = (ativo.varPct * (ativo.peso / 100));
-                somaContribuicao += contribuicao;
-                somaPesoCoberto += ativo.peso;
-
-                const pontosTrade = Math.round(contribuicao * 1300);
-                const cor = ativo.varPct >= 0 ? 'text-emerald-400' : 'text-rose-400';
-                const bgCor = ativo.varPct >= 0 ? 'border-emerald-500/20' : 'border-rose-500/20';
-
-                const card = document.createElement('div');
-                card.className = `bg-[#131b2e] border ${bgCor} p-3 rounded-lg flex flex-col justify-between`;
-                card.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="font-black text-white text-xs">${ativo.ticker}</span>
-                        <span class="text-[10px] text-slate-400 font-mono">${ativo.peso.toFixed(1)}%</span>
-                    </div>
-                    <div class="mt-2">
-                        <p class="text-base font-bold text-white font-mono">R$ ${ativo.preco.toFixed(2).replace('.', ',')}</p>
-                        <div class="flex items-center justify-between mt-0.5">
-                            <span class="text-xs font-extrabold ${cor} font-mono">${ativo.varPct >= 0 ? '+' : ''}${ativo.varPct.toFixed(2).replace('.', ',')}%</span>
-                            <span class="text-[10px] font-mono ${pontosTrade >= 0 ? 'text-emerald-400/80' : 'text-rose-400/80'}">${pontosTrade >= 0 ? '+' : ''}${pontosTrade} pts</span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-
-            const badgePeso = document.getElementById('badge-peso-coberto');
-            if (badgePeso) {
-                badgePeso.innerText = `${somaPesoCoberto.toFixed(1)}% do IBOV (${selecionadas.length} ações)`;
-            }
-
-            const pontosEstimados = Math.round(somaContribuicao * 1300);
-            const elVeredito = document.getElementById('quant-veredito');
-            const elExplicacao = document.getElementById('quant-explicacao');
-            const elPontos = document.getElementById('quant-pontos-gerados');
-
-            if (elPontos) {
-                elPontos.innerText = `${pontosEstimados >= 0 ? '+' : ''}${pontosEstimados} pts`;
-                elPontos.className = `text-lg font-black font-mono ${pontosEstimados >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-            }
-
-            if (elVeredito && elExplicacao) {
-                if (somaContribuicao >= 0.25) {
-                    elVeredito.innerHTML = `<span class="text-emerald-400">🟢 FORTE PRESSÃO COMPRADORA INSTITUCIONAL (+${somaContribuicao.toFixed(2)}%)</span>`;
-                    elExplicacao.innerText = `As ${selecionadas.length} ações monitoradas (${somaPesoCoberto.toFixed(1)}% do índice) estão gerando tração positiva no Mini-Índice. Recuos na VWAP têm suporte passivo na compra.`;
-                } else if (somaContribuicao <= -0.25) {
-                    elVeredito.innerHTML = `<span class="text-rose-400">🔴 FORTE PRESSÃO VENDEDORA INSTITUCIONAL (${somaContribuicao.toFixed(2)}%)</span>`;
-                    elExplicacao.innerText = `Despejo concentrado nas ações mais pesadas da cesta (${somaPesoCoberto.toFixed(1)}% do índice). Risco elevado de rompimento falso para compradores no Mini-Índice.`;
-                } else {
-                    elVeredito.innerHTML = `<span class="text-sky-400">🟡 MERCADO EM EQUILÍBRIO / ROTAÇÃO SETORIAL (${somaContribuicao.toFixed(2)}%)</span>`;
-                    elExplicacao.innerText = `As ações monitoradas apresentam forças opostas entre commodities e setor financeiro, anulando a direção líquida. Tendência a pregão de range/lateralização.`;
-                }
-            }
-        }
-        renderizarCestaDinamica();
 
         async function carregarDadosMercadoCompleto() {
             // A. Banco Central do Brasil (SGS)
