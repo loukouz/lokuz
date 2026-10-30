@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PapaParse para auditoria client-side de relatórios CSV do Profit -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Chart.js para Curva de Capital, Drawdown e Gráfico Principal Yahoo -->
+    <!-- Chart.js para Curva de Capital, Drawdown e Gráfico Nativo Yahoo -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -73,6 +73,7 @@
     <header class="bg-[#090d16] border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
+                <!-- Símbolo: Olho no Box Neon -->
                 <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                     <i data-lucide="eye" class="w-5 h-5 text-white stroke-[2.2]"></i>
                 </div>
@@ -97,7 +98,7 @@
                 </button>
                 <button onclick="trocarAbaPrincipal('mesas')" id="tabBtn-mesas" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="award" class="w-3.5 h-3.5"></i>
-                    <span>Mesas & Cupons</span>
+                    <span>Mesas & Cupões</span>
                 </button>
                 <button onclick="trocarAbaPrincipal('produtos')" id="tabBtn-produtos" class="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5">
                     <i data-lucide="boxes" class="w-3.5 h-3.5"></i>
@@ -413,13 +414,12 @@
             </div>
 
             <!-- ============================================================== -->
-            <!-- COMPONENTE DAS CAPTURAS: MINI GRAPHIC CARDS & WATCHLIST         -->
+            <!-- MINI GRAPHIC CARDS & WATCHLIST COM LINHA BASE TRACEJADA         -->
             <!-- ============================================================== -->
             <div class="bg-[#090f1d] border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-col gap-4">
                 
                 <!-- Barra Superior de Navegação idêntica à Imagem 1 -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
-                    <!-- Abas: Tendências de mercado | Ativo | Ganhadoras | Perdedoras | Lista -->
                     <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar">
                         <button onclick="mudarAbaMercado('tendencias', this)" class="btn-aba-mercado px-3.5 py-1.5 text-xs font-bold rounded-lg text-white bg-slate-800/90 border border-slate-700/80 shadow-sm transition-all flex-shrink-0">
                             Tendências de mercado
@@ -440,20 +440,20 @@
 
                     <div class="flex items-center gap-2 self-end sm:self-auto">
                         <span class="text-[11px] font-mono text-slate-400 hidden sm:inline">Mini gráficos com linha base de fecho</span>
-                        <button onclick="scrollarCardsDireita()" class="w-7 h-7 rounded-full bg-[#131b2e] border border-slate-700 hover:border-sky-500 hover:bg-slate-800 flex items-center justify-center text-slate-300 transition-all">
+                        <button onclick="scrollarCardsDireita()" class="w-7 h-7 rounded-full bg-[#131b2e] border border-slate-700 hover:border-sky-500 hover:bg-slate-800 flex items-center justify-center text-slate-300 transition-all" title="Avançar carrossel">
                             <i data-lucide="chevron-right" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- MODO 1: CARROSSEL DE CARDS COM MINI GRÁFICOS (SPARKLINES COM LINHA BASE) -->
+                <!-- MODO 1: CARROSSEL DE CARDS COM MINI GRÁFICOS (IMAGEM 1) -->
                 <div id="painel-cards-mercado" class="relative">
                     <div id="carrossel-cards-container" class="flex items-center gap-3.5 overflow-x-auto no-scrollbar scroll-smooth py-1">
                         <!-- Injetado dinamicamente via JS -->
                     </div>
                 </div>
 
-                <!-- MODO 2: LISTA COMPACTA VERTICAL (ESTILO IMAGEM 2) -->
+                <!-- MODO 2: LISTA COMPACTA VERTICAL (IMAGEM 2) -->
                 <div id="painel-lista-mercado" class="hidden">
                     <div class="bg-[#0b1222] border border-slate-800/90 rounded-xl overflow-hidden divide-y divide-slate-800/60 font-mono">
                         <div class="px-4 py-2 bg-[#080d19] text-[11px] font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center">
@@ -461,7 +461,7 @@
                             <span>Cotação / Histórico Intraday</span>
                         </div>
                         <div id="lista-rows-container">
-                            <!-- Linhas injetadas dinamicamente via JS -->
+                            <!-- Injetado dinamicamente via JS -->
                         </div>
                     </div>
                 </div>
@@ -786,11 +786,10 @@
             { 
                 id: 'USDBRL', 
                 ticker: 'USD/BRL', 
-                nome: 'Dólar dos Estados Unidos/Real...', 
+                nome: 'Dólar dos Estados Unidos/Real ...', 
                 preco: 5.4120, 
                 varPct: 0.01, 
                 prevClose: 5.4115,
-                // Sequência real de cotações intraday (linha base no fecho anterior)
                 historico: [5.4115, 5.4116, 5.4125, 5.4128, 5.4130, 5.4132, 5.4130, 5.4125, 5.4120, 5.4119, 5.4118, 5.4119, 5.4120] 
             },
             { 
@@ -915,7 +914,7 @@
 
             const getY = (val) => h - padY - ((val - minP) / range) * (h - padY * 2);
 
-            // 1. Linha Tracejada do Fecho Anterior (Baseline exata da Imagem 1 e 2)
+            // 1. Linha Tracejada do Fecho Anterior (Baseline exata das fotos)
             const yBase = getY(refClose);
             ctx.save();
             ctx.beginPath();
@@ -927,7 +926,7 @@
             ctx.stroke();
             ctx.restore();
 
-            // 2. Curva Intraday de Preços Reais
+            // 2. Curva Intraday de Preços
             ctx.beginPath();
             ctx.strokeStyle = cor;
             ctx.lineWidth = 1.6;
@@ -990,7 +989,6 @@
                 `;
                 container.appendChild(card);
 
-                // Desenha a curva logo após injetar no DOM
                 setTimeout(() => {
                     desenharSparklineCanvas(canvasId, ativo.historico, ativo.prevClose);
                 }, 10);
@@ -1522,7 +1520,7 @@
                     if (conforme && partesHora) {
                         let [h, m, s] = partesHora.split(':').map(Number);
                         if (h > 17 || (h === 17 && m > 30)) {
-                            if (bruto > 0) { conforme = false; motivo = "Ignorado: Fechamento pós-17:30"; }
+                            if (bruto > 0) { conforme = false; motivo = "Ignorado: Fecho pós-17:30"; }
                         }
                     }
                 }
